@@ -74,14 +74,14 @@ On veut mettre en place un site qui permet de faire des échanges d’objet : Ta
 
 ## **Page Utilisateur – Gestion Objets**
 - **Base**
-    - [ ] Table `objects` (id, titre, description, prix, user_id, cat_id) + date
-    - [ ] Table `photos` (id, object_id, url)
-    - [ ] CRUD objets avec photos multiples
+    - [x] Table `objects` (id, libelle, description, category_id, prix_estimatif, user_id)
+    - [x] Table `photos` (id, object_id, url)
+    - [x] CRUD objets (avec photos multiples)
 - **Design**
     - [ ] Formulaire avec upload d’images (multiple)
-    - [ ] Galerie des objets de l’utilisateur
+    - [x] Galerie des objets de l’utilisateur (pas encore avec les images)
 - **Intégration**
-    - [ ] Routes Flight pour CRUD objets
+    - [wip] Routes Flight pour CRUD objets
     - [ ] Upload des images dans `uploads/`
 - **Fonction**
     - [ ] Validation : titre, prix numérique

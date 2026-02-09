@@ -1,5 +1,7 @@
 <?php
-// require_once __DIR__ . '/controllers/AuthController.php';
+require_once __DIR__ . '/controllers/AuthController.php';
+require_once __DIR__ . '/controllers/ObjetController.php';
+require_once __DIR__ . '/repositories/ObjetRepository.php';
 
 
 Flight::route('/', function () {
@@ -7,11 +9,22 @@ Flight::route('/', function () {
 });
 
 // Login routes
-Flight::route('GET /login', ['AuthController', 'showLogin']);
-Flight::route('POST /login', ['AuthController', 'postLogin']);
+Flight::route('GET /login', function () {
+    AuthController::showLogin();
+});
+Flight::route('POST /login', function () {
+    AuthController::postLogin();
+});
 
-//message routes
-Flight::route('GET /messages', ['MessageController', 'list']);
+// Objets routes
+Flight::route('GET /objet/@id', function ($id) {
+    ObjetController::detail($id);
+});
+
+
+Flight::route('GET /objets', function () {
+    ObjetController::list();
+});
 
 // Flight::route('POST /register', ['AuthController', 'postRegister']);
 
