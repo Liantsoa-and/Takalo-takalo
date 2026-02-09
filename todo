@@ -33,7 +33,7 @@ Fonctionnalite 2 :
     1 - Back office (admin) => [J]
         a. Statistiques 
             i. Nombre d’utilisateur inscrit 
-                Back :
+                [OK]Back : 
                     route : GET / admin_users [OK]
                     controller : AdminController->showUsers() [OK]
                     repositories : UserRepository->findAll() [OK]
