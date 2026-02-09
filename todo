@@ -15,7 +15,8 @@ Fonctionnalite 1 :
             .route post admin/login (essaie de connection)
             -controllers:
             Admincontrollers
-            
+            front:
+            .page login pour admin et user
 
         b - Gestion des categories
     2 - Front  office (utilisateur) => [L]
