@@ -37,6 +37,7 @@ Fonctionnalite 2 :
                 Back :
                     route : GET / admin_echange
                     controller : AdminController->showEchanges()
-                    repositories : EchangeRepository
+                    repositories : EchangeRepository->findAll()
                 Front : 
+                    tableau table
     2 - Front office (utilsateur)

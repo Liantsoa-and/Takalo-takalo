@@ -13,6 +13,9 @@ Flight::route('POST /login', ['AuthController', 'postLogin']);
 //message routes
 Flight::route('GET /messages', ['MessageController', 'list']);
 
+Flight::route('GET /admin_users', ['AdminController', 'showUsers']);
+
+
 // Flight::route('POST /register', ['AuthController', 'postRegister']);
 
 
