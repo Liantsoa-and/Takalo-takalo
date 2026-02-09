@@ -19,7 +19,7 @@ Fonctionnalite 1 :
 
         b - Gestion des categories
     2 - Front  office (utilisateur) => [L]
-        a - . Créer une page d’inscription et de login 
+        a - . Créer une page d’inscription et de login [H]
         b. Page pour gérer ses objets 
             i. Objet : titre description, 1 ou plusieurs photos, prix estimatif 
         c. Page pour voir la liste des objets des autres utilisateurs 
