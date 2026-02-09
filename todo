@@ -33,9 +33,9 @@ Fonctionnalite 2 :
         a. Statistiques 
             i. Nombre d’utilisateur inscrit 
                 Back :
-                    route : GET / admin_users
-                    controller : AdminController->showUsers()
-                    repositories : UserRepository->findAll()
+                    route : GET / admin_users [OK]
+                    controller : AdminController->showUsers() [OK]
+                    repositories : UserRepository->findAll() [OK]
 
                 Front :
                     badge nb_utilisateur inscrit utilisateur inscrit

@@ -25,7 +25,7 @@ class UserRepository {
   }
 
   public function findAll() {
-    $st = $this->pdo->query("SELECT * FROM users");
+    $st = $this->pdo->query("SELECT * FROM tt_users");
     return $st->fetchAll(PDO::FETCH_ASSOC);
   }
 }
