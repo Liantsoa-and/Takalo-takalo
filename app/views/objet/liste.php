@@ -34,7 +34,17 @@ $objets = $objets ?? [];
             <div class="row">
                 <?php foreach ($objets as $objet): ?>
                     <div class="col-md-4 mb-4">
-                        <div class="card">
+                        <div class="card h-100">
+                            <?php if (!empty($objet['photo'])): ?>
+                                <img src="<?php echo htmlspecialchars($objet['photo']); ?>" class="card-img-top"
+                                    alt="<?php echo htmlspecialchars($objet['libelle']); ?>"
+                                    style="height: 200px; object-fit: cover;">
+                            <?php else: ?>
+                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
+                                    style="height: 200px;">
+                                    <span class="text-white">Pas de photo</span>
+                                </div>
+                            <?php endif; ?>
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($objet['libelle']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars(substr($objet['description'], 0, 100)); ?>...

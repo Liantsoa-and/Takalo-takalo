@@ -76,9 +76,44 @@ $objet = $objet ?? [];
                         <div class="card-header">
                             <h5>Photos</h5>
                         </div>
-                        <div class="card-body text-center">
-                            <p class="text-muted">Aucune photo disponible pour le moment</p>
-                            <!-- Les photos seront affichées ici via la table tt_photos -->
+                        <div class="card-body">
+                            <?php if (!empty($objet['photos'])): ?>
+                                <div id="carouselPhotos" class="carousel slide mb-3" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <?php foreach ($objet['photos'] as $index => $photo): ?>
+                                            <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                                                <img src="<?php echo htmlspecialchars($photo['url']); ?>"
+                                                    class="d-block w-100 rounded" alt="Photo de l'objet"
+                                                    style="max-height: 400px; object-fit: cover;">
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <?php if (count($objet['photos']) > 1): ?>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPhotos"
+                                            data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Précédent</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselPhotos"
+                                            data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Suivant</span>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="row gap-2">
+                                    <?php foreach ($objet['photos'] as $photo): ?>
+                                        <div class="col-md-3">
+                                            <img src="<?php echo htmlspecialchars($photo['url']); ?>"
+                                                class="img-fluid rounded cursor-pointer" alt="Photo"
+                                                onclick="document.querySelector('#carouselPhotos').style.display='block'"
+                                                style="cursor: pointer;">
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="text-muted">Aucune photo disponible pour le moment</p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
