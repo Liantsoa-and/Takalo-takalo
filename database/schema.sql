@@ -1,4 +1,4 @@
-CREATE DATABASE takalo
+CREATE DATABASE takalo;
 
 USE takalo;
 
