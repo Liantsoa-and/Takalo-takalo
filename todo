@@ -9,6 +9,14 @@ Memebre du projet :
 Fonctionnalite 1 :
     1 - Back offcie (admin) => [H]
         a - Login admin (mettre le login par defaut sur le formulaire)
+            back:
+            -route:
+            .route get admin/login
+            .route post admin/login (essaie de connection)
+            -controllers:
+            Admincontrollers
+            
+
         b - Gestion des categories
     2 - Front  office (utilisateur) => [L]
         a - . Créer une page d’inscription et de login [H]
