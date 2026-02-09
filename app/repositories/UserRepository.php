@@ -23,4 +23,9 @@ class UserRepository {
     $st->execute([(string)$email]);
     return $st->fetch(PDO::FETCH_ASSOC) ?: null;
   }
+
+  public function findAll() {
+    $st = $this->pdo->query("SELECT * FROM users");
+    return $st->fetchAll(PDO::FETCH_ASSOC);
+  }
 }

@@ -26,6 +26,9 @@ Flight::route('GET /objets', function () {
     ObjetController::list();
 });
 
+Flight::route('GET /admin_users', ['AdminController', 'showUsers']);
+
+
 // Flight::route('POST /register', ['AuthController', 'postRegister']);
 
 
