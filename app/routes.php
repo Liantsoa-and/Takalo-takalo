@@ -20,7 +20,15 @@ Flight::route('POST /login', function () {
     AuthController::postLogin();
 });
 
-//message routes
+// Objets routes
+Flight::route('GET /objet/@id', function ($id) {
+    ObjetController::detail($id);
+});
+
+
+Flight::route('GET /objets', function () {
+    ObjetController::list();
+});
 
 Flight::route('GET /admin_users', ['AdminController', 'showUsers']);
 
