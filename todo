@@ -32,5 +32,19 @@ Fonctionnalite 2 :
     1 - Back office (admin) => [J]
         a. Statistiques 
             i. Nombre d’utilisateur inscrit 
+                Back :
+                    route : GET / admin_users
+                    controller : AdminController->showUsers()
+                    repositories : UserRepository->findAll()
+
+                Front :
+                    badge nb_utilisateur inscrit utilisateur inscrit
+                    badge nb_admin 
+                    badge nb_user
             ii. Le nombre d’échange effectué
+                Back :
+                    route : GET / admin_echange
+                    controller : AdminController->showEchanges()
+                    repositories : EchangeRepository
+                Front : 
     2 - Front office (utilsateur)
