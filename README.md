@@ -78,14 +78,14 @@ On veut mettre en place un site qui permet de faire des échanges d’objet : Ta
     - [x] Table `photos` (id, object_id, url)
     - [x] CRUD objets (avec photos multiples)
 - **Design**
-    - [ ] Formulaire avec upload d’images (multiple)
-    - [x] Galerie des objets de l’utilisateur (pas encore avec les images)
+    - [x] Formulaire avec upload d’images (multiple)
+    - [x] Galerie des objets de l’utilisateur 
 - **Intégration**
-    - [wip] Routes Flight pour CRUD objets
-    - [ ] Upload des images dans `uploads/`
+    - [wip] Routes Flight pour CRUD objets (delete ne marche pas encore)
+    - [x] Upload des images dans `uploads/`
 - **Fonction**
-    - [ ] Validation : titre, prix numérique
-    - [ ] Prévisualisation des images avant envoi
+    - [x] Validation : titre, prix numérique
+    - [x] Prévisualisation des images avant envoi
 
 ---
 

@@ -25,7 +25,20 @@ Fonctionnalite 1 :
             i. Objet : titre description, 1 ou plusieurs photos, prix estimatif 
         c. Page pour voir la liste des objets des autres utilisateurs 
             i. Fiche objet 
-                1. Proposition d’échange avec notre objet 
+                1. Proposition d’échange avec notre objet [wip]
+                - **Base**
+                    - [x] Table `objects` (id, libelle, description, category_id, prix_estimatif, user_id)
+                    - [x] Table `photos` (id, object_id, url)
+                    - [x] CRUD objets (avec photos multiples)
+                - **Design**
+                    - [x] Formulaire avec upload d’images (multiple)
+                    - [x] Galerie des objets de l’utilisateur 
+                - **Intégration**
+                    - [wip] Routes Flight pour CRUD objets (delete ne marche pas encore)
+                    - [x] Upload des images dans `uploads/`
+                - **Fonction**
+                    - [x] Validation : titre, prix numérique
+                    - [x] Prévisualisation des images avant envoi
         d. Page pour gérer les échanges avec d’autres utilisateurs 
         i. Liste des propositions 
         ii. Acceptation ou refus 
