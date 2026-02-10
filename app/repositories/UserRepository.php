@@ -28,4 +28,9 @@ class UserRepository {
     $st = $this->pdo->query("SELECT * FROM tt_users");
     return $st->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  public function findAllUtilisateur() {
+    $st = $this->pdo->query("SELECT * FROM tt_users WHERE role='user'");
+    return $st->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
