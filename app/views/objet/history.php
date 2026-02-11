@@ -15,7 +15,7 @@
         <ul class="list-group">
           <?php foreach ($timeline as $entry) : ?>
             <li class="list-group-item d-flex align-items-center">
-              <img src="/public/assets/images/pdp/<?php echo htmlspecialchars($entry['pdp'] ?? 'default.png'); ?>" alt="avatar" class="rounded-circle me-3" width="48" height="48">
+              <img src="/assets/images/pdp/<?php echo htmlspecialchars($entry['pdp'] ?? 'default.png'); ?>" alt="avatar" class="rounded-circle me-3" width="48" height="48">
               <div>
                 <strong><?php echo htmlspecialchars($entry['username'] ?? 'Utilisateur'); ?></strong>
                 <div class="text-muted small">

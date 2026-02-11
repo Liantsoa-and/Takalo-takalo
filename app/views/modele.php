@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title ?? 'Objets - Takalo-takalo') ?></title>
     <link rel="stylesheet" href="<?= $base ?>/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?= $base ?>/assets/bootstrap/css/bootstrap-icons.css">
     <style>
         body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
         .sidebar { min-height: 100vh; border-right: 1px solid #eee; }
         .footer { border-top: 1px solid #eee; padding: 1rem 0; }
+        .icon-action { color: #0d6efd;; font-size: 1rem; text-decoration: none; display:inline-flex; align-items:center; }
+        .icon-action:hover { color: #0a4db3;; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -39,9 +40,9 @@
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objets">Mes objets</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objets_publics">Objets publics</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/echanges">Échanges</a></li>
-                        <?php if (!empty($objet) && !empty($objet['id'])): ?>
-                            <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objet/<?php echo $objet['id']; ?>/history">Historique</a></li>
-                        <?php endif; ?>
+                           <?php /* Historique moved to card actions; no sidebar link here anymore */ ?>
+                           <?php if (!empty($objet) && !empty($objet['id'])): ?>
+                           <?php endif; ?>
 
                     </ul>
                 </div>

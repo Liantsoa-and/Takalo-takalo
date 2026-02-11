@@ -19,10 +19,19 @@
                             Catégorie: #<?= htmlspecialchars($objet['category_id'] ?? '') ?> |
                             Prix estimé: <?= htmlspecialchars(number_format($objet['prix_estimatif'] ?? 0, 2, ',', ' ')) ?> €
                         </p>
-                        <div class="btn-group w-100" role="group">
-                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>" class="btn btn-sm btn-info">Voir</a>
-                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>/edit" class="btn btn-sm btn-warning">Éditer</a>
-                            <button class="btn btn-sm btn-danger" onclick="if(confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')){ window.location.href='<?= $base ?>/objet/<?= $objet['id'] ?>/delete' }">Supprimer</button>
+                        <div class="d-flex align-items-center">
+                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>" class="icon-action me-2" title="Voir">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" fill="#fff"/></svg>
+                            </a>
+                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>/edit" class="icon-action me-2" title="Éditer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M12.146.708a1 1 0 0 1 1.415 0l1.731 1.73a1 1 0 0 1 0 1.415L5.854 13.29a.5.5 0 0 1-.168.11l-4 1.5A.5.5 0 0 1 1.5 13.5l1.5-4a.5.5 0 0 1 .11-.168L12.146.708z"/></svg>
+                            </a>
+                            <a href="#" class="icon-action me-2" title="Supprimer" onclick="if(confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')){ window.location.href='<?= $base ?>/objet/<?= $objet['id'] ?>/delete' }">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 5.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5zM8 5.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6A.5.5 0 0 1 8 5.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 1 1 0-2h3.086a1 1 0 0 1 .707.293L7 2h2l.707-.707A1 1 0 0 1 10.414 1H13.5a1 1 0 0 1 1 1z"/></svg>
+                            </a>
+                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>/history" class="icon-action ms-auto" title="Historique">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.515 3.5a.5.5 0 0 1 .485.379l.5 2a.5.5 0 0 1-.97.242L8 4.5 7.47 6.121A3.5 3.5 0 1 0 8.515 3.5z"/><path d="M8 1a7 7 0 1 0 4.95 11.95.5.5 0 0 0-.866-.5A6 6 0 1 1 8 2z"/></svg>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -41,9 +50,16 @@
                         <h5 class="card-title"><?= htmlspecialchars($objet['libelle']) ?></h5>
                         <p class="card-text text-muted mb-2"><small><i class="bi bi-tag"></i> <?= htmlspecialchars($objet['category_name'] ?? '') ?></small></p>
                         <p class="card-text"><?= htmlspecialchars(substr($objet['description'] ?? '',0,100)) ?>...</p>
-                        <div class="d-flex justify-content-between align-items-center"><span class="badge bg-success"><?= htmlspecialchars(number_format($objet['prix_estimatif'] ?? 0,0,',',' ')) ?> Ar</span><small class="text-muted">Par <?= htmlspecialchars($objet['owner_name'] ?? '') ?></small></div>
+                        <div class="d-flex align-items-center">
+                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>" class="icon-action me-2" title="Voir">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" fill="#fff"/></svg>
+                            </a>
+                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>/history" class="icon-action me-2" title="Historique">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.515 3.5a.5.5 0 0 1 .485.379l.5 2a.5.5 0 0 1-.97.242L8 4.5 7.47 6.121A3.5 3.5 0 1 0 8.515 3.5z"/><path d="M8 1a7 7 0 1 0 4.95 11.95.5.5 0 0 0-.866-.5A6 6 0 1 1 8 2z"/></svg>
+                            </a>
+                            <div class="ms-auto text-end"><span class="badge bg-success"><?= htmlspecialchars(number_format($objet['prix_estimatif'] ?? 0,0,',',' ')) ?> Ar</span><br><small class="text-muted">Par <?= htmlspecialchars($objet['owner_name'] ?? '') ?></small></div>
+                        </div>
                     </div>
-                    <div class="card-footer"><a href="<?= $base ?>/objet/<?= $objet['id'] ?>" class="btn btn-primary w-100">Voir détails</a></div>
                 </div>
             </div>
         <?php endforeach; ?>
