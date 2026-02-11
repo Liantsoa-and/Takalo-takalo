@@ -5,6 +5,7 @@ require_once __DIR__ . '/controllers/AdminController.php';
 require_once __DIR__ . '/repositories/UserRepository.php';
 require_once __DIR__ . '/repositories/CategoryRepository.php';
 require_once __DIR__ . '/controllers/ObjetController.php';
+require_once __DIR__ . '/controllers/EchangeController.php';
 require_once __DIR__ . '/repositories/ObjetRepository.php';
 require_once __DIR__ . '/repositories/EchangeRepository.php';
 
@@ -59,6 +60,23 @@ Flight::route('GET /objets_publics', function () {
 
 Flight::route('GET /photo/@id/delete', function ($id) {
     ObjetController::deletePhoto($id);
+});
+
+// Echange routes
+Flight::route('POST /echange/propose', function () {
+    ObjetController::proposeEchange();
+});
+
+Flight::route('GET /echanges', function () {
+    EchangeController::mesEchanges();
+});
+
+Flight::route('POST /echange/@id/accepter', function ($id) {
+    EchangeController::accepter($id);
+});
+
+Flight::route('POST /echange/@id/refuser', function ($id) {
+    EchangeController::refuser($id);
 });
 
 // Admin routes----------------------------------------------

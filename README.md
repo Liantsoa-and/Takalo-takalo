@@ -106,16 +106,17 @@ On veut mettre en place un site qui permet de faire des échanges d’objet : Ta
 
 ## **Page Utilisateur – Fiche Objet + Proposition Échange**
 - **Base**
-    - [ ] Table `exchanges` (id, object1_id, object2_id, status, date_proposition)
-    - [ ] Vérifier que l’objet proposé appartient à l’utilisateur connecté
+    - [x] Table `tt_echanges` (id, object1_id, object2_id, date_echange, statut_id)
+    - [x] Table `tt_status` (id, libelle)
+    - [x] Vérifier que l’objet proposé appartient à l’utilisateur connecté
 - **Design**
-    - [ ] Afficher photos, description, propriétaire
-    - [ ] Liste déroulante des objets de l’utilisateur pour proposition
+    - [x] Afficher photos, description, propriétaire
+    - [x] Liste déroulante des objets de l’utilisateur pour proposition
 - **Intégration**
-    - [ ] Route `/object/{id}` pour affichage
-    - [ ] Route `POST /exchange/propose` pour créer une proposition
+    - [x] Route `/objet/{id}` pour affichage
+    - [x] Route `POST /echange/propose` pour créer une proposition
 - **Fonction**
-    - [ ] Ne pas permettre de proposer son propre objet
+    - [x] Ne pas permettre de proposer son propre objet
     - [ ] Notification au propriétaire de l’objet
 
 ---

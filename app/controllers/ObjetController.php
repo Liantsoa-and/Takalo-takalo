@@ -27,7 +27,22 @@ class ObjetController
             return;
         }
         $objet['photos'] = $photoService->getPhotosByObjetId($id);
-        Flight::render('objet/detail', ['objet' => $objet]);
+
+        // Récupérer les objets de l'utilisateur connecté pour proposition d'échange
+        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $objetRepository = new ObjetRepository($pdo);
+        $mesObjets = $objetRepository->findByUserId($currentUserId);
+
+        // Récupérer les échanges liés à cet objet
+        $echangeRepo = new EchangeRepository($pdo);
+        $echanges = $echangeRepo->getEchangesByObjetId($id);
+
+        Flight::render('objet/detail', [
+            'objet' => $objet,
+            'mesObjets' => $mesObjets,
+            'echanges' => $echanges,
+            'currentUserId' => $currentUserId
+        ]);
     }
 
     public static function showForm()
@@ -168,5 +183,54 @@ class ObjetController
             'totalPages' => $totalPages,
             'total' => $total
         ]);
+    }
+
+    // Proposer un échange
+    public static function proposeEchange()
+    {
+        $currentUserId = 2; // À récupérer depuis la session plus tard
+
+        $objet2_id = $_POST['objet2_id'] ?? null; // L'objet ciblé (celui qu'on veut)
+        $objet1_id = $_POST['objet1_id'] ?? null; // Mon objet (celui qu'on propose)
+
+        if (!$objet2_id || !$objet1_id) {
+            Flight::json(['error' => 'Paramètres manquants'], 400);
+            return;
+        }
+
+        $pdo = Flight::db();
+        $objetRepo = new ObjetRepository($pdo);
+        $echangeRepo = new EchangeRepository($pdo);
+
+        // Vérifier que l'objet proposé appartient bien à l'utilisateur connecté
+        $monObjet = $objetRepo->findById($objet1_id);
+        if (!$monObjet || $monObjet['user_id'] != $currentUserId) {
+            Flight::json(['error' => 'Cet objet ne vous appartient pas'], 403);
+            return;
+        }
+
+        // Vérifier que l'objet ciblé existe et n'appartient pas à l'utilisateur
+        $objetCible = $objetRepo->findById($objet2_id);
+        if (!$objetCible) {
+            Flight::json(['error' => 'Objet ciblé introuvable'], 404);
+            return;
+        }
+
+        if ($objetCible['user_id'] == $currentUserId) {
+            Flight::json(['error' => 'Vous ne pouvez pas proposer un échange avec votre propre objet'], 400);
+            return;
+        }
+
+        // Vérifier qu'un échange n'existe pas déjà
+        if ($echangeRepo->echangeExists($objet1_id, $objet2_id)) {
+            Flight::json(['error' => 'Un échange existe déjà entre ces deux objets'], 400);
+            return;
+        }
+
+        // Créer la proposition d'échange
+        $echangeId = $echangeRepo->createEchange($objet1_id, $objet2_id);
+
+        // Rediriger vers la page de détail de l'objet
+        Flight::redirect('/objet/' . $objet2_id . '?success=echange_propose');
     }
 }

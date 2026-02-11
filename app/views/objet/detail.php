@@ -9,16 +9,24 @@ $objet = $objet ?? [];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($objet['libelle'] ?? 'Détails de l\'objet'); ?> - Takalo-takalo</title>
-    <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <?php $base = Flight::get('base_path') ?? ''; ?>
+    <link href="<?= $base ?>/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container mt-5">
         <div class="mb-4">
-            <a href="/objets" class="btn btn-secondary mb-3">
+            <a href="<?= $base ?>/objets" class="btn btn-secondary mb-3">
                 <i class="bi bi-arrow-left"></i> Retour à la liste
             </a>
         </div>
+
+        <?php if (isset($_GET['success']) && $_GET['success'] == 'echange_propose'): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Succès !</strong> Votre proposition d'échange a été envoyée.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
 
         <?php if (empty($objet)): ?>
             <div class="alert alert-danger">
@@ -57,18 +65,91 @@ $objet = $objet ?? [];
                             </div>
 
                             <div class="d-flex gap-2">
-                                <a href="/objet/<?php echo $objet['id']; ?>/edit" class="btn btn-warning">
-                                    <i class="bi bi-pencil"></i> Éditer
-                                </a>
-                                <button class="btn btn-danger" onclick="confirmDelete(<?php echo $objet['id']; ?>)">
-                                    <i class="bi bi-trash"></i> Supprimer
-                                </button>
-                                <a href="/exchange/propose/<?php echo $objet['id']; ?>" class="btn btn-success">
-                                    <i class="bi bi-arrow-left-right"></i> Proposer un échange
-                                </a>
+                                <?php if ($objet['user_id'] == ($currentUserId ?? 0)): ?>
+                                    <!-- Boutons propriétaire -->
+                                    <a href="<?= $base ?>/objet/<?php echo $objet['id']; ?>/edit" class="btn btn-warning">
+                                        <i class="bi bi-pencil"></i> Éditer
+                                    </a>
+                                    <button class="btn btn-danger" onclick="confirmDelete(<?php echo $objet['id']; ?>)">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
+
+                    <?php if ($objet['user_id'] != ($currentUserId ?? 0) && !empty($mesObjets ?? [])): ?>
+                        <!-- Formulaire de proposition d'échange -->
+                        <div class="card mt-3">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="bi bi-arrow-left-right"></i> Proposer un échange</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">Sélectionnez un de vos objets à proposer en échange :</p>
+                                <form method="POST" action="<?= $base ?>/echange/propose">
+                                    <input type="hidden" name="objet2_id" value="<?= $objet['id'] ?>">
+
+                                    <div class="mb-3">
+                                        <label for="objet1_id" class="form-label">Votre objet :</label>
+                                        <select name="objet1_id" id="objet1_id" class="form-select" required>
+                                            <option value="">-- Choisissez un objet --</option>
+                                            <?php foreach ($mesObjets as $monObjet): ?>
+                                                <option value="<?= $monObjet['id'] ?>">
+                                                    <?= htmlspecialchars($monObjet['libelle']) ?>
+                                                    (<?= number_format($monObjet['prix_estimatif'], 0, ',', ' ') ?> Ar)
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="bi bi-send"></i> Envoyer la proposition
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    <?php elseif ($objet['user_id'] != ($currentUserId ?? 0) && empty($mesObjets ?? [])): ?>
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-info-circle"></i>
+                            Vous devez avoir au moins un objet pour proposer un échange.
+                            <a href="<?= $base ?>/objet/formulaire" class="alert-link">Ajouter un objet</a>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($echanges ?? [])): ?>
+                        <!-- Liste des échanges liés à cet objet -->
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h5 class="mb-0">Propositions d'échange</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <?php foreach ($echanges as $echange): ?>
+                                        <div class="list-group-item">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">
+                                                    <?= htmlspecialchars($echange['objet1']) ?>
+                                                    <i class="bi bi-arrow-left-right"></i>
+                                                    <?= htmlspecialchars($echange['objet2']) ?>
+                                                </h6>
+                                                <small
+                                                    class="text-muted"><?= date('d/m/Y', strtotime($echange['date_echange'])) ?></small>
+                                            </div>
+                                            <p class="mb-1">
+                                                <small>
+                                                    Proposé par : <strong><?= htmlspecialchars($echange['user1']) ?></strong>
+                                                </small>
+                                            </p>
+                                            <span
+                                                class="badge bg-<?= $echange['status'] == 'en attente' ? 'warning' : ($echange['status'] == 'confirme' ? 'success' : 'danger') ?>">
+                                                <?= htmlspecialchars($echange['status']) ?>
+                                            </span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="col-md-6">
@@ -121,11 +202,11 @@ $objet = $objet ?? [];
         <?php endif; ?>
     </div>
 
-    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= $base ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         function confirmDelete(id) {
             if (confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')) {
-                window.location.href = '/objet/' + id + '/delete';
+                window.location.href = '<?= $base ?>/objet/' + id + '/delete';
             }
         }
     </script>
