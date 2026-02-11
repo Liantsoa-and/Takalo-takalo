@@ -10,8 +10,14 @@
         body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
         .sidebar { min-height: 100vh; border-right: 1px solid #eee; }
         .footer { border-top: 1px solid #eee; padding: 1rem 0; }
-        .icon-action { color: #0d6efd;; font-size: 1rem; text-decoration: none; display:inline-flex; align-items:center; }
-        .icon-action:hover { color: #0a4db3;; text-decoration: none; }
+        .icon-action { color: inherit; font-size: 1rem; text-decoration: none; display:inline-flex; align-items:center; }
+        .icon-action:hover { color: inherit; text-decoration: none; }
+        /* Couleurs par action */
+        .icon-view { color: #0d6efd; }       /* bleu */
+        .icon-edit { color: #fd7e14; }       /* orange */
+        .icon-delete { color: #dc3545; }     /* rouge */
+        .icon-history { color: #6c757d; }    /* gris */
+        .icon-tag { color: #0dcaf0; }        /* cyan pour tag */
     </style>
 </head>
 <body>
