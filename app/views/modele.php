@@ -36,10 +36,10 @@
                 <div class="px-3">
                     <h6>Menu</h6>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link" href="<?= $base ?>">Accueil</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objets">Mes objets</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objets_publics">Objets publics</a></li>
-                        <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objets/ajouter">Proposer un objet</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?= $base ?>/echanges">Échanges</a></li>
+
                     </ul>
                 </div>
             </aside>

@@ -17,10 +17,13 @@ class EchangeController
             $echanges = $echangeRepo->getPropositionsRecues($currentUserId);
         }
 
-        Flight::render('echange/liste', [
+        $pagename = "echange/liste.php";
+
+        Flight::render('modele', [
             'echanges' => $echanges,
             'onglet' => $onglet,
-            'currentUserId' => $currentUserId
+            'currentUserId' => $currentUserId,
+            'pagename' => $pagename
         ]);
     }
 

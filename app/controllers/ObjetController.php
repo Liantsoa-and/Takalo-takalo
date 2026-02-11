@@ -13,8 +13,8 @@ class ObjetController
             $objet['photo'] = $photoService->getFirstPhoto($objet['id']);
         }
 
-        $pagename = "liste.php";
-        Flight::render('objet/modele', ['objets' => $objets, 'pagename' => $pagename]);
+        $pagename = "objet/liste.php";
+        Flight::render('modele', ['objets' => $objets, 'pagename' => $pagename]);
     }
 
     public static function detail($id)
@@ -38,11 +38,14 @@ class ObjetController
         $echangeRepo = new EchangeRepository($pdo);
         $echanges = $echangeRepo->getEchangesByObjetId($id);
 
-        Flight::render('objet/detail', [
+        $pagename= "objet/detail.php";
+
+        Flight::render('modele', [
             'objet' => $objet,
             'mesObjets' => $mesObjets,
             'echanges' => $echanges,
-            'currentUserId' => $currentUserId
+            'currentUserId' => $currentUserId,
+            'pagename' => $pagename
         ]);
     }
 
@@ -51,7 +54,9 @@ class ObjetController
         $pdo = Flight::db();
         $repo = new CategoryRepository($pdo);
         $categories = $repo->findAll();
-        Flight::render('objet/formulaire', ['categories' => $categories]);
+    
+        $pagename = "objet/formulaire.php";
+        Flight::render('modele', ['categories' => $categories, 'pagename' => $pagename]);
     }
 
     public static function create()
@@ -122,8 +127,9 @@ class ObjetController
 
         $photoService = new PhotoService($pdo);
         $objet['photos'] = $photoService->getPhotosByObjetId($id);
+        $pagename = "objet/formulaire.php";
 
-        Flight::render('objet/formulaire', ['objet' => $objet, 'categories' => $categories]);
+        Flight::render('modele', ['objet' => $objet, 'categories' => $categories, 'pagename' => $pagename]);
     }
 
     public static function delete($id)
@@ -175,14 +181,16 @@ class ObjetController
 
         $categoryRepository = new CategoryRepository($pdo);
         $categories = $categoryRepository->findAll();
+        $pagename = "objet/publics.php";
 
-        Flight::render('objet/publics', [
+        Flight::render('modele', [
             'objets' => $objets,
             'categories' => $categories,
             'currentCategory' => $categoryId,
             'currentPage' => $page,
             'totalPages' => $totalPages,
-            'total' => $total
+            'total' => $total,
+            'pagename' => $pagename
         ]);
     }
 
