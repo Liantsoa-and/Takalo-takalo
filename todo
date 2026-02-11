@@ -69,9 +69,23 @@ Fonctionnalite 2 :
                 [OK]Front : 
                     tableau table [OK]
     
-    2 - Front office (utilsateur) => [J]
-    a. Barre de recherche  
-        i. rechercher dans le titre, catégorie (zone de liste) 
-    b. Historique d’appartenance d’un objet (visible au public) 
-        i. On veut voir qui sont les différents propriétaires au fil des échanges, 
-        avec la date et l’heure d’échange 
+    2 - Front office (utilisateur) => [J]
+        a. Barre de recherche
+            - Vue SQL : `v_objets_cat` (objets join catégories) 
+                — fichier `database/20260211-03-v_objets_cat.sql`.
+            - Backend : `ObjetRepository::search($q,$category)` 
+                - route `GET /objets/search` 
+                -controller: `ObjetController::search()` 
+                - ciew `objet/search.php`.
+            - Frontend : formulaire `q` + `category`, 
+                -afficher résultats en cartes (image, titre, catégorie, extrait, lien détail).
+
+        b. Historique d'appartenance
+            - Backend : `EchangeRepository::getOwnershipHistory($objetId)` 
+                - route `GET /objet/{id}/history` 
+                - `ObjetController::history()` 
+                - vue `objet/history.php`.
+            - Frontend : page `objet/history.php` 
+                -affichant timeline/list des propriétaires (avatar/initiale, nom, date, statut).
+
+    Notes : adapter les chemins d'images selon stockage (uploads/ ou assets/images). Pagination recommandée si nécessaire.
