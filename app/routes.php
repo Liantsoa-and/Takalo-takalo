@@ -53,6 +53,10 @@ Flight::route('GET /objets', function () {
     ObjetController::list();
 });
 
+Flight::route('GET /objets_publics', function () {
+    ObjetController::listeObjetPublics();
+});
+
 Flight::route('GET /photo/@id/delete', function ($id) {
     ObjetController::deletePhoto($id);
 });

@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /S3/messaging-app/public/
+RewriteBase /Takalo-takalo/public/
 
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

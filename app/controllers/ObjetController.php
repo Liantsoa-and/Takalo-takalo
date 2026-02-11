@@ -143,4 +143,30 @@ class ObjetController
         $photoService->deletePhoto($id);
         Flight::redirect('/objet/' . $objetId . '/edit');
     }
+
+    public static function listeObjetPublics()
+    {
+        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $categoryId = $_GET['category_id'] ?? null;
+        $page = $_GET['page'] ?? 1;
+        $limit = 10;
+
+        $pdo = Flight::db();
+        $objetRepository = new ObjetRepository($pdo);
+        $objets = $objetRepository->getObjetsByOthers($currentUserId, $categoryId, $page, $limit);
+        $total = $objetRepository->countObjetsByOthers($currentUserId, $categoryId);
+        $totalPages = ceil($total / $limit);
+
+        $categoryRepository = new CategoryRepository($pdo);
+        $categories = $categoryRepository->findAll();
+
+        Flight::render('objet/publics', [
+            'objets' => $objets,
+            'categories' => $categories,
+            'currentCategory' => $categoryId,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'total' => $total
+        ]);
+    }
 }

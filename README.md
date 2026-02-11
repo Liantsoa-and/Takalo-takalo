@@ -91,17 +91,16 @@ On veut mettre en place un site qui permet de faire des échanges d’objet : Ta
 
 ## **Page Utilisateur – Liste Objets Autres Utilisateurs**
 - **Base**
-    - [ ] Requête SELECT avec jointure `users`, `categories`, `photos`
-    - [ ] Exclusion des objets de l’utilisateur connecté
+    - [x] Requête SELECT avec jointure `users`, `categories`, `photos`
+    - [x] Exclusion des objets de l’utilisateur connecté
 - **Design**
-    - [ ] Grille de cartes Bootstrap (image + titre + catégorie)
-    - [ ] Bouton "Voir détail" sur chaque carte
+    - [x] Grille de cartes Bootstrap (image + titre + catégorie)
+    - [x] Bouton "Voir détail" sur chaque carte
 - **Intégration**
-    - [ ] Route `/objects` avec pagination
-    - [ ] Lien vers fiche objet
+    - [x] Route `/objets_publics` avec pagination
+    - [x] Lien vers fiche objet
 - **Fonction**
-    - [ ] Filtre par catégorie via liste déroulante
-    - [ ] Tri par date de publication
+    - [x] Filtre par catégorie via liste déroulante
 
 ---
 
