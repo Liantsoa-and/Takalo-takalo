@@ -59,6 +59,8 @@ Fonctionnalite 2 :
                     badge nb_utilisateur inscrit utilisateur inscrit[OK]
                     badge nb_admin [OK]
                     badge nb_user[OK]
+                    [OK]ajouter des photo de profil :
+                        mettre les pdp dans public/assets/images/pdp[OK]
             [OK]ii. Le nombre d’échange effectué
                 [OK]Back :
                     route : GET / admin_echange [OK]
@@ -66,4 +68,10 @@ Fonctionnalite 2 :
                     repositories : EchangeRepository->findAll() [OK]
                 [OK]Front : 
                     tableau table [OK]
-    2 - Front office (utilsateur)
+    
+    2 - Front office (utilsateur) => [J]
+    a. Barre de recherche  
+        i. rechercher dans le titre, catégorie (zone de liste) 
+    b. Historique d’appartenance d’un objet (visible au public) 
+        i. On veut voir qui sont les différents propriétaires au fil des échanges, 
+        avec la date et l’heure d’échange 

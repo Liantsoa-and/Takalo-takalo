@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function(){
         if(!modalForm) return alert('Formulaire modal introuvable');
         modalForm.reset(); modalForm.id.value = '';
         document.getElementById('userModalLabel').textContent = 'Créer un utilisateur';
+        // reset preview to default
+        const previewAdd = document.getElementById('modalPdpPreview'); if(previewAdd) previewAdd.src = '/assets/images/pdp/default.png';
         modalSaveBtn.dataset.mode = 'create';
         const m = ensureBsModal(); if(m) m.show();
       });
@@ -50,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function(){
         modalForm.password.value = '';
         modalForm.role.value = u.role || 'user';
         document.getElementById('userModalLabel').textContent = 'Modifier utilisateur';
+        // set preview image to current pdp
+        const preview = document.getElementById('modalPdpPreview');
+        if(preview) preview.src = `/assets/images/pdp/${u.pdp || 'default.png'}`;
         modalSaveBtn.dataset.mode = 'edit';
         const m = ensureBsModal(); if(m) m.show();
       }).catch(()=>alert('Erreur réseau'));
@@ -57,22 +62,25 @@ document.addEventListener('DOMContentLoaded', function(){
 
     if(modalSaveBtn){
       modalSaveBtn.addEventListener('click', ()=>{
-        const data = Object.fromEntries(new FormData(modalForm).entries());
+        const formData = new FormData(modalForm);
         const mode = modalSaveBtn.dataset.mode;
-        if(mode === 'create'){
-          postJson('/admin/user/create', data).then(resp=>{
-            if(resp.success){
-              const m = ensureBsModal(); if(m) m.hide();
-              appendRow(resp.id, data.username, data.role);
-            } else alert('Erreur création');
-          });
-        } else {
-          const id = data.id;
-          postJson(`/admin/user/${id}/update`, data).then(resp=>{
-            if(resp.success){ const m = ensureBsModal(); if(m) m.hide(); updateRow(id, data.username, data.role); }
-            else alert('Erreur mise à jour');
-          });
+        let url = '/admin/user/create';
+        if(mode !== 'create'){
+          url = `/admin/user/${formData.get('id')}/update`;
         }
+        fetch(url, { method: 'POST', body: formData }).then(r=>r.json()).then(resp=>{
+          if(!resp) return alert('Erreur réseau');
+          if(resp.success){
+            const m = ensureBsModal(); if(m) m.hide();
+            const pdp = resp.pdp || 'default.png';
+            if(mode === 'create') appendRow(resp.id, formData.get('username'), formData.get('role'), pdp);
+            else updateRow(formData.get('id'), formData.get('username'), formData.get('role'));
+            // update modal preview if response contains pdp
+            const previewAfter = document.getElementById('modalPdpPreview'); if(previewAfter && resp.pdp) previewAfter.src = `/assets/images/pdp/${resp.pdp}`;
+          } else {
+            alert(resp.message || 'Erreur');
+          }
+        }).catch(()=>alert('Erreur réseau'));
       });
     }
 
@@ -116,6 +124,20 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+    // preview selected file in modal
+    const pdpInput = modalForm ? modalForm.querySelector('input[name="pdp"]') : null;
+    if(pdpInput){
+      pdpInput.addEventListener('change', function(e){
+        const f = this.files && this.files[0];
+        const preview = document.getElementById('modalPdpPreview');
+        if(f && preview){
+          const reader = new FileReader();
+          reader.onload = function(ev){ preview.src = ev.target.result; };
+          reader.readAsDataURL(f);
+        } else if(preview){ preview.src = '/assets/images/pdp/default.png'; }
+      });
+    }
 
   })();
 });

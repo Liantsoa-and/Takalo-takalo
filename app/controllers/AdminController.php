@@ -32,11 +32,29 @@ public static function showUsersById($id)
 
 public static function apiCreateUser()
     {
-        $data = Flight::request()->data->getData();
+        // Accept multipart/form-data (files in $_FILES, fields in $_POST)
+        $data = $_POST ?: Flight::request()->data->getData();
+        // handle uploaded profile picture
+        $pdpFilename = null;
+        if (!empty($_FILES['pdp']) && $_FILES['pdp']['error'] === UPLOAD_ERR_OK) {
+            $tmp = $_FILES['pdp']['tmp_name'];
+            $orig = $_FILES['pdp']['name'];
+            $ext = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
+            $allowed = ['jpg','jpeg','png','gif','webp'];
+            if (in_array($ext, $allowed)) {
+                $name = time() . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
+                $destDir = realpath(__DIR__ . '/../../public/assets/images/pdp');
+                if ($destDir && move_uploaded_file($tmp, $destDir . DIRECTORY_SEPARATOR . $name)) {
+                    $pdpFilename = $name;
+                }
+            }
+        }
+        if ($pdpFilename) $data['pdp'] = $pdpFilename;
+
         $pdo = Flight::db();
         $repo = new UserRepository($pdo);
         $id = $repo->createFull($data);
-        Flight::json(['success' => true, 'id' => $id]);
+        Flight::json(['success' => true, 'id' => $id, 'pdp' => $pdpFilename]);
     }
 
 public static function apiGetUser($id)
@@ -53,11 +71,28 @@ public static function apiGetUser($id)
 
 public static function apiUpdateUser($id)
     {
-        $data = Flight::request()->data->getData();
+        $data = $_POST ?: Flight::request()->data->getData();
+        // handle uploaded profile picture
+        $pdpFilename = null;
+        if (!empty($_FILES['pdp']) && $_FILES['pdp']['error'] === UPLOAD_ERR_OK) {
+            $tmp = $_FILES['pdp']['tmp_name'];
+            $orig = $_FILES['pdp']['name'];
+            $ext = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
+            $allowed = ['jpg','jpeg','png','gif','webp'];
+            if (in_array($ext, $allowed)) {
+                $name = time() . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
+                $destDir = realpath(__DIR__ . '/../../public/assets/images/pdp');
+                if ($destDir && move_uploaded_file($tmp, $destDir . DIRECTORY_SEPARATOR . $name)) {
+                    $pdpFilename = $name;
+                }
+            }
+        }
+        if ($pdpFilename) $data['pdp'] = $pdpFilename;
+
         $pdo = Flight::db();
         $repo = new UserRepository($pdo);
         $ok = $repo->update($id, $data);
-        Flight::json(['success' => (bool)$ok]);
+        Flight::json(['success' => (bool)$ok, 'pdp' => $pdpFilename]);
     }
 
 public static function apiDeleteUser($id)

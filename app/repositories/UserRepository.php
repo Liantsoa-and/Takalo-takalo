@@ -41,11 +41,12 @@ class UserRepository {
   }
 
   public function createFull(array $data) {
-    $st = $this->pdo->prepare("INSERT INTO tt_users (username, password, role) VALUES (?, ?, ?)");
+    $st = $this->pdo->prepare("INSERT INTO tt_users (username, password, role, pdp) VALUES (?, ?, ?, ?)");
     $st->execute([
       isset($data['username']) ? $data['username'] : null,
-      isset($data['password']) ? password_hash($data['password'], PASSWORD_DEFAULT) : null,
-      isset($data['role']) ? $data['role'] : 'user'
+      isset($data['password']) && $data['password'] !== '' ? password_hash($data['password'], PASSWORD_DEFAULT) : null,
+      isset($data['role']) ? $data['role'] : 'user',
+      isset($data['pdp']) ? $data['pdp'] : 'default.png'
     ]);
     return $this->pdo->lastInsertId();
   }
@@ -56,6 +57,7 @@ class UserRepository {
     if (isset($data['username'])) { $fields[] = 'username = ?'; $params[] = $data['username']; }
     if (isset($data['password']) && $data['password'] !== '') { $fields[] = 'password = ?'; $params[] = password_hash($data['password'], PASSWORD_DEFAULT); }
     if (isset($data['role'])) { $fields[] = 'role = ?'; $params[] = $data['role']; }
+    if (isset($data['pdp'])) { $fields[] = 'pdp = ?'; $params[] = $data['pdp']; }
     if (empty($fields)) { return false; }
     $params[] = (int)$id;
     $sql = "UPDATE tt_users SET " . implode(', ', $fields) . " WHERE id = ?";

@@ -85,6 +85,9 @@ $count = count($usersList);
             </div>
             <div class="modal-body">
                 <form id="modalUserForm">
+                    <div class="d-flex justify-content-center mb-3">
+                        <img id="modalPdpPreview" src="/assets/images/pdp/default.png" alt="pdp preview" class="rounded-circle border" style="width:120px;height:120px;object-fit:cover;">
+                    </div>
                     <input type="hidden" name="id" value="">
                     <div class="mb-3">
                         <label class="form-label">Nom d'utilisateur</label>
@@ -93,6 +96,10 @@ $count = count($usersList);
                     <div class="mb-3">
                         <label class="form-label">Mot de passe (laisser vide si inchangé)</label>
                         <input type="password" name="password" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Photo de profil</label>
+                        <input type="file" name="pdp" accept="image/*" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Rôle</label>
