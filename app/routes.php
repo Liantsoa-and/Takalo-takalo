@@ -58,6 +58,10 @@ Flight::route('GET /objets_publics', function () {
     ObjetController::listeObjetPublics();
 });
 
+// AJAX search endpoints
+Flight::route('GET /objets/search', ['ObjetController', 'searchMine']);
+Flight::route('GET /objets_publics/search', ['ObjetController', 'searchPublics']);
+
 Flight::route('GET /photo/@id/delete', function ($id) {
     ObjetController::deletePhoto($id);
 });

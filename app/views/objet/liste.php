@@ -2,6 +2,8 @@
 <?php $objets = $objets ?? []; ?>
 
 <main class="col-12 col-md-10 py-4">
+<?php $categories = $categories ?? []; $scope = 'mine'; include __DIR__ . '/search.php'; ?>
+
     <div class="row mb-4">
         <div class="col-md-8">
             <h1>Mes objets</h1>
@@ -18,7 +20,7 @@
             Vous n'avez pas encore d'objets. <a href="<?= $base ?>/objet/formulaire">Créez votre premier objet</a>
         </div>
     <?php else: ?>
-        <div class="row">
+        <div id="objects-list-mine" class="row objects-list">
             <?php foreach ($objets as $objet): ?>
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">

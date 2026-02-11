@@ -103,4 +103,48 @@ class ObjetRepository
     $st->execute([(int) $id]);
     return $st->fetch(PDO::FETCH_ASSOC);
   }
+
+  public function searchByUser($userId, $q = '', $categoryId = null)
+  {
+    $sql = "SELECT * FROM tt_objets WHERE user_id = ?";
+    $params = [(int) $userId];
+    if ($q !== '') {
+      $sql .= " AND (libelle LIKE ? OR description LIKE ?)";
+      $like = '%' . $q . '%';
+      $params[] = $like;
+      $params[] = $like;
+    }
+    if ($categoryId) {
+      $sql .= " AND category_id = ?";
+      $params[] = (int) $categoryId;
+    }
+    $sql .= " ORDER BY id DESC";
+    $st = $this->pdo->prepare($sql);
+    $st->execute($params);
+    return $st->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function searchPublic($currentUserId = null, $q = '', $categoryId = null)
+  {
+    $sql = "SELECT * FROM v_objets_public WHERE 1=1";
+    $params = [];
+    if ($currentUserId !== null) {
+      $sql .= " AND user_id != ?";
+      $params[] = (int) $currentUserId;
+    }
+    if ($q !== '') {
+      $sql .= " AND (libelle LIKE ? OR description LIKE ?)";
+      $like = '%' . $q . '%';
+      $params[] = $like;
+      $params[] = $like;
+    }
+    if ($categoryId) {
+      $sql .= " AND category_id = ?";
+      $params[] = (int) $categoryId;
+    }
+    $sql .= " ORDER BY id DESC";
+    $st = $this->pdo->prepare($sql);
+    $st->execute($params);
+    return $st->fetchAll(PDO::FETCH_ASSOC);
+  }
 }

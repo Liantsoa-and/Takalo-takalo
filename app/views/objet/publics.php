@@ -1,6 +1,8 @@
 <?php $base = Flight::get('base_path') ?? ''; ?>
+<?php $categories = $categories ?? []; $scope = 'public'; ?>
 
 <main class="col-12 col-md-10 py-4">
+    <?php include __DIR__ . '/search.php'; ?>
     <h1 class="mb-4">Objets disponibles pour échange</h1>
 
     <style>
@@ -30,7 +32,7 @@
 
     <p class="text-muted mb-4"><?= $total ?> objet(s) trouvé(s)</p>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+    <div id="objects-list-public" class="row row-cols-1 row-cols-md-3 g-4 mb-4">
         <?php if (empty($objets)): ?>
             <div class="col-12"><div class="alert alert-info">Aucun objet disponible pour le moment.</div></div>
         <?php else: foreach ($objets as $objet): ?>

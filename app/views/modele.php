@@ -55,5 +55,6 @@
     </footer>
 
     <script src="<?= $base ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= $base ?>/assets/js/search.js"></script>
 </body>
 </html>

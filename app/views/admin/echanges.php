@@ -18,7 +18,7 @@
         <div class="card-body d-flex align-items-center justify-content-between p-4">
             <div>
                 <div class="h1 mb-0 display-4 fw-bold"><?= $count ?></div>
-                <div class="text-uppercase small text-white-25">Échanges enregistrés</div>
+                <div class="text-uppercase small text-white-50">Échanges enregistrés</div>
             </div>
             <div class="text-end">
                 <i class="bi bi-arrow-left-right" style="font-size:64px; color:inherit;"></i>

@@ -194,6 +194,55 @@ class ObjetController
         ]);
     }
 
+    // AJAX search for user's own objects
+    public static function searchMine()
+    {
+        $pdo = Flight::db();
+        $repo = new ObjetRepository($pdo);
+        $photoService = new PhotoService($pdo);
+
+        $q = $_GET['q'] ?? '';
+        $categoryId = $_GET['category_id'] ?? null;
+        $currentUserId = 2; // TODO: retrieve from session
+
+        $objets = $repo->searchByUser($currentUserId, $q, $categoryId);
+        // attach main photo
+        foreach ($objets as &$o) { $o['main_photo'] = $photoService->getFirstPhoto($o['id']); }
+
+        // If AJAX, render partial cards
+        if ((isset($_GET['ajax']) && $_GET['ajax']=='1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])==='xmlhttprequest')) {
+            Flight::render('objet/_cards', ['objets' => $objets]);
+            return;
+        }
+
+        // fallback: render full page
+        $pagename = 'objet/liste.php';
+        Flight::render('modele', ['objets' => $objets, 'pagename' => $pagename]);
+    }
+
+    // AJAX search for public objects
+    public static function searchPublics()
+    {
+        $pdo = Flight::db();
+        $repo = new ObjetRepository($pdo);
+        $photoService = new PhotoService($pdo);
+
+        $q = $_GET['q'] ?? '';
+        $categoryId = $_GET['category_id'] ?? null;
+        $currentUserId = 2; // TODO: session
+
+        $objets = $repo->searchPublic($currentUserId, $q, $categoryId);
+        foreach ($objets as &$o) { $o['main_photo'] = $photoService->getFirstPhoto($o['id']); }
+
+        if ((isset($_GET['ajax']) && $_GET['ajax']=='1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])==='xmlhttprequest')) {
+            Flight::render('objet/_cards', ['objets' => $objets]);
+            return;
+        }
+
+        $pagename = 'objet/publics.php';
+        Flight::render('modele', ['objets' => $objets, 'pagename' => $pagename]);
+    }
+
     // Proposer un échange
     public static function proposeEchange()
     {
