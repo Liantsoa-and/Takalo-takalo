@@ -96,11 +96,12 @@ document.addEventListener('DOMContentLoaded', function(){
       if(row) row.remove();
     }
 
-    function appendRow(id, username, role){
+    function appendRow(id, username, role, pdp){
+      pdp = pdp || 'default.png';
       const tbody = document.querySelector('table.table tbody');
       const tr = document.createElement('tr'); tr.id = 'user-row-'+id;
       tr.innerHTML = `
-        <td>--</td>
+        <td class="pdp-cell"><img src="/assets/images/pdp/${escapeHtml(pdp)}" alt="pdp" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;"></td>
         <td class="username-cell">${escapeHtml(username)}</td>
         <td class="role-cell"><span class="badge bg-secondary">${escapeHtml(role)}</span></td>
         <td>

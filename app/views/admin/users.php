@@ -44,7 +44,9 @@ $count = count($usersList);
                         foreach ($usersList as $user):
                             $uid = $user['id'] ?? ($user['user_id'] ?? ''); ?>
                             <tr id="user-row-<?= htmlspecialchars($uid) ?>">
-                                <td><?= $i++ ?></td>
+                                <td class="pdp-cell" style="width:60px">
+                                    <img src="/assets/images/pdp/<?= htmlspecialchars($user['pdp'] ?? 'default.png') ?>" alt="pdp" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+                                </td>
                                 <td class="username-cell">
                                     <?= htmlspecialchars($user['username'] ?? ($user['user'] ?? '')) ?></td>
                                 <td class="role-cell"><span
