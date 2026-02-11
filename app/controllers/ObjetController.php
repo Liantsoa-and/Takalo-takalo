@@ -13,7 +13,8 @@ class ObjetController
             $objet['photo'] = $photoService->getFirstPhoto($objet['id']);
         }
 
-        Flight::render('objet/liste', ['objets' => $objets]);
+        $pagename = "liste.php";
+        Flight::render('objet/modele', ['objets' => $objets, 'pagename' => $pagename]);
     }
 
     public static function detail($id)
