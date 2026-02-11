@@ -50,6 +50,9 @@ Flight::route('GET /objet/@id', function ($id) {
     ObjetController::detail($id);
 });
 
+// Historique d'appartenance d'un objet
+Flight::route('GET /objet/@id/history', ['ObjetController', 'history']);
+
 Flight::route('GET /objets', function () {
     ObjetController::list();
 });

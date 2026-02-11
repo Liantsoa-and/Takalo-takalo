@@ -39,18 +39,23 @@
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objets">Mes objets</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objets_publics">Objets publics</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= $base ?>/echanges">Échanges</a></li>
+                        <?php if (!empty($objet) && !empty($objet['id'])): ?>
+                            <li class="nav-item"><a class="nav-link" href="<?= $base ?>/objet/<?php echo $objet['id']; ?>/history">Historique</a></li>
+                        <?php endif; ?>
 
                     </ul>
                 </div>
             </aside>
 
-            <?php include __DIR__ . '/' . ($pagename ); ?>
+            <main class="col-12 col-md-10 py-4">
+                <?php include __DIR__ . '/' . ($pagename ); ?>
+            </main>
         </div>
     </div>
 
     <footer class="footer bg-white mt-4">
         <div class="container text-center text-muted">
-            <small>&copy; <?= date('Y') ?> Takalo-takalo — Tous droits réservés</small>
+            <small>&copy; <?= date('Y') ?> Takalo-takalo — Tous droits réservés : ETU4042 - ETU3940 - ETU4199</small>
         </div>
     </footer>
 

@@ -199,4 +199,70 @@ class EchangeRepository
     return $st->fetch(PDO::FETCH_ASSOC);
   }
 
+  // Récupérer l'historique d'appartenance d'un objet (liste des propriétaires dans le temps)
+  public function getOwnershipHistory($objetId)
+  {
+    // Récupérer l'état courant (propriétaire actuel)
+    $st = $this->pdo->prepare("SELECT user_id FROM tt_objets WHERE id = ? LIMIT 1");
+    $st->execute([(int)$objetId]);
+    $current = $st->fetch(PDO::FETCH_ASSOC);
+    $currentOwner = $current ? (int)$current['user_id'] : null;
+
+    // Récupérer les échanges confirmés impliquant cet objet, par date décroissante
+    $sql = "SELECT e.id, e.date_echange, e.objet1_id, e.objet2_id,
+                   o1.user_id AS o1_user_id, u1.username AS o1_username, u1.pdp AS o1_pdp,
+                   o2.user_id AS o2_user_id, u2.username AS o2_username, u2.pdp AS o2_pdp,
+                   s.libelle AS status
+            FROM tt_echanges e
+            LEFT JOIN tt_objets o1 ON e.objet1_id = o1.id
+            LEFT JOIN tt_users u1 ON o1.user_id = u1.id
+            LEFT JOIN tt_objets o2 ON e.objet2_id = o2.id
+            LEFT JOIN tt_users u2 ON o2.user_id = u2.id
+            LEFT JOIN tt_status s ON e.status_id = s.id
+            WHERE (e.objet1_id = ? OR e.objet2_id = ?) AND e.status_id = 2
+            ORDER BY e.date_echange DESC";
+
+    $st = $this->pdo->prepare($sql);
+    $st->execute([(int)$objetId, (int)$objetId]);
+    $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+
+    $timeline = [];
+    if ($currentOwner !== null) {
+      // récupérer infos utilisateur courant
+      $ust = $this->pdo->prepare("SELECT id, username, pdp FROM tt_users WHERE id = ? LIMIT 1");
+      $ust->execute([$currentOwner]);
+      $u = $ust->fetch(PDO::FETCH_ASSOC) ?: ['id'=>$currentOwner,'username'=>'Utilisateur','pdp'=>'default.png'];
+      $timeline[] = ['user_id'=>$u['id'],'username'=>$u['username'],'pdp'=>$u['pdp'],'date'=>null,'note'=>'Actuel'];
+    }
+
+    // parcourir les échanges du plus récent au plus ancien et reconstituer les propriétaires précédents
+    foreach ($rows as $r) {
+      // déterminer l'autre utilisateur impliqué dans l'échange
+      if ((int)$r['objet1_id'] === (int)$objetId) {
+        $userAfter = (int)$r['o2_user_id']; // après échange, objet1 appartient à o2
+        $userBefore = (int)$r['o1_user_id'];
+      } else {
+        // objet2
+        $userAfter = (int)$r['o1_user_id']; // après échange, objet2 appartient à o1
+        $userBefore = (int)$r['o2_user_id'];
+      }
+
+      // si le propriétaire courant correspond à l'état après l'échange, le propriétaire précédent est userBefore
+      $prevOwner = ($currentOwner === $userAfter) ? $userBefore : $userAfter;
+
+      // récupérer infos du prevOwner
+      $ust = $this->pdo->prepare("SELECT id, username, pdp FROM tt_users WHERE id = ? LIMIT 1");
+      $ust->execute([$prevOwner]);
+      $pu = $ust->fetch(PDO::FETCH_ASSOC) ?: ['id'=>$prevOwner,'username'=>'Utilisateur','pdp'=>'default.png'];
+
+      $timeline[] = ['user_id'=>$pu['id'],'username'=>$pu['username'],'pdp'=>$pu['pdp'],'date'=>$r['date_echange'],'note'=>'Transféré'];
+
+      // mettre à jour currentOwner pour l'étape suivante (remonter dans le temps)
+      $currentOwner = $prevOwner;
+    }
+
+    // inverser pour ordre chronologique (ancien -> actuel)
+    return array_reverse($timeline);
+  }
+
 }

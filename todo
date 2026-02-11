@@ -57,15 +57,15 @@ Fonctionnalite 2 :
                     tableau table [OK]
     
     2 - Front office (utilisateur) => [J]
-        a. Barre de recherche
-            - Vue SQL : `v_objets_cat` (objets join catégories) 
-                — fichier `database/20260211-03-v_objets_cat.sql`.
-            - Backend : `ObjetRepository::search($q,$category)` 
+        [OK]a. Barre de recherche
+            [OK]- Vue SQL : `v_objets_cat` (objets join catégories) 
+                [OK]— fichier `database/20260211-03-v_objets_cat.sql`.
+            [OK]- Backend : `ObjetRepository::search($q,$category)` 
                 - route `GET /objets/search` 
-                -controller: `ObjetController::search()` 
-                - ciew `objet/search.php`.
-            - Frontend : formulaire `q` + `category`, 
-                -afficher résultats en cartes (image, titre, catégorie, extrait, lien détail).
+                [OK]-controller: `ObjetController::search()` 
+                [OK]- ciew `objet/search.php`.
+            [OK]- Frontend : formulaire `q` + `category`, 
+                [OK]-afficher résultats en cartes (image, titre, catégorie, extrait, lien détail).
 
         b. Historique d'appartenance
             - Backend : `EchangeRepository::getOwnershipHistory($objetId)` 

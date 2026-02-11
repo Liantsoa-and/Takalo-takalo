@@ -215,7 +215,7 @@ class ObjetController
 
         // If AJAX, render partial cards
         if ((isset($_GET['ajax']) && $_GET['ajax']=='1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])==='xmlhttprequest')) {
-            Flight::render('objet/_cards', ['objets' => $objets]);
+            Flight::render('objet/_cards', ['objets' => $objets, 'scope' => 'mine']);
             return;
         }
 
@@ -239,12 +239,34 @@ class ObjetController
         foreach ($objets as &$o) { $o['main_photo'] = $photoService->getFirstPhoto($o['id']); }
 
         if ((isset($_GET['ajax']) && $_GET['ajax']=='1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])==='xmlhttprequest')) {
-            Flight::render('objet/_cards', ['objets' => $objets]);
+            Flight::render('objet/_cards', ['objets' => $objets, 'scope' => 'public']);
             return;
         }
 
         $pagename = 'objet/publics.php';
         Flight::render('modele', ['objets' => $objets, 'pagename' => $pagename]);
+    }
+
+    // Afficher l'historique d'appartenance pour un objet
+    public static function history($id)
+    {
+        $pdo = Flight::db();
+        $objetRepo = new ObjetRepository($pdo);
+        $objet = $objetRepo->findById($id);
+        if (!$objet) {
+            Flight::notFound();
+            return;
+        }
+
+        $echangeRepo = new EchangeRepository($pdo);
+        $timeline = $echangeRepo->getOwnershipHistory($id);
+
+        $pagename = 'objet/history.php';
+        Flight::render('modele', [
+            'objet' => $objet,
+            'timeline' => $timeline,
+            'pagename' => $pagename
+        ]);
     }
 
     // Proposer un échange
