@@ -12,23 +12,7 @@
         .filter-section { background-color: #f8f9fa; padding: 20px; margin-bottom: 30px; border-radius: 8px; }
     </style>
 
-    <div class="filter-section">
-        <form method="GET" action="<?= $base ?>/objets_publics" class="row g-3">
-            <div class="col-md-8">
-                <label for="category_id" class="form-label">Filtrer par catégorie</label>
-                <select name="category_id" id="category_id" class="form-select" onchange="this.form.submit()">
-                    <option value="">Toutes les catégories</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?= $category['id'] ?>" <?= $currentCategory == $category['id'] ? 'selected' : '' ?>><?= htmlspecialchars($category['libelle']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-            </div>
-        </form>
-        <?php if ($currentCategory): ?><div class="mt-2"><a href="<?= $base ?>/objets_publics" class="btn btn-sm btn-outline-secondary">Réinitialiser le filtre</a></div><?php endif; ?>
-    </div>
+    
 
     <p class="text-muted mb-4"><?= $total ?> objet(s) trouvé(s)</p>
 
