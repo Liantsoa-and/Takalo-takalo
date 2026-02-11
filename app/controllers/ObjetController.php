@@ -13,8 +13,12 @@ class ObjetController
             $objet['photo'] = $photoService->getFirstPhoto($objet['id']);
         }
 
+        // Récupérer les catégories pour le sélecteur de recherche
+        $catRepo = new CategoryRepository($pdo);
+        $categories = $catRepo->findAll();
+
         $pagename = "objet/liste.php";
-        Flight::render('modele', ['objets' => $objets, 'pagename' => $pagename]);
+        Flight::render('modele', ['objets' => $objets, 'categories' => $categories, 'pagename' => $pagename]);
     }
 
     public static function detail($id)
