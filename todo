@@ -43,23 +43,27 @@ Fonctionnalite 1 :
         i. Liste des propositions 
         ii. Acceptation ou refus 
 Fonctionnalite 2 :
+    Dans modele : 
+    ajoute un verification des sessions s il y en a 
+    sinon on le remet dans login admin
+    
     1 - Back office (admin) => [J]
         a. Statistiques 
-            i. Nombre d’utilisateur inscrit 
+            [OK]i. Nombre d’utilisateur inscrit 
                 [OK]Back : 
                     route : GET / admin_users [OK]
                     controller : AdminController->showUsers() [OK]
                     repositories : UserRepository->findAll() [OK]
 
-                Front :
-                    badge nb_utilisateur inscrit utilisateur inscrit
-                    badge nb_admin 
-                    badge nb_user
-            ii. Le nombre d’échange effectué
-                Back :
-                    route : GET / admin_echange
-                    controller : AdminController->showEchanges()
-                    repositories : EchangeRepository->findAll()
-                Front : 
-                    tableau table
+                [OK]Front :
+                    badge nb_utilisateur inscrit utilisateur inscrit[OK]
+                    badge nb_admin [OK]
+                    badge nb_user[OK]
+            [OK]ii. Le nombre d’échange effectué
+                [OK]Back :
+                    route : GET / admin_echange [OK]
+                    controller : AdminController->showEchanges() [OK]
+                    repositories : EchangeRepository->findAll() [OK]
+                [OK]Front : 
+                    tableau table [OK]
     2 - Front office (utilsateur)

@@ -1,0 +1,1 @@
+ALTER TABLE tt_users ADD COLUMN pdp VARCHAR(255) DEFAULT 'default.png' ;

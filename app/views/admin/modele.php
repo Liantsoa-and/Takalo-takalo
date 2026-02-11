@@ -1,7 +1,6 @@
 <?php
     // Définitions par défaut pour éviter Undefined variable
-    $usersList = isset($utilisateur) ? $utilisateur : (isset($users) ? $users : []);
-    $count = count($usersList);
+   
     $adminName = isset($adminName) ? $adminName : 'Admin Demo';
     $adminInitials = strtoupper(substr($adminName, 0, 1));
     
@@ -67,8 +66,8 @@
             <nav id="sidebar" class="col-md-2 d-none d-md-block bg-white border-end p-3">
                 <h6 class="text-muted">Menu</h6>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="/admin_users">Utilisateurs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin_echange">Echange</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/users">Utilisateurs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/echanges">Echanges</a></li>
                 </ul>
             </nav>
 
@@ -83,5 +82,8 @@
     </footer>
 
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php if (isset($pagename) && (strpos($pagename, 'users.php') !== false || strpos($pagename, 'admin/users.php') !== false)): ?>
+        <script src="/assets/js/users.js"></script>
+    <?php endif; ?>
 </body>
 </html>

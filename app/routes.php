@@ -57,9 +57,24 @@ Flight::route('GET /photo/@id/delete', function ($id) {
     ObjetController::deletePhoto($id);
 });
 
-Flight::route('GET /admin_users', ['AdminController', 'showUsers']);
+// Admin routes----------------------------------------------
+Flight::route('GET /admin', function () {
+    Flight::redirect('/admin/users');
+});
 
-Flight::route('GET /admin_echange', ['AdminController', 'showEchanges']);
+Flight::route('GET /admin/users', ['AdminController', 'showUsers']);
+
+Flight::route('GET /admin/@id/users', function ($id) {
+    AdminController::showUsersById($id);
+});
+
+// API for users (AJAX)
+Flight::route('POST /admin/user/create', ['AdminController', 'apiCreateUser']);
+Flight::route('GET /admin/user/@id', ['AdminController', 'apiGetUser']);
+Flight::route('POST /admin/user/@id/update', ['AdminController', 'apiUpdateUser']);
+Flight::route('GET /admin/user/@id/delete', ['AdminController', 'apiDeleteUser']);
+
+Flight::route('GET /admin/echanges', ['AdminController', 'showEchanges']);
 
 
 
