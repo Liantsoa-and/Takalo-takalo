@@ -76,3 +76,5 @@ Fonctionnalite 2 :
                 -affichant timeline/list des propriétaires (avatar/initiale, nom, date, statut).
 
     Notes : adapter les chemins d'images selon stockage (uploads/ ou assets/images). Pagination recommandée si nécessaire.
+
+    Bonus : fragmente les card des objet pour ameliorer les recherches dans _card.php
