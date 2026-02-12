@@ -1,4 +1,24 @@
-<?php $base = Flight::get('base_path') ?? ''; ?>
+<?php
+$base = Flight::get('base_path') ?? '';
+// Préparer le lien vers le profil connecté
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+$_SESSION['user_id'] = $_SESSION['user_id'] ?? 2; // Assurer que la variable existe
+$profileHref = $base . '/profil';
+if (!empty($_SESSION['user_id'])) {
+    $uid = (int) $_SESSION['user_id'];
+    try {
+        $pdo = Flight::db();
+        $userRepo = new UserRepository($pdo);
+        $u = $userRepo->findById($uid);
+        $type = 'user';
+        $profileHref = $base . '/profil/' . $uid . '/' . $type;
+    } catch (Exception $e) {
+        // fallback to generic profil link
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -63,7 +83,7 @@
                             <i class="bi bi-person-circle me-1"></i> Mon compte
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="<?= $base ?>/profil"><i class="bi bi-person me-2"></i>
+                                <li><a class="dropdown-item" href="<?= $profileHref ?>"><i class="bi bi-person me-2"></i>
                                     Mon profil</a></li>
                             <li><a class="dropdown-item" href="<?= $base ?>/parametres"><i class="bi bi-gear me-2"></i>
                                     Paramètres</a></li>
