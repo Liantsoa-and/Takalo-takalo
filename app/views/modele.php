@@ -1,67 +1,77 @@
 <?php $base = Flight::get('base_path') ?? ''; ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Takalo-takalo - Plateforme d'échange d'objets">
     <title><?= htmlspecialchars($title ?? 'Objets - Takalo-takalo') ?></title>
-    
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= $base ?>/assets/bootstrap/css/bootstrap.min.css">
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    
+
+    <!-- Bootstrap Icons (local) -->
+    <link rel="stylesheet" href="<?= $base ?>/assets/bootstrap-icons/bootstrap-icons.css">
+
     <!-- Custom Styles -->
     <link rel="stylesheet" href="<?= $base ?>/assets/style/main.css">
     <link rel="stylesheet" href="<?= $base ?>/assets/style/objects.css">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="<?= $base ?>/assets/images/logo.png">
 </head>
+
 <body>
     <!-- Header -->
-    <header class="navbar-header bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light container-fluid">
+    <header class="navbar-header">
+        <nav class="navbar navbar-expand-lg container-fluid">
             <div class="d-flex align-items-center">
-                <!-- Mobile Sidebar Toggle (sera ajouté par JavaScript) -->
-                <a class="navbar-brand" href="<?= $base ?>">
-                    <img src="<?= $base ?>/assets/images/logo.png" alt="Logo" height="30" class="d-inline-block align-text-top me-2">
-                    Takalo-takalo
+                <a class="navbar-brand" href="<?= $base ?>/">
+                    <i class="bi bi-arrow-left-right me-2"></i>Takalo-takalo
                 </a>
             </div>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $base ?>/objets">
+                        <a class="nav-link <?= isset($page) && $page === 'objets' ? 'active' : '' ?>"
+                            href="<?= $base ?>/objets">
                             <i class="bi bi-box me-1"></i> Mes objets
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $base ?>/objets_publics">
+                        <a class="nav-link <?= isset($page) && $page === 'objets_publics' ? 'active' : '' ?>"
+                            href="<?= $base ?>/objets_publics">
                             <i class="bi bi-grid-3x3 me-1"></i> Objets publics
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $base ?>/echanges">
+                        <a class="nav-link <?= isset($page) && $page === 'echanges' ? 'active' : '' ?>"
+                            href="<?= $base ?>/echanges">
                             <i class="bi bi-arrow-left-right me-1"></i> Échanges
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-1"></i> Mon compte
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="<?= $base ?>/profil"><i class="bi bi-person me-2"></i> Mon profil</a></li>
-                            <li><a class="dropdown-item" href="<?= $base ?>/parametres"><i class="bi bi-gear me-2"></i> Paramètres</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="<?= $base ?>/logout"><i class="bi bi-box-arrow-right me-2"></i> Déconnexion</a></li>
+                            <li><a class="dropdown-item" href="<?= $base ?>/profil"><i class="bi bi-person me-2"></i>
+                                    Mon profil</a></li>
+                            <li><a class="dropdown-item" href="<?= $base ?>/parametres"><i class="bi bi-gear me-2"></i>
+                                    Paramètres</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="<?= $base ?>/logout"><i
+                                        class="bi bi-box-arrow-right me-2"></i> Déconnexion</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -75,28 +85,31 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <aside class="col-md-3 col-lg-2 sidebar bg-light py-4 d-none d-md-block">
+            <aside class="col-md-3 col-lg-2 sidebar d-none d-md-block">
                 <div class="px-3">
-                    <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">Menu</h6>
+                    <h6>Menu</h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link <?= isset($page) && $page === 'objets' ? 'active' : '' ?>" href="<?= $base ?>/objets">
+                            <a class="nav-link <?= isset($page) && $page === 'objets' ? 'active' : '' ?>"
+                                href="<?= $base ?>/objets">
                                 <i class="bi bi-box"></i> Mes objets
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?= isset($page) && $page === 'objets_publics' ? 'active' : '' ?>" href="<?= $base ?>/objets_publics">
+                            <a class="nav-link <?= isset($page) && $page === 'objets_publics' ? 'active' : '' ?>"
+                                href="<?= $base ?>/objets_publics">
                                 <i class="bi bi-grid-3x3"></i> Objets publics
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?= isset($page) && $page === 'echanges' ? 'active' : '' ?>" href="<?= $base ?>/echanges">
+                            <a class="nav-link <?= isset($page) && $page === 'echanges' ? 'active' : '' ?>"
+                                href="<?= $base ?>/echanges">
                                 <i class="bi bi-arrow-left-right"></i> Échanges
                             </a>
                         </li>
-                        
+
                         <li class="nav-item mt-4">
-                            <h6 class="text-uppercase text-muted mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">Actions rapides</h6>
+                            <h6>Actions rapides</h6>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= $base ?>/objet/formulaire">
@@ -115,7 +128,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer bg-white mt-auto">
+    <footer class="footer">
         <div class="container py-4">
             <div class="row">
                 <div class="col-md-6">
@@ -136,11 +149,11 @@
 
     <!-- Bootstrap Bundle JS -->
     <script src="<?= $base ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Custom JS -->
     <script src="<?= $base ?>/assets/js/app.js"></script>
     <script src="<?= $base ?>/assets/js/search.js"></script>
-    
+
     <!-- Page-specific scripts -->
     <?php if (isset($additionalScripts)): ?>
         <?php foreach ($additionalScripts as $script): ?>
@@ -148,4 +161,5 @@
         <?php endforeach; ?>
     <?php endif; ?>
 </body>
+
 </html>
