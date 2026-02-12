@@ -8,6 +8,7 @@ require_once __DIR__ . '/controllers/ObjetController.php';
 require_once __DIR__ . '/controllers/EchangeController.php';
 require_once __DIR__ . '/repositories/ObjetRepository.php';
 require_once __DIR__ . '/repositories/EchangeRepository.php';
+require_once __DIR__ . '/controllers/ProfilController.php';
 
 
 require_once __DIR__ . '/services/PhotoService.php';
@@ -93,10 +94,14 @@ Flight::route('POST /echange/@id/refuser', function ($id) {
 
 // Admin routes----------------------------------------------
 Flight::route('GET /admin', function () {
-    Flight::redirect('/admin/users');
+    Flight::redirect('/admin/dashboard');
 });
 
+Flight::route('GET /admin/dashboard', ['AdminController', 'showDashboard']);
+
 Flight::route('GET /admin/users', ['AdminController', 'showUsers']);
+
+Flight::route('GET /admin/objets', ['AdminController', 'showObjets']);
 
 Flight::route('GET /admin/@id/users', function ($id) {
     AdminController::showUsersById($id);
@@ -109,6 +114,16 @@ Flight::route('POST /admin/user/@id/update', ['AdminController', 'apiUpdateUser'
 Flight::route('GET /admin/user/@id/delete', ['AdminController', 'apiDeleteUser']);
 
 Flight::route('GET /admin/echanges', ['AdminController', 'showEchanges']);
+
+Flight::route('GET /admin/objet/@id/delete', ['AdminController', 'apiDeleteObjet']);
+
+Flight::route('GET /logout', ['AuthController', 'logout']);
+
+
+// Profil 
+Flight::route('GET /profil/@id/@typePersonne',function($id, $typePersonne){
+    ProfilController::show($id,$typePersonne);
+});
 
 
 

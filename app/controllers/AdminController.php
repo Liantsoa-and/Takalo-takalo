@@ -8,7 +8,7 @@ public static function showUsers()
         $repo = new UserRepository($pdo);
         $users = $repo->findAll();
         $utilisateur = $repo->findAllUtilisateur();
-        $pagename = "users.php";
+        $pagename = "admin/users.php";
         Flight::render('admin/modele', ['users' => $users, 'utilisateur' => $utilisateur, 'pagename' => $pagename]);
     }
 
@@ -17,7 +17,7 @@ public static function showEchanges()
         $pdo = Flight::db();
         $repo = new EchangeRepository($pdo);
         $echanges = $repo->findAll();
-        $pagename = "echanges.php";
+        $pagename = "admin/echanges.php";
         Flight::render('admin/modele', ['echanges' => $echanges, 'pagename' => $pagename]);
 }
 
@@ -26,7 +26,7 @@ public static function showUsersById($id)
         $pdo = Flight::db();
         $repo = new UserRepository($pdo);
         $user = $repo->findById($id);
-        $pagename = "user.php";
+        $pagename = "admin/user.php";
         Flight::render('admin/modele', ['user' => $user, 'pagename' => $pagename]);
 }
 
@@ -101,6 +101,100 @@ public static function apiDeleteUser($id)
         $repo = new UserRepository($pdo);
         $ok = $repo->delete($id);
         Flight::json(['success' => (bool)$ok]);
+    }
+
+// ============ DASHBOARD ============
+
+public static function showDashboard()
+    {
+        $pdo = Flight::db();
+        $userRepo     = new UserRepository($pdo);
+        $objetRepo    = new ObjetRepository($pdo);
+        $echangeRepo  = new EchangeRepository($pdo);
+        $catRepo      = new CategoryRepository($pdo);
+
+        $nbUsers      = $userRepo->countAll();
+        $nbObjets     = $objetRepo->countAll();
+        $nbEchanges   = $echangeRepo->countAll();
+        $nbCategories = count($catRepo->findAll());
+
+        // Statuts échanges
+        $nbEnAttente  = $echangeRepo->countByStatus(1);
+        $nbConfirmes  = $echangeRepo->countByStatus(2);
+        $nbRefuses    = $echangeRepo->countByStatus(3);
+
+        // Données récentes
+        $recentEchanges = $echangeRepo->findRecent(5);
+        $recentObjets   = $objetRepo->findRecentWithDetails(5);
+        $topUsers       = $userRepo->topUsersByObjets(5);
+
+        $pagename = "admin/dashboard.php";
+        Flight::render('admin/modele', [
+            'nbUsers'        => $nbUsers,
+            'nbObjets'       => $nbObjets,
+            'nbEchanges'     => $nbEchanges,
+            'nbCategories'   => $nbCategories,
+            'nbEnAttente'    => $nbEnAttente,
+            'nbConfirmes'    => $nbConfirmes,
+            'nbRefuses'      => $nbRefuses,
+            'recentEchanges' => $recentEchanges,
+            'recentObjets'   => $recentObjets,
+            'topUsers'       => $topUsers,
+            'pagename'       => $pagename
+        ]);
+    }
+
+// ============ OBJETS ADMIN ============
+
+public static function showObjets()
+    {
+        $pdo = Flight::db();
+        $objetRepo = new ObjetRepository($pdo);
+        $catRepo   = new CategoryRepository($pdo);
+
+        $q          = $_GET['q'] ?? '';
+        $categoryId = $_GET['category_id'] ?? null;
+        $ownerName  = $_GET['owner'] ?? null;
+        $page       = (int)($_GET['page'] ?? 1);
+        $limit      = 20;
+
+        $objets     = $objetRepo->findAllWithDetails($q, $categoryId, $ownerName, $page, $limit);
+        $total      = $objetRepo->countFiltered($q, $categoryId, $ownerName);
+        $totalPages = ceil($total / $limit);
+        $categories = $catRepo->findAll();
+
+        $pagename = "admin/objets.php";
+        Flight::render('admin/modele', [
+            'objets'         => $objets,
+            'categories'     => $categories,
+            'filterCategory' => $categoryId,
+            'filterUser'     => $ownerName,
+            'searchQuery'    => $q,
+            'currentPage'    => $page,
+            'totalPages'     => $totalPages,
+            'total'          => $total,
+            'pagename'       => $pagename
+        ]);
+    }
+
+public static function apiDeleteObjet($id)
+    {
+        $pdo = Flight::db();
+        $repo = new ObjetRepository($pdo);
+        $photoService = new PhotoService($pdo);
+
+        $objet = $repo->findById($id);
+        if (!$objet) {
+            Flight::json(['success' => false, 'message' => 'Objet introuvable']);
+            return;
+        }
+
+        // Supprimer les photos associées
+        $photoService->deletePhotosByObjetId($id);
+        // Supprimer l'objet
+        $repo->deleteById($id);
+
+        Flight::json(['success' => true]);
     }
 
 }

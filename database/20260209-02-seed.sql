@@ -37,8 +37,11 @@ INSERT INTO tt_photos_objet (id, objet_id, url) VALUES
 (3, 3, '/assets/img/veste.jpg');
 
 -- Échanges (références aux objets ci-dessus)
-INSERT INTO tt_echanges (id, objet1_id, objet2_id, status_id) VALUES
-(1, 1, 2, 2),
-(2, 3, 4, 1);
+-- Note: user1_id et user2_id doivent être renseignés après ALTER TABLE
+-- Pour ce seed initial, on commente car la table n'a pas encore les colonnes
+-- Utilisez 20260212-03-data-echange.sql après l'ALTER
+-- INSERT INTO tt_echanges (id, objet1_id, objet2_id, user1_id, user2_id, status_id) VALUES
+-- (1, 1, 2, 3, 3, 2),
+-- (2, 3, 4, 3, 4, 1);
 
 -- FIN du fichier de seed

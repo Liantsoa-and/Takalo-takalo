@@ -4,7 +4,7 @@ class EchangeController
     // Page de gestion des échanges
     public static function mesEchanges()
     {
-        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
         $onglet = $_GET['onglet'] ?? 'recues'; // Par défaut : propositions reçues
 
         $pdo = Flight::db();
@@ -30,7 +30,7 @@ class EchangeController
     // Accepter une proposition d'échange
     public static function accepter($id)
     {
-        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
 
         $pdo = Flight::db();
         $echangeRepo = new EchangeRepository($pdo);
@@ -68,7 +68,7 @@ class EchangeController
     // Refuser une proposition d'échange
     public static function refuser($id)
     {
-        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
 
         $pdo = Flight::db();
         $echangeRepo = new EchangeRepository($pdo);

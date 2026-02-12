@@ -134,8 +134,9 @@ $base = Flight::get('base_path') ?? '';
                                 <div class="carousel-inner">
                                     <?php foreach ($objet['photos'] as $index => $photo): ?>
                                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                            <img src="<?= htmlspecialchars($photo['url']) ?>" class="d-block w-100 rounded"
-                                                alt="Photo de l'objet" style="max-height:400px;object-fit:cover;">
+                                            <img src="<?= $base ?>/uploads/photos/<?= htmlspecialchars($photo['url']) ?>"
+                                                class="d-block w-100 rounded" alt="Photo de l'objet"
+                                                style="max-height:400px;object-fit:cover;">
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
@@ -149,9 +150,12 @@ $base = Flight::get('base_path') ?? '';
                                 <?php endif; ?>
                             </div>
                             <div class="row gap-2">
-                                <?php foreach ($objet['photos'] as $photo): ?>
-                                    <div class="col-md-3"><img src="<?= htmlspecialchars($photo['url']) ?>"
-                                            class="img-fluid rounded" alt="Photo" style="cursor:pointer;"></div>
+                                <?php foreach ($objet['photos'] as $index => $photo): ?>
+                                    <div class="col-md-3" style="cursor:pointer;"
+                                        onclick="document.getElementById('carouselPhotos').carousel(<?= $index ?>)">
+                                        <img src="<?= $base ?>/uploads/photos/<?= htmlspecialchars($photo['url']) ?>"
+                                            class="img-fluid rounded" alt="Photo">
+                                    </div>
                                 <?php endforeach; ?>
                             </div>
                         <?php else: ?>

@@ -6,7 +6,7 @@ class ObjetController
         $pdo = Flight::db();
         $repo = new ObjetRepository($pdo);
         $photoService = new PhotoService($pdo);
-        $objets = $repo->findByUserId(2);
+        $objets = $repo->findByUserId(3);
 
         // Ajouter la première photo à chaque objet
         foreach ($objets as &$objet) {
@@ -34,7 +34,7 @@ class ObjetController
         $objet['photos'] = $photoService->getPhotosByObjetId($id);
 
         // Récupérer les objets de l'utilisateur connecté pour proposition d'échange
-        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
         $objetRepository = new ObjetRepository($pdo);
         $mesObjets = $objetRepository->findByUserId($currentUserId);
 
@@ -42,7 +42,7 @@ class ObjetController
         $echangeRepo = new EchangeRepository($pdo);
         $echanges = $echangeRepo->getEchangesByObjetId($id);
 
-        $pagename= "objet/detail.php";
+        $pagename = "objet/detail.php";
 
         Flight::render('modele', [
             'objet' => $objet,
@@ -58,7 +58,7 @@ class ObjetController
         $pdo = Flight::db();
         $repo = new CategoryRepository($pdo);
         $categories = $repo->findAll();
-    
+
         $pagename = "objet/formulaire.php";
         Flight::render('modele', ['categories' => $categories, 'pagename' => $pagename]);
     }
@@ -74,7 +74,7 @@ class ObjetController
             'description' => $_POST['description'] ?? '',
             'category_id' => $_POST['category_id'] ?? 0,
             'prix_estimatif' => $_POST['prix_estimatif'] ?? 0,
-            'user_id' => 2 // À récupérer depuis la session plus tard
+            'user_id' => 1 // À récupérer depuis la session plus tard
         ];
 
         $id = $repo->create($data);
@@ -172,14 +172,18 @@ class ObjetController
 
     public static function listeObjetPublics()
     {
-        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
         $categoryId = $_GET['category_id'] ?? null;
         $page = $_GET['page'] ?? 1;
         $limit = 10;
 
         $pdo = Flight::db();
         $objetRepository = new ObjetRepository($pdo);
+        $photoService = new PhotoService($pdo);
         $objets = $objetRepository->getObjetsByOthers($currentUserId, $categoryId, $page, $limit);
+        foreach ($objets as &$o) {
+            $o['main_photo'] = $photoService->getFirstPhoto($o['id']);
+        }
         $total = $objetRepository->countObjetsByOthers($currentUserId, $categoryId);
         $totalPages = ceil($total / $limit);
 
@@ -207,14 +211,16 @@ class ObjetController
 
         $q = $_GET['q'] ?? '';
         $categoryId = $_GET['category_id'] ?? null;
-        $currentUserId = 2; // TODO: retrieve from session
+        $currentUserId = 3; // TODO: retrieve from session
 
         $objets = $repo->searchByUser($currentUserId, $q, $categoryId);
         // attach main photo
-        foreach ($objets as &$o) { $o['main_photo'] = $photoService->getFirstPhoto($o['id']); }
+        foreach ($objets as &$o) {
+            $o['main_photo'] = $photoService->getFirstPhoto($o['id']);
+        }
 
         // If AJAX, render partial cards
-        if ((isset($_GET['ajax']) && $_GET['ajax']=='1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])==='xmlhttprequest')) {
+        if ((isset($_GET['ajax']) && $_GET['ajax'] == '1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')) {
             Flight::render('objet/_cards', ['objets' => $objets, 'scope' => 'mine']);
             return;
         }
@@ -233,12 +239,14 @@ class ObjetController
 
         $q = $_GET['q'] ?? '';
         $categoryId = $_GET['category_id'] ?? null;
-        $currentUserId = 2; // TODO: session
+        $currentUserId = 3; // TODO: session
 
         $objets = $repo->searchPublic($currentUserId, $q, $categoryId);
-        foreach ($objets as &$o) { $o['main_photo'] = $photoService->getFirstPhoto($o['id']); }
+        foreach ($objets as &$o) {
+            $o['main_photo'] = $photoService->getFirstPhoto($o['id']);
+        }
 
-        if ((isset($_GET['ajax']) && $_GET['ajax']=='1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])==='xmlhttprequest')) {
+        if ((isset($_GET['ajax']) && $_GET['ajax'] == '1') || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')) {
             Flight::render('objet/_cards', ['objets' => $objets, 'scope' => 'public']);
             return;
         }
@@ -259,12 +267,17 @@ class ObjetController
         }
 
         $echangeRepo = new EchangeRepository($pdo);
-        $timeline = $echangeRepo->getOwnershipHistory($id);
+        $echanges = $echangeRepo->getEchangesByObjetId($id);
+
+        // Récupérer le propriétaire actuel
+        $userRepo = new UserRepository($pdo);
+        $currentOwner = $userRepo->findById($objet['user_id']);
 
         $pagename = 'objet/history.php';
         Flight::render('modele', [
             'objet' => $objet,
-            'timeline' => $timeline,
+            'echanges' => $echanges,
+            'currentOwner' => $currentOwner,
             'pagename' => $pagename
         ]);
     }
@@ -272,7 +285,7 @@ class ObjetController
     // Proposer un échange
     public static function proposeEchange()
     {
-        $currentUserId = 2; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
 
         $objet2_id = $_POST['objet2_id'] ?? null; // L'objet ciblé (celui qu'on veut)
         $objet1_id = $_POST['objet1_id'] ?? null; // Mon objet (celui qu'on propose)
@@ -311,8 +324,10 @@ class ObjetController
             return;
         }
 
-        // Créer la proposition d'échange
-        $echangeId = $echangeRepo->createEchange($objet1_id, $objet2_id);
+        // Créer la proposition d'échange (avec les user IDs)
+        $user1_id = (int)$monObjet['user_id'];
+        $user2_id = (int)$objetCible['user_id'];
+        $echangeId = $echangeRepo->createEchange($objet1_id, $objet2_id, $user1_id, $user2_id);
 
         // Rediriger vers la page de détail de l'objet
         Flight::redirect('/objet/' . $objet2_id . '?success=echange_propose');

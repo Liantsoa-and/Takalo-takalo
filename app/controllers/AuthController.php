@@ -96,4 +96,6 @@ class AuthController
     
     Flight::redirect('/login');
   }
+
+
 }

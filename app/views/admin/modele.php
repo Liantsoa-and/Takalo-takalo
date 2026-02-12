@@ -2,6 +2,7 @@
 $adminName = isset($adminName) ? $adminName : 'Admin Demo';
 $adminInitials = strtoupper(substr($adminName, 0, 1));
 $base = Flight::get('base_path') ?? '';
+$adminId = isset($adminId) ? $adminId : 1;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -132,32 +133,6 @@ $base = Flight::get('base_path') ?? '';
                 </div>
 
                 <div class="d-flex align-items-center gap-3">
-                    <!-- Notifications -->
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-secondary position-relative" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell"></i>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                style="font-size: 0.6rem;">
-                                3
-                            </span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <h6 class="dropdown-header">Notifications</h6>
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person-plus me-2"></i> Nouvel
-                                    utilisateur</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-arrow-left-right me-2"></i> Nouvel
-                                    échange</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item text-center small" href="#">Voir tout</a></li>
-                        </ul>
-                    </div>
-
                     <!-- User Profile -->
                     <div class="d-flex align-items-center">
                         <div class="me-3 text-end d-none d-sm-block">
@@ -165,9 +140,12 @@ $base = Flight::get('base_path') ?? '';
                             <strong class="d-block"
                                 style="font-size: 0.875rem; color: var(--tk-text-heading);"><?= htmlspecialchars($adminName) ?></strong>
                         </div>
-                        <div class="profile-circle" title="Photo de profil admin">
-                            <?= htmlspecialchars($adminInitials) ?>
+                        <a href="<?= $base ?>/profil/<?= $adminId ?>/admin">
+                                                    <div class="profile-circle" title="Photo de profil admin">
+                             <?= htmlspecialchars($adminInitials) ?>
                         </div>
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -240,7 +218,13 @@ $base = Flight::get('base_path') ?? '';
 
             <!-- Main Content -->
             <main class="col-12 col-md-9 col-lg-10 py-4">
-                <?php require_once __DIR__ . '/' . $pagename; ?>
+                <?php
+                $cleanPagename = isset($pagename) ? ltrim($pagename, '/\\') : '';
+                if ($cleanPagename === '' || strpos($cleanPagename, '..') !== false) {
+                    throw new Exception('Page invalide');
+                }
+                require_once dirname(__DIR__) . '/' . $cleanPagename;
+                ?>
             </main>
         </div>
     </div>
