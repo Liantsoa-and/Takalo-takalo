@@ -88,14 +88,15 @@ $base = Flight::get('base_path') ?? '';
                         <div class="card-body">
                             <?php if ($onglet === 'recues'): ?>
                                 <h6 class="text-primary mb-3"><i class="bi bi-person"></i> Proposition de
-                                    <strong><?= htmlspecialchars($echange['proposant']) ?></strong></h6>
+                                    <strong><?= htmlspecialchars($echange['proposant']) ?></strong>
+                                </h6>
 
                                 <div class="row mb-3">
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Il propose :</p>
                                         <?php if (!empty($echange['photo_propose'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['photo_propose']) ?>" class="objet-img w-100 mb-2"
-                                                alt="<?= htmlspecialchars($echange['objet_propose']) ?>">
+                                            <img src="<?= $base ?>/<?= htmlspecialchars($echange['photo_propose']) ?>"
+                                                class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['objet_propose']) ?>">
                                         <?php else: ?>
                                             <div
                                                 class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
@@ -109,8 +110,8 @@ $base = Flight::get('base_path') ?? '';
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Contre votre :</p>
                                         <?php if (!empty($echange['ma_photo'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['ma_photo']) ?>" class="objet-img w-100 mb-2"
-                                                alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
+                                            <img src="<?= $base ?>/<?= htmlspecialchars($echange['ma_photo']) ?>"
+                                                class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
                                         <?php else: ?>
                                             <div
                                                 class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
@@ -141,14 +142,15 @@ $base = Flight::get('base_path') ?? '';
 
                             <?php else: ?>
                                 <h6 class="text-primary mb-3"><i class="bi bi-person"></i> Envoyée à
-                                    <strong><?= htmlspecialchars($echange['destinataire']) ?></strong></h6>
+                                    <strong><?= htmlspecialchars($echange['destinataire']) ?></strong>
+                                </h6>
 
                                 <div class="row mb-3">
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Vous proposez :</p>
                                         <?php if (!empty($echange['ma_photo'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['ma_photo']) ?>" class="objet-img w-100 mb-2"
-                                                alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
+                                            <img src="<?= $base ?>/<?= htmlspecialchars($echange['ma_photo']) ?>"
+                                                class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
                                         <?php else: ?>
                                             <div
                                                 class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
@@ -162,8 +164,8 @@ $base = Flight::get('base_path') ?? '';
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Contre :</p>
                                         <?php if (!empty($echange['photo_cible'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['photo_cible']) ?>" class="objet-img w-100 mb-2"
-                                                alt="<?= htmlspecialchars($echange['objet_cible']) ?>">
+                                            <img src="<?= $base ?>/<?= htmlspecialchars($echange['photo_cible']) ?>"
+                                                class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['objet_cible']) ?>">
                                         <?php else: ?>
                                             <div
                                                 class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
