@@ -1,5 +1,9 @@
 <?php
-$adminName = isset($adminName) ? $adminName : 'Admin Demo';
+
+if(!isset($_SESSION['user_id'])) { Flight::redirect('/login');
+ exit;
+}
+$adminName = isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin Demo';
 $adminInitials = strtoupper(substr($adminName, 0, 1));
 $base = Flight::get('base_path') ?? '';
 $adminId = isset($adminId) ? $adminId : 1;

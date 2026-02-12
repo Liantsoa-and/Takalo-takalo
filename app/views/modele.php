@@ -4,7 +4,6 @@ $base = Flight::get('base_path') ?? '';
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
-$_SESSION['user_id'] = $_SESSION['user_id'] ?? 4; // Assurer que la variable existe
 $profileHref = $base . '/profil';
 if (!empty($_SESSION['user_id'])) {
     $uid = (int) $_SESSION['user_id'];
@@ -18,6 +17,9 @@ if (!empty($_SESSION['user_id'])) {
         // fallback to generic profil link
     }
 }
+else{
+    Flight::redirect('/login'); exit; } 
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
