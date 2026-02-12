@@ -59,7 +59,7 @@ class AuthController
     }
 
     // Vérification du mot de passe
-    if (!password_verify($res['values']['password'], $user['password'])) {
+    if ($res['values']['password'] !== $user['password']) {
       $_SESSION['error'] = 'Nom d\'utilisateur ou mot de passe incorrect.';
       Flight::redirect('/login');
       return;
