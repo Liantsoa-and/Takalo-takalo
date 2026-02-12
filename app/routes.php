@@ -117,6 +117,14 @@ Flight::route('GET /admin/echanges', ['AdminController', 'showEchanges']);
 
 Flight::route('GET /admin/objet/@id/delete', ['AdminController', 'apiDeleteObjet']);
 
+// Admin Categories
+Flight::route('GET /admin/categories', ['AdminController', 'showCategories']);
+Flight::route('POST /admin/category/create', ['AdminController', 'apiCreateCategory']);
+Flight::route('GET /admin/category/@id', ['AdminController', 'apiGetCategory']);
+Flight::route('POST /admin/category/@id/update', ['AdminController', 'apiUpdateCategory']);
+Flight::route('GET /admin/category/@id/delete', ['AdminController', 'apiDeleteCategory']);
+Flight::route('POST /admin/category/@id/migrate-delete', ['AdminController', 'apiMigrateAndDeleteCategory']);
+
 Flight::route('GET /logout', ['AuthController', 'logout']);
 
 
