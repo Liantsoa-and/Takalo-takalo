@@ -55,6 +55,7 @@
                                        name="username" 
                                        class="form-control login-input" 
                                        placeholder="Entrez votre nom d'utilisateur"
+                                       value="admin1"
                                        required
                                        autocomplete="username">
                             </div>
@@ -73,6 +74,7 @@
                                        name="password" 
                                        class="form-control login-input" 
                                        placeholder="Entrez votre mot de passe"
+                                       value="adminpass1"
                                        required
                                        autocomplete="current-password">
                             </div>
@@ -93,8 +95,10 @@
                     
                     <div class="login-footer">
                         <small>
-                            <i class="bi bi-shield-check me-1"></i>
-                            Connexion sécurisée
+                            Pas encore de compte ?
+                            <a href="<?= BASE_PATH ?>/register" class="login-link">
+                                <i class="bi bi-person-plus-fill me-1"></i>Créer un compte
+                            </a>
                         </small>
                     </div>
                 </div>

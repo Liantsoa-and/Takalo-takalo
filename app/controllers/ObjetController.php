@@ -1,12 +1,18 @@
 <?php
 class ObjetController
 {
+    private static function currentUserId(): int
+    {
+        return (int)($_SESSION['user_id'] ?? 0);
+    }
+
     public static function list()
     {
         $pdo = Flight::db();
         $repo = new ObjetRepository($pdo);
         $photoService = new PhotoService($pdo);
-        $objets = $repo->findByUserId(3);
+        $currentUserId = self::currentUserId();
+        $objets = $repo->findByUserId($currentUserId);
 
         // Ajouter la première photo à chaque objet
         foreach ($objets as &$objet) {
@@ -34,7 +40,7 @@ class ObjetController
         $objet['photos'] = $photoService->getPhotosByObjetId($id);
 
         // Récupérer les objets de l'utilisateur connecté pour proposition d'échange
-        $currentUserId = 3; // À récupérer depuis la session plus tard
+        $currentUserId = self::currentUserId();
         $objetRepository = new ObjetRepository($pdo);
         $mesObjets = $objetRepository->findByUserId($currentUserId);
 
@@ -74,7 +80,7 @@ class ObjetController
             'description' => $_POST['description'] ?? '',
             'category_id' => $_POST['category_id'] ?? 0,
             'prix_estimatif' => $_POST['prix_estimatif'] ?? 0,
-            'user_id' => 1 // À récupérer depuis la session plus tard
+            'user_id' => self::currentUserId()
         ];
 
         $id = $repo->create($data);
@@ -172,7 +178,7 @@ class ObjetController
 
     public static function listeObjetPublics()
     {
-        $currentUserId = 3; // À récupérer depuis la session plus tard
+        $currentUserId = self::currentUserId();
         $categoryId = $_GET['category_id'] ?? null;
         $page = $_GET['page'] ?? 1;
         $limit = 10;
@@ -211,7 +217,7 @@ class ObjetController
 
         $q = $_GET['q'] ?? '';
         $categoryId = $_GET['category_id'] ?? null;
-        $currentUserId = 3; // TODO: retrieve from session
+        $currentUserId = self::currentUserId();
 
         $objets = $repo->searchByUser($currentUserId, $q, $categoryId);
         // attach main photo
@@ -239,7 +245,7 @@ class ObjetController
 
         $q = $_GET['q'] ?? '';
         $categoryId = $_GET['category_id'] ?? null;
-        $currentUserId = 3; // TODO: session
+        $currentUserId = self::currentUserId();
 
         $objets = $repo->searchPublic($currentUserId, $q, $categoryId);
         foreach ($objets as &$o) {
@@ -285,7 +291,7 @@ class ObjetController
     // Proposer un échange
     public static function proposeEchange()
     {
-        $currentUserId = 3; // À récupérer depuis la session plus tard
+        $currentUserId = self::currentUserId();
 
         $objet2_id = $_POST['objet2_id'] ?? null; // L'objet ciblé (celui qu'on veut)
         $objet1_id = $_POST['objet1_id'] ?? null; // Mon objet (celui qu'on propose)

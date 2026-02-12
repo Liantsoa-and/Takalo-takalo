@@ -229,6 +229,18 @@ body.login-page::before {
     color: #950101;
 }
 
+/* Lien login/register */
+.login-link {
+    color: #ff0000;
+    font-weight: 600;
+    transition: color 0.25s ease;
+}
+
+.login-link:hover {
+    color: #ff4444;
+    text-decoration: underline;
+}
+
 /* Spinner */
 .login-spinner {
     width: 1.2rem;
