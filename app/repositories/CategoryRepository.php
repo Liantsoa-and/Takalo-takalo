@@ -13,7 +13,7 @@ class CategoryRepository {
   }
 
   public function findAll() {
-    $st = $this->pdo->query("SELECT * FROM tt_categories");
+    $st = $this->pdo->query("SELECT * FROM tt_categories ORDER BY libelle ASC");
     return $st->fetchAll(PDO::FETCH_ASSOC);
   }
 
@@ -25,7 +25,7 @@ class CategoryRepository {
 
   public function deleteById($id) {
     $st = $this->pdo->prepare("DELETE FROM tt_categories WHERE id=?");
-    $st->execute([(int)$id]);
+    return $st->execute([(int)$id]);
   }
 
   public function update($id, $data) {
@@ -34,6 +34,23 @@ class CategoryRepository {
       SET libelle=?
       WHERE id=?
     ");
-    $st->execute([(string)$data['libelle'], (int)$id]);
+    return $st->execute([(string)$data['libelle'], (int)$id]);
+  }
+
+  /**
+   * Compte le nombre d'objets utilisant cette catégorie
+   */
+  public function countObjetsByCategory($id) {
+    $st = $this->pdo->prepare("SELECT COUNT(*) FROM tt_objets WHERE category_id=?");
+    $st->execute([(int)$id]);
+    return (int)$st->fetchColumn();
+  }
+
+  /**
+   * Migre tous les objets d'une catégorie vers une autre
+   */
+  public function migrateObjets($fromCategoryId, $toCategoryId) {
+    $st = $this->pdo->prepare("UPDATE tt_objets SET category_id=? WHERE category_id=?");
+    return $st->execute([(int)$toCategoryId, (int)$fromCategoryId]);
   }
 }
