@@ -53,7 +53,8 @@ $base = Flight::get('base_path') ?? '';
             </a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link <?= $onglet === 'envoyees' ? 'active' : '' ?>" href="<?= $base ?>/echanges?onglet=envoyees">
+            <a class="nav-link <?= $onglet === 'envoyees' ? 'active' : '' ?>"
+                href="<?= $base ?>/echanges?onglet=envoyees">
                 <i class="bi bi-send"></i> Propositions envoyées
             </a>
         </li>
@@ -74,77 +75,103 @@ $base = Flight::get('base_path') ?? '';
             <?php foreach ($echanges as $echange): ?>
                 <div class="col-md-6">
                     <div class="card echange-card h-100">
-                        <div class="card-header bg-light">
+                        <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted small"><?= date('d/m/Y à H:i', strtotime($echange['date_echange'])) ?></span>
-                                <span class="badge badge-status bg-<?= $echange['status'] == 'en attente' ? 'warning' : ($echange['status'] == 'confirme' ? 'success' : 'danger') ?>">
+                                <span
+                                    class="text-muted small"><?= date('d/m/Y à H:i', strtotime($echange['date_echange'])) ?></span>
+                                <span
+                                    class="badge badge-status bg-<?= $echange['status'] == 'en attente' ? 'warning' : ($echange['status'] == 'confirme' ? 'success' : 'danger') ?>">
                                     <?= htmlspecialchars($echange['status']) ?>
                                 </span>
                             </div>
                         </div>
                         <div class="card-body">
                             <?php if ($onglet === 'recues'): ?>
-                                <h6 class="text-primary mb-3"><i class="bi bi-person"></i> Proposition de <strong><?= htmlspecialchars($echange['proposant']) ?></strong></h6>
+                                <h6 class="text-primary mb-3"><i class="bi bi-person"></i> Proposition de
+                                    <strong><?= htmlspecialchars($echange['proposant']) ?></strong></h6>
 
                                 <div class="row mb-3">
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Il propose :</p>
                                         <?php if (!empty($echange['photo_propose'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['photo_propose']) ?>" class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['objet_propose']) ?>">
+                                            <img src="<?= htmlspecialchars($echange['photo_propose']) ?>" class="objet-img w-100 mb-2"
+                                                alt="<?= htmlspecialchars($echange['objet_propose']) ?>">
                                         <?php else: ?>
-                                            <div class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">Pas d'image</div>
+                                            <div
+                                                class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
+                                                Pas d'image</div>
                                         <?php endif; ?>
                                         <h6><?= htmlspecialchars($echange['objet_propose']) ?></h6>
-                                        <span class="badge bg-success"><?= number_format($echange['prix_propose'], 0, ',', ' ') ?> Ar</span>
+                                        <span class="badge bg-success"><?= number_format($echange['prix_propose'], 0, ',', ' ') ?>
+                                            Ar</span>
                                     </div>
 
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Contre votre :</p>
                                         <?php if (!empty($echange['ma_photo'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['ma_photo']) ?>" class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
+                                            <img src="<?= htmlspecialchars($echange['ma_photo']) ?>" class="objet-img w-100 mb-2"
+                                                alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
                                         <?php else: ?>
-                                            <div class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">Pas d'image</div>
+                                            <div
+                                                class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
+                                                Pas d'image</div>
                                         <?php endif; ?>
                                         <h6><?= htmlspecialchars($echange['mon_objet']) ?></h6>
-                                        <span class="badge bg-success"><?= number_format($echange['mon_prix'], 0, ',', ' ') ?> Ar</span>
+                                        <span class="badge bg-success"><?= number_format($echange['mon_prix'], 0, ',', ' ') ?>
+                                            Ar</span>
                                     </div>
                                 </div>
 
                                 <?php if ($echange['status_id'] == 1): ?>
                                     <div class="d-flex gap-2">
-                                        <form method="POST" action="<?= $base ?>/echange/<?= $echange['id'] ?>/accepter" class="flex-fill" onsubmit="return confirm('Êtes-vous sûr de vouloir accepter cet échange ? Les objets changeront de propriétaire.');">
-                                            <button type="submit" class="btn btn-success w-100"><i class="bi bi-check-circle"></i> Accepter</button>
+                                        <form method="POST" action="<?= $base ?>/echange/<?= $echange['id'] ?>/accepter"
+                                            class="flex-fill"
+                                            onsubmit="return confirm('Êtes-vous sûr de vouloir accepter cet échange ? Les objets changeront de propriétaire.');">
+                                            <button type="submit" class="btn btn-success w-100"><i class="bi bi-check-circle"></i>
+                                                Accepter</button>
                                         </form>
-                                        <form method="POST" action="<?= $base ?>/echange/<?= $echange['id'] ?>/refuser" class="flex-fill" onsubmit="return confirm('Êtes-vous sûr de vouloir refuser cette proposition ?');">
-                                            <button type="submit" class="btn btn-danger w-100"><i class="bi bi-x-circle"></i> Refuser</button>
+                                        <form method="POST" action="<?= $base ?>/echange/<?= $echange['id'] ?>/refuser"
+                                            class="flex-fill"
+                                            onsubmit="return confirm('Êtes-vous sûr de vouloir refuser cette proposition ?');">
+                                            <button type="submit" class="btn btn-danger w-100"><i class="bi bi-x-circle"></i>
+                                                Refuser</button>
                                         </form>
                                     </div>
                                 <?php endif; ?>
 
                             <?php else: ?>
-                                <h6 class="text-primary mb-3"><i class="bi bi-person"></i> Envoyée à <strong><?= htmlspecialchars($echange['destinataire']) ?></strong></h6>
+                                <h6 class="text-primary mb-3"><i class="bi bi-person"></i> Envoyée à
+                                    <strong><?= htmlspecialchars($echange['destinataire']) ?></strong></h6>
 
                                 <div class="row mb-3">
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Vous proposez :</p>
                                         <?php if (!empty($echange['ma_photo'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['ma_photo']) ?>" class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
+                                            <img src="<?= htmlspecialchars($echange['ma_photo']) ?>" class="objet-img w-100 mb-2"
+                                                alt="<?= htmlspecialchars($echange['mon_objet']) ?>">
                                         <?php else: ?>
-                                            <div class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">Pas d'image</div>
+                                            <div
+                                                class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
+                                                Pas d'image</div>
                                         <?php endif; ?>
                                         <h6><?= htmlspecialchars($echange['mon_objet']) ?></h6>
-                                        <span class="badge bg-success"><?= number_format($echange['mon_prix'], 0, ',', ' ') ?> Ar</span>
+                                        <span class="badge bg-success"><?= number_format($echange['mon_prix'], 0, ',', ' ') ?>
+                                            Ar</span>
                                     </div>
 
                                     <div class="col-6 text-center">
                                         <p class="text-muted small mb-2">Contre :</p>
                                         <?php if (!empty($echange['photo_cible'])): ?>
-                                            <img src="<?= htmlspecialchars($echange['photo_cible']) ?>" class="objet-img w-100 mb-2" alt="<?= htmlspecialchars($echange['objet_cible']) ?>">
+                                            <img src="<?= htmlspecialchars($echange['photo_cible']) ?>" class="objet-img w-100 mb-2"
+                                                alt="<?= htmlspecialchars($echange['objet_cible']) ?>">
                                         <?php else: ?>
-                                            <div class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">Pas d'image</div>
+                                            <div
+                                                class="objet-img w-100 mb-2 bg-secondary d-flex align-items-center justify-content-center text-white">
+                                                Pas d'image</div>
                                         <?php endif; ?>
                                         <h6><?= htmlspecialchars($echange['objet_cible']) ?></h6>
-                                        <span class="badge bg-success"><?= number_format($echange['prix_cible'], 0, ',', ' ') ?> Ar</span>
+                                        <span class="badge bg-success"><?= number_format($echange['prix_cible'], 0, ',', ' ') ?>
+                                            Ar</span>
                                     </div>
                                 </div>
 

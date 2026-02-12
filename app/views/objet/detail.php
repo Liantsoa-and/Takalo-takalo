@@ -38,7 +38,7 @@ $base = Flight::get('base_path') ?? '';
                             </div>
                             <div class="col-md-6">
                                 <h6>Catégorie</h6>
-                                <p class="badge bg-info text-dark">#<?= htmlspecialchars($objet['category_id']) ?></p>
+                                <p class="badge bg-info">#<?= htmlspecialchars($objet['category_id']) ?></p>
                             </div>
                         </div>
 
@@ -62,8 +62,9 @@ $base = Flight::get('base_path') ?? '';
 
                 <?php if ($objet['user_id'] != ($currentUserId ?? 0) && !empty($mesObjets ?? [])): ?>
                     <div class="card mt-3">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0"><i class="bi bi-arrow-left-right"></i> Proposer un échange</h5>
+                        <div class="card-header">
+                            <h5 class="mb-0" style="color:var(--tk-text-heading)"><i class="bi bi-arrow-left-right me-2"
+                                    style="color:var(--tk-success)"></i>Proposer un échange</h5>
                         </div>
                         <div class="card-body">
                             <p class="text-muted">Sélectionnez un de vos objets à proposer en échange :</p>
@@ -75,12 +76,14 @@ $base = Flight::get('base_path') ?? '';
                                     <select name="objet1_id" id="objet1_id" class="form-select" required>
                                         <option value="">-- Choisissez un objet --</option>
                                         <?php foreach ($mesObjets as $monObjet): ?>
-                                            <option value="<?= $monObjet['id'] ?>"><?= htmlspecialchars($monObjet['libelle']) ?> (<?= number_format($monObjet['prix_estimatif'], 0, ',', ' ') ?> Ar)</option>
+                                            <option value="<?= $monObjet['id'] ?>"><?= htmlspecialchars($monObjet['libelle']) ?>
+                                                (<?= number_format($monObjet['prix_estimatif'], 0, ',', ' ') ?> Ar)</option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-success w-100"><i class="bi bi-send"></i> Envoyer la proposition</button>
+                                <button type="submit" class="btn btn-success w-100"><i class="bi bi-send"></i> Envoyer la
+                                    proposition</button>
                             </form>
                         </div>
                     </div>
@@ -94,17 +97,24 @@ $base = Flight::get('base_path') ?? '';
 
                 <?php if (!empty($echanges ?? [])): ?>
                     <div class="card mt-3">
-                        <div class="card-header"><h5 class="mb-0">Propositions d'échange</h5></div>
+                        <div class="card-header">
+                            <h5 class="mb-0">Propositions d'échange</h5>
+                        </div>
                         <div class="card-body">
                             <div class="list-group">
                                 <?php foreach ($echanges as $echange): ?>
                                     <div class="list-group-item">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1"><?= htmlspecialchars($echange['objet1']) ?> <i class="bi bi-arrow-left-right"></i> <?= htmlspecialchars($echange['objet2']) ?></h6>
-                                            <small class="text-muted"><?= date('d/m/Y', strtotime($echange['date_echange'])) ?></small>
+                                            <h6 class="mb-1"><?= htmlspecialchars($echange['objet1']) ?> <i
+                                                    class="bi bi-arrow-left-right"></i> <?= htmlspecialchars($echange['objet2']) ?>
+                                            </h6>
+                                            <small
+                                                class="text-muted"><?= date('d/m/Y', strtotime($echange['date_echange'])) ?></small>
                                         </div>
-                                        <p class="mb-1"><small>Proposé par : <strong><?= htmlspecialchars($echange['user1']) ?></strong></small></p>
-                                        <span class="badge bg-<?= $echange['status'] == 'en attente' ? 'warning' : ($echange['status'] == 'confirme' ? 'success' : 'danger') ?>"><?= htmlspecialchars($echange['status']) ?></span>
+                                        <p class="mb-1"><small>Proposé par :
+                                                <strong><?= htmlspecialchars($echange['user1']) ?></strong></small></p>
+                                        <span
+                                            class="badge bg-<?= $echange['status'] == 'en attente' ? 'warning' : ($echange['status'] == 'confirme' ? 'success' : 'danger') ?>"><?= htmlspecialchars($echange['status']) ?></span>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -115,25 +125,33 @@ $base = Flight::get('base_path') ?? '';
 
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header"><h5>Photos</h5></div>
+                    <div class="card-header">
+                        <h5>Photos</h5>
+                    </div>
                     <div class="card-body">
                         <?php if (!empty($objet['photos'])): ?>
                             <div id="carouselPhotos" class="carousel slide mb-3" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     <?php foreach ($objet['photos'] as $index => $photo): ?>
                                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                            <img src="<?= htmlspecialchars($photo['url']) ?>" class="d-block w-100 rounded" alt="Photo de l'objet" style="max-height:400px;object-fit:cover;">
+                                            <img src="<?= htmlspecialchars($photo['url']) ?>" class="d-block w-100 rounded"
+                                                alt="Photo de l'objet" style="max-height:400px;object-fit:cover;">
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
                                 <?php if (count($objet['photos']) > 1): ?>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselPhotos" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Précédent</span></button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselPhotos" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Suivant</span></button>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselPhotos"
+                                        data-bs-slide="prev"><span class="carousel-control-prev-icon"
+                                            aria-hidden="true"></span><span class="visually-hidden">Précédent</span></button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselPhotos"
+                                        data-bs-slide="next"><span class="carousel-control-next-icon"
+                                            aria-hidden="true"></span><span class="visually-hidden">Suivant</span></button>
                                 <?php endif; ?>
                             </div>
                             <div class="row gap-2">
                                 <?php foreach ($objet['photos'] as $photo): ?>
-                                    <div class="col-md-3"><img src="<?= htmlspecialchars($photo['url']) ?>" class="img-fluid rounded" alt="Photo" style="cursor:pointer;"></div>
+                                    <div class="col-md-3"><img src="<?= htmlspecialchars($photo['url']) ?>"
+                                            class="img-fluid rounded" alt="Photo" style="cursor:pointer;"></div>
                                 <?php endforeach; ?>
                             </div>
                         <?php else: ?>
@@ -146,6 +164,6 @@ $base = Flight::get('base_path') ?? '';
     <?php endif; ?>
 
     <script>
-    function confirmDelete(id) { if (confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')) window.location.href = '<?= $base ?>/objet/'+id+'/delete'; }
+        function confirmDelete(id) { if (confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')) window.location.href = '<?= $base ?>/objet/' + id + '/delete'; }
     </script>
 </main>
