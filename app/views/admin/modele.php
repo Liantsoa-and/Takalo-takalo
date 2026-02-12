@@ -132,31 +132,6 @@ $base = Flight::get('base_path') ?? '';
                 </div>
 
                 <div class="d-flex align-items-center gap-3">
-                    <!-- Notifications -->
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-secondary position-relative" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell"></i>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                style="font-size: 0.6rem;">
-                                3
-                            </span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <h6 class="dropdown-header">Notifications</h6>
-                            </li>
-                            <li><a id="addUserBtn" class="dropdown-item" href="#"><i class="bi bi-person-plus me-2"></i> Nouvel
-                                    utilisateur</a></li>
-                            
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item text-center small" href="<?= $base ?>/admin/dashboard">Voir tout</a></li>
-                        </ul>
-                    </div>
-
                     <!-- User Profile -->
                     <div class="d-flex align-items-center">
                         <div class="me-3 text-end d-none d-sm-block">

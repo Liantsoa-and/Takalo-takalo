@@ -55,36 +55,36 @@ $searchQuery    = isset($searchQuery) ? $searchQuery : '';
                     <i class="bi bi-funnel me-1"></i>Filtrer
                 </button>
             </div>
-        </form>
-    </div>
-</div>
+                                <td>
+                                    <?php
+                                    // Images are stored in public/uploads/photos
+                                    $photoUrl = $obj['main_photo'] ?? null;
+                                    $displayPhoto = null;
+                                    $docRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/');
 
-<!-- Stats mini -->
-<div class="row g-3 mb-4">
-    <div class="col-6 col-md-3">
-        <div class="card text-white bg-warning shadow-sm border-0">
-            <div class="card-body d-flex align-items-center justify-content-between py-3">
-                <div>
-                    <div class="h3 mb-0 fw-bold"><?= $count ?></div>
-                    <small class="text-uppercase">Total objets</small>
-                </div>
-                <i class="bi bi-box-seam-fill" style="font-size:2rem; opacity:0.7;"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="card text-white bg-info shadow-sm border-0">
-            <div class="card-body d-flex align-items-center justify-content-between py-3">
-                <div>
-                    <div class="h3 mb-0 fw-bold"><?= count($categories) ?></div>
-                    <small class="text-uppercase">Catégories</small>
-                </div>
-                <i class="bi bi-tags-fill" style="font-size:2rem; opacity:0.7;"></i>
-            </div>
-        </div>
-    </div>
-</div>
+                                    if ($photoUrl) {
+                                        // If stored as full path (/uploads/photos/xxx) use it
+                                        $candidate1 = $photoUrl;
+                                        // If stored as filename or different path, normalize to /uploads/photos/{basename}
+                                        $candidate2 = '/uploads/photos/' . basename($photoUrl);
 
+                                        if ($docRoot && file_exists($docRoot . $candidate1)) {
+                                            $displayPhoto = $candidate1;
+                                        } elseif ($docRoot && file_exists($docRoot . $candidate2)) {
+                                            $displayPhoto = $candidate2;
+                                        }
+                                    }
+
+                                    if ($displayPhoto): ?>
+                                        <img src="<?= $base ?><?= htmlspecialchars($displayPhoto) ?>" alt="photo"
+                                             class="rounded" style="width:45px;height:45px;object-fit:cover;">
+                                    <?php else: ?>
+                                        <div class="rounded d-flex align-items-center justify-content-center"
+                                             style="width:45px;height:45px;background:var(--tk-bg-input);">
+                                            <i class="bi bi-image text-muted"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
 <!-- Objects Table -->
 <div class="card shadow-sm border-0">
     <div class="card-body p-0">
