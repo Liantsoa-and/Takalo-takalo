@@ -48,12 +48,12 @@
                                 <i class="bi bi-person-fill me-1"></i> Nom d'utilisateur
                             </label>
                             <div class="input-group">
-                                <span class="input-group-text login-input-group-text">
+                                <span class="input-group-text login-input-icon">
                                     <i class="bi bi-person"></i>
                                 </span>
                                 <input type="text" 
                                        name="username" 
-                                       class="form-control login-form-control" 
+                                       class="form-control login-input" 
                                        placeholder="Entrez votre nom d'utilisateur"
                                        required
                                        autocomplete="username">
@@ -66,12 +66,12 @@
                                 <i class="bi bi-lock-fill me-1"></i> Mot de passe
                             </label>
                             <div class="input-group">
-                                <span class="input-group-text login-input-group-text">
+                                <span class="input-group-text login-input-icon">
                                     <i class="bi bi-lock"></i>
                                 </span>
                                 <input type="password" 
                                        name="password" 
-                                       class="form-control login-form-control" 
+                                       class="form-control login-input" 
                                        placeholder="Entrez votre mot de passe"
                                        required
                                        autocomplete="current-password">
@@ -84,7 +84,7 @@
                                 <i class="bi bi-box-arrow-in-right me-2"></i>
                                 <span id="btnText">Se connecter</span>
                                 <span id="btnSpinner" class="d-none">
-                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    <span class="spinner-border login-spinner me-2"></span>
                                     Connexion...
                                 </span>
                             </button>
