@@ -147,14 +147,13 @@ $base = Flight::get('base_path') ?? '';
                             <li>
                                 <h6 class="dropdown-header">Notifications</h6>
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person-plus me-2"></i> Nouvel
+                            <li><a id="addUserBtn" class="dropdown-item" href="#"><i class="bi bi-person-plus me-2"></i> Nouvel
                                     utilisateur</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-arrow-left-right me-2"></i> Nouvel
-                                    échange</a></li>
+                            
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-center small" href="#">Voir tout</a></li>
+                            <li><a class="dropdown-item text-center small" href="<?= $base ?>/admin/dashboard">Voir tout</a></li>
                         </ul>
                     </div>
 

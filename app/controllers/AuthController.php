@@ -41,5 +41,12 @@ class AuthController
     Flight::redirect('/');
   }
 
+  public static function logout()
+  {
+    if (session_status() === PHP_SESSION_ACTIVE) {
+      session_destroy();
+    }
+    Flight::redirect('/login');
+  }
 
 }

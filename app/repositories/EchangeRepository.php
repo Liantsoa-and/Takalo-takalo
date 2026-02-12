@@ -184,6 +184,45 @@ class EchangeRepository
     return $st->execute([(int) $echangeId]);
   }
 
+  // Compter les échanges par statut
+  public function countByStatus($statusId)
+  {
+    $sql = "SELECT COUNT(*) FROM tt_echanges WHERE status_id = ?";
+    $st = $this->pdo->prepare($sql);
+    $st->execute([(int)$statusId]);
+    return (int)$st->fetchColumn();
+  }
+
+  // Compter tous les échanges
+  public function countAll()
+  {
+    $sql = "SELECT COUNT(*) FROM tt_echanges";
+    $st = $this->pdo->query($sql);
+    return (int)$st->fetchColumn();
+  }
+
+  // Récupérer les N derniers échanges
+  public function findRecent($limit = 5)
+  {
+    $sql = "SELECT e.id,
+                   o1.libelle AS objet1,
+                   u1.username AS user1,
+                   o2.libelle AS objet2,
+                   u2.username AS user2,
+                   s.libelle AS status,
+                   e.date_echange
+            FROM tt_echanges e
+            LEFT JOIN tt_objets o1 ON e.objet1_id = o1.id
+            LEFT JOIN tt_users u1 ON o1.user_id = u1.id
+            LEFT JOIN tt_objets o2 ON e.objet2_id = o2.id
+            LEFT JOIN tt_users u2 ON o2.user_id = u2.id
+            LEFT JOIN tt_status s ON e.status_id = s.id
+            ORDER BY e.id DESC
+            LIMIT " . (int)$limit;
+    $st = $this->pdo->query($sql);
+    return $st->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   // Récupérer un échange par ID
   public function findById($id)
   {

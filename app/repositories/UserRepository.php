@@ -69,4 +69,23 @@ class UserRepository {
     $st = $this->pdo->prepare("DELETE FROM tt_users WHERE id = ?");
     return $st->execute([(int)$id]);
   }
+
+  // Compter tous les utilisateurs
+  public function countAll() {
+    $st = $this->pdo->query("SELECT COUNT(*) FROM tt_users");
+    return (int)$st->fetchColumn();
+  }
+
+  // Utilisateurs avec le plus d'objets
+  public function topUsersByObjets($limit = 5) {
+    $sql = "SELECT u.id, u.username, u.role, u.pdp, COUNT(o.id) as nb_objets
+            FROM tt_users u
+            LEFT JOIN tt_objets o ON o.user_id = u.id
+            GROUP BY u.id, u.username, u.role, u.pdp
+            HAVING nb_objets > 0
+            ORDER BY nb_objets DESC
+            LIMIT " . (int)$limit;
+    $st = $this->pdo->query($sql);
+    return $st->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
