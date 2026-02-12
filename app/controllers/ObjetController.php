@@ -172,7 +172,7 @@ class ObjetController
 
     public static function listeObjetPublics()
     {
-        $currentUserId = null; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
         $categoryId = $_GET['category_id'] ?? null;
         $page = $_GET['page'] ?? 1;
         $limit = 10;
@@ -239,7 +239,7 @@ class ObjetController
 
         $q = $_GET['q'] ?? '';
         $categoryId = $_GET['category_id'] ?? null;
-        $currentUserId = null; // TODO: session
+        $currentUserId = 3; // TODO: session
 
         $objets = $repo->searchPublic($currentUserId, $q, $categoryId);
         foreach ($objets as &$o) {
@@ -267,12 +267,17 @@ class ObjetController
         }
 
         $echangeRepo = new EchangeRepository($pdo);
-        $timeline = $echangeRepo->getOwnershipHistory($id);
+        $echanges = $echangeRepo->getEchangesByObjetId($id);
+
+        // Récupérer le propriétaire actuel
+        $userRepo = new UserRepository($pdo);
+        $currentOwner = $userRepo->findById($objet['user_id']);
 
         $pagename = 'objet/history.php';
         Flight::render('modele', [
             'objet' => $objet,
-            'timeline' => $timeline,
+            'echanges' => $echanges,
+            'currentOwner' => $currentOwner,
             'pagename' => $pagename
         ]);
     }
@@ -319,8 +324,10 @@ class ObjetController
             return;
         }
 
-        // Créer la proposition d'échange
-        $echangeId = $echangeRepo->createEchange($objet1_id, $objet2_id);
+        // Créer la proposition d'échange (avec les user IDs)
+        $user1_id = (int)$monObjet['user_id'];
+        $user2_id = (int)$objetCible['user_id'];
+        $echangeId = $echangeRepo->createEchange($objet1_id, $objet2_id, $user1_id, $user2_id);
 
         // Rediriger vers la page de détail de l'objet
         Flight::redirect('/objet/' . $objet2_id . '?success=echange_propose');
