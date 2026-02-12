@@ -93,8 +93,10 @@
                     
                     <div class="login-footer">
                         <small>
-                            <i class="bi bi-shield-check me-1"></i>
-                            Connexion sécurisée
+                            Pas encore de compte ?
+                            <a href="<?= BASE_PATH ?>/register" class="login-link">
+                                <i class="bi bi-person-plus-fill me-1"></i>Créer un compte
+                            </a>
                         </small>
                     </div>
                 </div>
