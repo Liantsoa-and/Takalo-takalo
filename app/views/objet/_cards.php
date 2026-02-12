@@ -10,7 +10,7 @@ $scope = $scope ?? 'public'; ?>
         <?php foreach ($objets as $objet): ?>
             <div class="card object-card">
                 <?php if (!empty($objet['photo']) || !empty($objet['main_photo'])): ?>
-                    <img src="/uploads/photos/<?= htmlspecialchars($objet['photo'] ?? $objet['main_photo']) ?>"
+                    <img src="<?= $base ?>/uploads/photos/<?= htmlspecialchars($objet['photo'] ?? $objet['main_photo']) ?>"
                         class="card-img-top object-img" alt="<?= htmlspecialchars($objet['libelle']) ?>">
                 <?php else: ?>
                     <div class="card-img-top object-img bg-gradient d-flex align-items-center justify-content-center">
