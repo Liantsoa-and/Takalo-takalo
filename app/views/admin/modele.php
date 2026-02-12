@@ -1,87 +1,250 @@
 <?php
-    // Définitions par défaut pour éviter Undefined variable
-   
-    $adminName = isset($adminName) ? $adminName : 'Admin Demo';
-    $adminInitials = strtoupper(substr($adminName, 0, 1));
-    
+$adminName = isset($adminName) ? $adminName : 'Admin Demo';
+$adminInitials = strtoupper(substr($adminName, 0, 1));
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Takalo-takalo - Administration">
+    <title><?= htmlspecialchars($title ?? 'Administration - Takalo-takalo') ?></title>
+    
+    <!-- Bootstrap CSS -->
     <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link href="/assets/style/main.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    
     <style>
-        /* Modern font */
-        body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
-        h1,h2,h3,h4,h5,h6 { font-weight: 600; }
-        .profile-placeholder { width:40px; height:40px; border-radius:50%; }
-        .bi { vertical-align: -.125em; }
-        #sidebar { position:sticky; top:0; height:100vh; }
+        /* Styles spécifiques admin */
+        .admin-sidebar {
+            background: linear-gradient(180deg, #1a1d29 0%, #2d3142 100%);
+            color: #fff;
+        }
+        
+        .admin-sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .admin-sidebar .nav-link:hover,
+        .admin-sidebar .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #0d6efd;
+        }
+        
+        .admin-sidebar .nav-link i {
+            width: 24px;
+        }
+        
+        .admin-header {
+            background: #fff;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .stat-widget {
+            background: linear-gradient(135deg, var(--gradient-start, #667eea), var(--gradient-end, #764ba2));
+            color: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+        
+        .stat-widget:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-widget.blue {
+            --gradient-start: #4facfe;
+            --gradient-end: #00f2fe;
+        }
+        
+        .stat-widget.orange {
+            --gradient-start: #fa709a;
+            --gradient-end: #fee140;
+        }
+        
+        .stat-widget.green {
+            --gradient-start: #30cfd0;
+            --gradient-end: #330867;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body class="bg-light">
 
     <!-- Header -->
-    <header class="bg-white shadow-sm">
+    <header class="admin-header sticky-top shadow-sm">
         <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between py-2">
+            <div class="d-flex align-items-center justify-content-between py-3">
                 <div class="d-flex align-items-center">
-                    <button class="btn btn-sm btn-outline-primary d-md-none me-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">☰</button>
-                    <a class="navbar-brand fw-bold mb-0" href="/">Takalo-takalo</a>
+                    <!-- Mobile Sidebar Toggle -->
+                    <button class="btn btn-sm btn-outline-primary d-md-none me-3 sidebar-toggle" type="button" aria-label="Toggle sidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    
+                    <a class="navbar-brand fw-bold mb-0 d-flex align-items-center" href="/">
+                        <img src="/assets/images/logo.png" alt="Logo" height="30" class="me-2">
+                        <span class="d-none d-sm-inline">Takalo-takalo</span>
+                        <span class="badge bg-danger ms-2">Admin</span>
+                    </a>
                 </div>
-                <div class="d-flex align-items-center">
-                    <div class="me-3 text-end d-none d-sm-block">
-                        <small class="d-block text-muted">Connecté en tant que</small>
-                        <strong><?= htmlspecialchars($adminName) ?></strong>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notifications -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                                3
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person-plus me-2"></i> Nouvel utilisateur</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-arrow-left-right me-2"></i> Nouvel échange</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center small" href="#">Voir tout</a></li>
+                        </ul>
                     </div>
-                    <div class="profile-placeholder bg-secondary text-white d-flex align-items-center justify-content-center" title="Photo de profil admin">
-                        <?= htmlspecialchars($adminInitials) ?>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center">
+                        <div class="me-3 text-end d-none d-sm-block">
+                            <small class="d-block text-muted" style="font-size: 0.75rem;">Connecté en tant que</small>
+                            <strong class="d-block" style="font-size: 0.875rem;"><?= htmlspecialchars($adminName) ?></strong>
+                        </div>
+                        <div class="profile-circle" title="Photo de profil admin">
+                            <?= htmlspecialchars($adminInitials) ?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Offcanvas sidebar for small screens -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Menu</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body p-0">
-            <nav class="list-group list-group-flush">
-                <a href="/admin_users" class="list-group-item list-group-item-action">Utilisateurs</a>
-                <a href="/objets" class="list-group-item list-group-item-action">Objets</a>
-            </nav>
-        </div>
-    </div>
+    <!-- Overlay pour sidebar mobile -->
+    <div class="sidebar-overlay"></div>
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar for md+ -->
-            <nav id="sidebar" class="col-md-2 d-none d-md-block bg-white border-end p-3">
-                <h6 class="text-muted">Menu</h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="/admin/users">Utilisateurs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin/echanges">Echanges</a></li>
-                </ul>
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 admin-sidebar sidebar p-0 d-none d-md-block">
+                <div class="p-3">
+                    <h6 class="text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 1px; opacity: 0.7;">Navigation</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link <?= isset($page) && $page === 'dashboard' ? 'active' : '' ?>" href="/admin/dashboard">
+                                <i class="bi bi-speedometer2"></i> Tableau de bord
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= isset($page) && $page === 'users' ? 'active' : '' ?>" href="/admin/users">
+                                <i class="bi bi-people"></i> Utilisateurs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= isset($page) && $page === 'objets' ? 'active' : '' ?>" href="/admin/objets">
+                                <i class="bi bi-box-seam"></i> Objets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= isset($page) && $page === 'echanges' ? 'active' : '' ?>" href="/admin/echanges">
+                                <i class="bi bi-arrow-left-right"></i> Échanges
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="text-uppercase mb-3 mt-4" style="font-size: 0.75rem; letter-spacing: 1px; opacity: 0.7;">Paramètres</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/categories">
+                                <i class="bi bi-tags"></i> Catégories
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/settings">
+                                <i class="bi bi-gear"></i> Configuration
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <hr style="border-color: rgba(255,255,255,0.1);">
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="/logout">
+                                <i class="bi bi-box-arrow-right"></i> Déconnexion
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
 
-            <!-- Main content -->
-            <?php  require_once __DIR__ . '/' . $pagename; ?>
-            <!-- fin Main -->
+            <!-- Main Content -->
+            <main class="col-12 col-md-9 col-lg-10 py-4">
+                <?php require_once __DIR__ . '/' . $pagename; ?>
+            </main>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="mt-4 py-3 bg-white border-top">
-        <div class="container text-muted small">&copy; <?= date('Y') ?> Takalo-takalo:ETU4042-ETU3940-ETU4199</div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-muted small mb-0">&copy; <?= date('Y') ?> Takalo-takalo</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted small mb-0">ETU4042 - ETU3940 - ETU4199</p>
+                </div>
+            </div>
+        </div>
     </footer>
 
+    <!-- Bootstrap Bundle JS -->
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="/assets/js/app.js"></script>
+    
+    <!-- Page-specific scripts -->
     <?php if (isset($pagename) && (strpos($pagename, 'users.php') !== false || strpos($pagename, 'admin/users.php') !== false)): ?>
         <script src="/assets/js/users.js"></script>
     <?php endif; ?>
