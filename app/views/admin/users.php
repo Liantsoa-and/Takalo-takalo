@@ -9,7 +9,7 @@ $count = count($usersList);
         <div>
             <button id="addUserBtn" class="btn btn-sm btn-success me-2"><i
                     class="bi bi-person-plus me-1"></i>Ajouter</button>
-            <a href="/admin_users" class="btn btn-sm btn-outline-secondary"><i
+            <a href="/admin" class="btn btn-sm btn-outline-secondary"><i
                     class="bi bi-arrow-clockwise me-1"></i>Rafraîchir</a>
         </div>
     </div>

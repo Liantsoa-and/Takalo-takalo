@@ -9,7 +9,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="h4 mb-0">Échanges <span class="badge bg-primary"><?= $count ?></span></h1>
         <div>
-            <a href="/admin_echange" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-clockwise me-1"></i>Rafraîchir</a>
+            <a href="/admin/echanges" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-clockwise me-1"></i>Rafraîchir</a>
         </div>
     </div>
 
