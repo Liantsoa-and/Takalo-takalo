@@ -1,7 +1,7 @@
 <?php
 class ProfilController
 {
-    public static function show($id)
+    public static function show($id , $typePersonne)
     {
         $pdo = Flight::db();
         $repo = new UserRepository($pdo);
@@ -10,7 +10,26 @@ class ProfilController
             Flight::notFound();
             return;
         }
-        Flight::render('profil/profil', ['user' => $user]);
+        // Récupérer les objets appartenant à l'utilisateur
+        $objetRepo = new ObjetRepository($pdo);
+        $photoService = new PhotoService($pdo);
+        $objets = $objetRepo->searchByUser($id);
+        // Ajouter la photo principale si disponible
+        foreach ($objets as &$o) {
+            $first = $photoService->getFirstPhoto($o['id']);
+            $o['main_photo'] = $first;
+        }
+        unset($o);
+
+        $namepage = "profil/profil.php";
+        if($typePersonne === 'admin') {
+            Flight::render('admin/modele', ['user' => $user , 'pagename' => $namepage, 'objets' => $objets]);
+            return;
+        }
+        if($typePersonne === 'user') {
+            Flight::render('modele', ['user' => $user , 'pagename' => $namepage, 'objets' => $objets]);
+            return;
+        }
     }
 }
 ?>

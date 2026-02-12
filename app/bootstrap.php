@@ -17,4 +17,9 @@ Flight::register('db', 'PDO', array(
 
 Flight::set('flight.views.path', __DIR__ . '/views');
 
+// Global constant for views directory
+if (!defined('VIEWS_DIR')) {
+    define('VIEWS_DIR', __DIR__ . '/views');
+}
+
 require_once __DIR__ . '/routes.php';

@@ -116,8 +116,8 @@ Flight::route('GET /logout', ['AuthController', 'logout']);
 
 
 // Profil 
-Flight::route('GET /profil/@id',function($id){
-    ProfilController::show($id);
+Flight::route('GET /profil/@id/@typePersonne',function($id, $typePersonne){
+    ProfilController::show($id,$typePersonne);
 });
 
 

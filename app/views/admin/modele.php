@@ -140,7 +140,7 @@ $adminId = isset($adminId) ? $adminId : 1;
                             <strong class="d-block"
                                 style="font-size: 0.875rem; color: var(--tk-text-heading);"><?= htmlspecialchars($adminName) ?></strong>
                         </div>
-                        <a href="<?= $base ?>/profil/<?= $adminId ?>">
+                        <a href="<?= $base ?>/profil/<?= $adminId ?>/admin">
                                                     <div class="profile-circle" title="Photo de profil admin">
                              <?= htmlspecialchars($adminInitials) ?>
                         </div>
@@ -218,7 +218,13 @@ $adminId = isset($adminId) ? $adminId : 1;
 
             <!-- Main Content -->
             <main class="col-12 col-md-9 col-lg-10 py-4">
-                <?php require_once __DIR__ . '/' . $pagename; ?>
+                <?php
+                $cleanPagename = isset($pagename) ? ltrim($pagename, '/\\') : '';
+                if ($cleanPagename === '' || strpos($cleanPagename, '..') !== false) {
+                    throw new Exception('Page invalide');
+                }
+                require_once dirname(__DIR__) . '/' . $cleanPagename;
+                ?>
             </main>
         </div>
     </div>

@@ -8,7 +8,7 @@ public static function showUsers()
         $repo = new UserRepository($pdo);
         $users = $repo->findAll();
         $utilisateur = $repo->findAllUtilisateur();
-        $pagename = "users.php";
+        $pagename = "admin/users.php";
         Flight::render('admin/modele', ['users' => $users, 'utilisateur' => $utilisateur, 'pagename' => $pagename]);
     }
 
@@ -17,7 +17,7 @@ public static function showEchanges()
         $pdo = Flight::db();
         $repo = new EchangeRepository($pdo);
         $echanges = $repo->findAll();
-        $pagename = "echanges.php";
+        $pagename = "admin/echanges.php";
         Flight::render('admin/modele', ['echanges' => $echanges, 'pagename' => $pagename]);
 }
 
@@ -26,7 +26,7 @@ public static function showUsersById($id)
         $pdo = Flight::db();
         $repo = new UserRepository($pdo);
         $user = $repo->findById($id);
-        $pagename = "user.php";
+        $pagename = "admin/user.php";
         Flight::render('admin/modele', ['user' => $user, 'pagename' => $pagename]);
 }
 
@@ -128,7 +128,7 @@ public static function showDashboard()
         $recentObjets   = $objetRepo->findRecentWithDetails(5);
         $topUsers       = $userRepo->topUsersByObjets(5);
 
-        $pagename = "dashboard.php";
+        $pagename = "admin/dashboard.php";
         Flight::render('admin/modele', [
             'nbUsers'        => $nbUsers,
             'nbObjets'       => $nbObjets,
@@ -163,7 +163,7 @@ public static function showObjets()
         $totalPages = ceil($total / $limit);
         $categories = $catRepo->findAll();
 
-        $pagename = "objets.php";
+        $pagename = "admin/objets.php";
         Flight::render('admin/modele', [
             'objets'         => $objets,
             'categories'     => $categories,
