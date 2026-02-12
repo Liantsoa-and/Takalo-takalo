@@ -135,7 +135,7 @@ class ObjetRepository
   // Récupérer tous les objets avec détails (catégorie, propriétaire, photo)
   public function findAllWithDetails($q = '', $categoryId = null, $ownerName = null, $page = 1, $limit = 20)
   {
-    $sql = "SELECT o.*, c.libelle as category_name, u.username as owner_name, u.pdp as owner_pdp,
+    $sql = "SELECT o.*, c.libelle as category_name,u.id as owner_id,u.username as owner_name, u.pdp as owner_pdp,
                    (SELECT url FROM tt_photos_objet WHERE objet_id = o.id LIMIT 1) as main_photo
             FROM tt_objets o
             LEFT JOIN tt_categories c ON o.category_id = c.id
@@ -193,7 +193,7 @@ class ObjetRepository
   // Récupérer les N derniers objets avec détails
   public function findRecentWithDetails($limit = 5)
   {
-    $sql = "SELECT o.*, c.libelle as category_name, u.username as owner_name, u.pdp as owner_pdp,
+    $sql = "SELECT o.*, c.libelle as category_name, u.id as owner_id, u.username as owner_name, u.pdp as owner_pdp,
                    (SELECT url FROM tt_photos_objet WHERE objet_id = o.id LIMIT 1) as main_photo
             FROM tt_objets o
             LEFT JOIN tt_categories c ON o.category_id = c.id

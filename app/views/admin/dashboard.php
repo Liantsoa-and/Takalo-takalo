@@ -1,15 +1,15 @@
 <?php
 // Variables fournies par le controller
-$nbUsers       = isset($nbUsers) ? $nbUsers : 0;
-$nbObjets      = isset($nbObjets) ? $nbObjets : 0;
-$nbEchanges    = isset($nbEchanges) ? $nbEchanges : 0;
-$nbCategories  = isset($nbCategories) ? $nbCategories : 0;
-$nbEnAttente   = isset($nbEnAttente) ? $nbEnAttente : 0;
-$nbConfirmes   = isset($nbConfirmes) ? $nbConfirmes : 0;
-$nbRefuses     = isset($nbRefuses) ? $nbRefuses : 0;
+$nbUsers = isset($nbUsers) ? $nbUsers : 0;
+$nbObjets = isset($nbObjets) ? $nbObjets : 0;
+$nbEchanges = isset($nbEchanges) ? $nbEchanges : 0;
+$nbCategories = isset($nbCategories) ? $nbCategories : 0;
+$nbEnAttente = isset($nbEnAttente) ? $nbEnAttente : 0;
+$nbConfirmes = isset($nbConfirmes) ? $nbConfirmes : 0;
+$nbRefuses = isset($nbRefuses) ? $nbRefuses : 0;
 $recentEchanges = isset($recentEchanges) ? $recentEchanges : [];
-$recentObjets   = isset($recentObjets) ? $recentObjets : [];
-$topUsers       = isset($topUsers) ? $topUsers : [];
+$recentObjets = isset($recentObjets) ? $recentObjets : [];
+$topUsers = isset($topUsers) ? $topUsers : [];
 $base = Flight::get('base_path') ?? '';
 ?>
 
@@ -102,7 +102,7 @@ $base = Flight::get('base_path') ?? '';
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body d-flex align-items-center">
                 <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                     style="width:50px;height:50px;background:rgba(255,193,7,0.15);">
+                    style="width:50px;height:50px;background:rgba(255,193,7,0.15);">
                     <i class="bi bi-hourglass-split text-warning" style="font-size:1.4rem;"></i>
                 </div>
                 <div>
@@ -116,7 +116,7 @@ $base = Flight::get('base_path') ?? '';
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body d-flex align-items-center">
                 <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                     style="width:50px;height:50px;background:rgba(40,167,69,0.15);">
+                    style="width:50px;height:50px;background:rgba(40,167,69,0.15);">
                     <i class="bi bi-check-circle-fill text-success" style="font-size:1.4rem;"></i>
                 </div>
                 <div>
@@ -130,7 +130,7 @@ $base = Flight::get('base_path') ?? '';
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body d-flex align-items-center">
                 <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                     style="width:50px;height:50px;background:rgba(255,0,0,0.15);">
+                    style="width:50px;height:50px;background:rgba(255,0,0,0.15);">
                     <i class="bi bi-x-circle-fill text-danger" style="font-size:1.4rem;"></i>
                 </div>
                 <div>
@@ -167,7 +167,8 @@ $base = Flight::get('base_path') ?? '';
                         </thead>
                         <tbody>
                             <?php if (!empty($recentEchanges)): ?>
-                                <?php $i = 1; foreach ($recentEchanges as $e): ?>
+                                <?php $i = 1;
+                                foreach ($recentEchanges as $e): ?>
                                     <tr>
                                         <td><?= $i++ ?></td>
                                         <td><?= htmlspecialchars($e['user1'] ?? '') ?></td>
@@ -175,20 +176,28 @@ $base = Flight::get('base_path') ?? '';
                                         <td><?= htmlspecialchars($e['objet2'] ?? '') ?></td>
                                         <td><?= htmlspecialchars($e['user2'] ?? '') ?></td>
                                         <?php
-                                            $statusRaw = $e['status'] ?? '';
-                                            $statusKey = strtolower(str_replace(' ', '_', trim($statusRaw)));
-                                            $badgeClass = 'secondary';
-                                            if ($statusKey === 'en_attente') $badgeClass = 'warning';
-                                            elseif (in_array($statusKey, ['confirme','accepté','accepted'])) $badgeClass = 'success';
-                                            elseif (in_array($statusKey, ['refuser','refusé','rejected'])) $badgeClass = 'danger';
-                                            elseif ($statusKey === 'libre') $badgeClass = 'info';
+                                        $statusRaw = $e['status'] ?? '';
+                                        $statusKey = strtolower(str_replace(' ', '_', trim($statusRaw)));
+                                        $badgeClass = 'secondary';
+                                        if ($statusKey === 'en_attente')
+                                            $badgeClass = 'warning';
+                                        elseif (in_array($statusKey, ['confirme', 'accepté', 'accepted']))
+                                            $badgeClass = 'success';
+                                        elseif (in_array($statusKey, ['refuser', 'refusé', 'rejected']))
+                                            $badgeClass = 'danger';
+                                        elseif ($statusKey === 'libre')
+                                            $badgeClass = 'info';
                                         ?>
-                                        <td><span class="badge bg-<?= $badgeClass ?>"><?= htmlspecialchars($statusRaw) ?></span></td>
-                                        <td><small class="text-muted"><?= htmlspecialchars($e['date_echange'] ?? '') ?></small></td>
+                                        <td><span class="badge bg-<?= $badgeClass ?>"><?= htmlspecialchars($statusRaw) ?></span>
+                                        </td>
+                                        <td><small class="text-muted"><?= htmlspecialchars($e['date_echange'] ?? '') ?></small>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="7" class="text-center text-muted py-3">Aucun échange récent.</td></tr>
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-3">Aucun échange récent.</td>
+                                </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -210,13 +219,13 @@ $base = Flight::get('base_path') ?? '';
                             <li class="list-group-item d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
                                     <img src="<?= $base ?>/assets/images/pdp/<?= htmlspecialchars($tu['pdp'] ?? 'default.png') ?>"
-                                         alt="pdp" class="rounded-circle me-2" style="width:36px;height:36px;object-fit:cover;">
+                                        alt="pdp" class="rounded-circle me-2" style="width:36px;height:36px;object-fit:cover;">
                                     <div>
                                         <div class="fw-semibold"><?= htmlspecialchars($tu['username'] ?? '') ?></div>
                                         <small class="text-muted"><?= htmlspecialchars($tu['role'] ?? 'user') ?></small>
                                     </div>
                                 </div>
-                                <span class="badge bg-primary rounded-pill"><?= (int)($tu['nb_objets'] ?? 0) ?> objets</span>
+                                <span class="badge bg-primary rounded-pill"><?= (int) ($tu['nb_objets'] ?? 0) ?> objets</span>
                             </li>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -255,22 +264,27 @@ $base = Flight::get('base_path') ?? '';
                                         <td>
                                             <?php if (!empty($obj['main_photo'])): ?>
                                                 <img src="<?= $base ?><?= htmlspecialchars($obj['main_photo']) ?>" alt="photo"
-                                                     class="rounded" style="width:45px;height:45px;object-fit:cover;">
+                                                    class="rounded" style="width:45px;height:45px;object-fit:cover;">
                                             <?php else: ?>
                                                 <div class="rounded d-flex align-items-center justify-content-center"
-                                                     style="width:45px;height:45px;background:var(--tk-bg-input);">
+                                                    style="width:45px;height:45px;background:var(--tk-bg-input);">
                                                     <i class="bi bi-image text-muted"></i>
                                                 </div>
                                             <?php endif; ?>
                                         </td>
                                         <td><?= htmlspecialchars($obj['libelle'] ?? '') ?></td>
-                                        <td><span class="badge bg-secondary"><?= htmlspecialchars($obj['category_name'] ?? '') ?></span></td>
+                                        <td><span
+                                                class="badge bg-secondary"><?= htmlspecialchars($obj['category_name'] ?? '') ?></span>
+                                        </td>
                                         <td><?= htmlspecialchars($obj['owner_name'] ?? '') ?></td>
-                                        <td><strong><?= number_format((float)($obj['prix_estimatif'] ?? 0), 0, ',', ' ') ?> Ar</strong></td>
+                                        <td><strong><?= number_format((float) ($obj['prix_estimatif'] ?? 0), 0, ',', ' ') ?>
+                                                Ar</strong></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="5" class="text-center text-muted py-3">Aucun objet.</td></tr>
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-3">Aucun objet.</td>
+                                </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>

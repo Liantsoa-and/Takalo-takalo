@@ -22,7 +22,16 @@ class ProfilController
         unset($o);
 
         $namepage = "profil/profil.php";
+        
+        // Vérifier que seul un admin connecté peut utiliser le contexte admin
         if($typePersonne === 'admin') {
+            $connectedUserId = $_SESSION['user_id'] ?? 0;
+            $connectedUser = $repo->findById($connectedUserId);
+            if (!$connectedUser || $connectedUser['role'] !== 'admin') {
+                // Rediriger vers le contexte user si pas admin
+                Flight::redirect('/profil/' . $id . '/user');
+                return;
+            }
             Flight::render('admin/modele', ['user' => $user , 'pagename' => $namepage, 'objets' => $objets]);
             return;
         }
