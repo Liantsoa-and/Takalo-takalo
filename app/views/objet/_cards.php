@@ -58,8 +58,8 @@ $scope = $scope ?? 'public'; ?>
             <div class="col">
                 <div class="card object-card">
                     <?php if (!empty($objet['main_photo'])): ?>
-                        <img src="<?= $base ?>/<?= htmlspecialchars($objet['main_photo']) ?>" class="card-img-top object-img"
-                            alt="<?= htmlspecialchars($objet['libelle']) ?>">
+                        <img src="<?= $base ?>/uploads/photos/<?= htmlspecialchars($objet['main_photo']) ?>"
+                            class="card-img-top object-img" alt="<?= htmlspecialchars($objet['libelle']) ?>">
                     <?php else: ?>
                         <div class="card-img-top object-img bg-gradient d-flex align-items-center justify-content-center"><i
                                 class="bi bi-image text-white" style="font-size:2rem;opacity:0.5"></i></div>

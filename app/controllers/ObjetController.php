@@ -179,7 +179,11 @@ class ObjetController
 
         $pdo = Flight::db();
         $objetRepository = new ObjetRepository($pdo);
+        $photoService = new PhotoService($pdo);
         $objets = $objetRepository->getObjetsByOthers($currentUserId, $categoryId, $page, $limit);
+        foreach ($objets as &$o) {
+            $o['main_photo'] = $photoService->getFirstPhoto($o['id']);
+        }
         $total = $objetRepository->countObjetsByOthers($currentUserId, $categoryId);
         $totalPages = ceil($total / $limit);
 
