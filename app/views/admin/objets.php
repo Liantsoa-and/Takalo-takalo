@@ -98,7 +98,6 @@ $searchQuery    = isset($searchQuery) ? $searchQuery : '';
                         <th>Catégorie</th>
                         <th>Propriétaire</th>
                         <th>Prix (Ar)</th>
-                        <th style="width:120px">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,23 +136,11 @@ $searchQuery    = isset($searchQuery) ? $searchQuery : '';
                                 <td>
                                     <strong><?= number_format((float)($obj['prix_estimatif'] ?? 0), 0, ',', ' ') ?></strong>
                                 </td>
-                                <td>
-                                    <div class="d-flex gap-1">
-                                        <a href="<?= $base ?>/objet/<?= (int)$obj['id'] ?>"
-                                           class="btn btn-sm btn-outline-primary" title="Voir détail" target="_blank">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger btn-delete-objet"
-                                                data-id="<?= (int)$obj['id'] ?>" title="Supprimer">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">
+                            <td colspan="6" class="text-center text-muted py-4">
                                 <i class="bi bi-inbox" style="font-size:2rem;"></i><br>
                                 Aucun objet trouvé.
                             </td>
