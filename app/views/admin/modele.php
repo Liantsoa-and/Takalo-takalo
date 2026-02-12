@@ -2,6 +2,7 @@
 $adminName = isset($adminName) ? $adminName : 'Admin Demo';
 $adminInitials = strtoupper(substr($adminName, 0, 1));
 $base = Flight::get('base_path') ?? '';
+$adminId = isset($adminId) ? $adminId : 1;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -139,9 +140,12 @@ $base = Flight::get('base_path') ?? '';
                             <strong class="d-block"
                                 style="font-size: 0.875rem; color: var(--tk-text-heading);"><?= htmlspecialchars($adminName) ?></strong>
                         </div>
-                        <div class="profile-circle" title="Photo de profil admin">
-                            <?= htmlspecialchars($adminInitials) ?>
+                        <a href="<?= $base ?>/profil/<?= $adminId ?>">
+                                                    <div class="profile-circle" title="Photo de profil admin">
+                             <?= htmlspecialchars($adminInitials) ?>
                         </div>
+                        </a>
+
                     </div>
                 </div>
             </div>

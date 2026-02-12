@@ -8,6 +8,7 @@ require_once __DIR__ . '/controllers/ObjetController.php';
 require_once __DIR__ . '/controllers/EchangeController.php';
 require_once __DIR__ . '/repositories/ObjetRepository.php';
 require_once __DIR__ . '/repositories/EchangeRepository.php';
+require_once __DIR__ . '/controllers/ProfilController.php';
 
 
 require_once __DIR__ . '/services/PhotoService.php';
@@ -113,6 +114,11 @@ Flight::route('GET /admin/objet/@id/delete', ['AdminController', 'apiDeleteObjet
 
 Flight::route('GET /logout', ['AuthController', 'logout']);
 
+
+// Profil 
+Flight::route('GET /profil/@id',function($id){
+    ProfilController::show($id);
+});
 
 
 
