@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/style/login.css">
 </head>
 <body class="login-page">
-    <div class="container">
-        <div class="login-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="login-container w-100">
             <div class="login-card card">
                 <div class="login-header">
                     <div class="logo-icon">
