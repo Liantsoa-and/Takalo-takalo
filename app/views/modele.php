@@ -87,8 +87,7 @@ else{
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="<?= $profileHref ?>"><i class="bi bi-person me-2"></i>
                                     Mon profil</a></li>
-                            <li><a class="dropdown-item" href="<?= $base ?>/parametres"><i class="bi bi-gear me-2"></i>
-                                    Paramètres</a></li>
+                           
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

@@ -64,6 +64,7 @@ class UserRepository {
     if (isset($data['password']) && $data['password'] !== '') { $fields[] = 'password = ?'; $params[] = password_hash($data['password'], PASSWORD_DEFAULT); }
     if (isset($data['role'])) { $fields[] = 'role = ?'; $params[] = $data['role']; }
     if (isset($data['pdp'])) { $fields[] = 'pdp = ?'; $params[] = $data['pdp']; }
+  if (isset($data['bio'])) { $fields[] = 'bio = ?'; $params[] = $data['bio']; }
     if (empty($fields)) { return false; }
     $params[] = (int)$id;
     $sql = "UPDATE tt_users SET " . implode(', ', $fields) . " WHERE id = ?";

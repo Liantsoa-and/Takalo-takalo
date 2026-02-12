@@ -214,5 +214,15 @@ Flight::route('GET /profil/@id/@typePersonne',function($id, $typePersonne){
     ProfilController::show($id,$typePersonne);
 });
 
+// Profile updates (owner or admin)
+Flight::route('POST /profil/@id/update', function($id){
+    AuthController::requireLogin();
+    ProfilController::postUpdate($id);
+});
+Flight::route('POST /profil/@id/photo', function($id){
+    AuthController::requireLogin();
+    ProfilController::postPhoto($id);
+});
+
 
 
