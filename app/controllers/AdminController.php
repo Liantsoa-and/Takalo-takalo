@@ -197,4 +197,132 @@ public static function apiDeleteObjet($id)
         Flight::json(['success' => true]);
     }
 
+// ============ CATÉGORIES ADMIN ============
+
+public static function showCategories()
+    {
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+        $categories = $repo->findAll();
+
+        // Compter les objets par catégorie
+        foreach ($categories as &$cat) {
+            $cat['nb_objets'] = $repo->countObjetsByCategory($cat['id']);
+        }
+        unset($cat);
+
+        $pagename = "admin/categories.php";
+        Flight::render('admin/modele', ['categories' => $categories, 'pagename' => $pagename]);
+    }
+
+public static function apiCreateCategory()
+    {
+        $data = Flight::request()->data->getData();
+        $libelle = trim($data['libelle'] ?? '');
+
+        if ($libelle === '') {
+            Flight::json(['success' => false, 'message' => 'Le nom de la catégorie est obligatoire.']);
+            return;
+        }
+
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+        $id = $repo->create(['libelle' => $libelle]);
+        Flight::json(['success' => true, 'id' => $id, 'libelle' => $libelle]);
+    }
+
+public static function apiGetCategory($id)
+    {
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+        $cat = $repo->findById($id);
+        if ($cat) {
+            $cat['nb_objets'] = $repo->countObjetsByCategory($cat['id']);
+            Flight::json(['success' => true, 'category' => $cat]);
+        } else {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+        }
+    }
+
+public static function apiUpdateCategory($id)
+    {
+        $data = Flight::request()->data->getData();
+        $libelle = trim($data['libelle'] ?? '');
+
+        if ($libelle === '') {
+            Flight::json(['success' => false, 'message' => 'Le nom de la catégorie est obligatoire.']);
+            return;
+        }
+
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+
+        $cat = $repo->findById($id);
+        if (!$cat) {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+            return;
+        }
+
+        $repo->update($id, ['libelle' => $libelle]);
+        Flight::json(['success' => true]);
+    }
+
+public static function apiDeleteCategory($id)
+    {
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+
+        $cat = $repo->findById($id);
+        if (!$cat) {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+            return;
+        }
+
+        $nbObjets = $repo->countObjetsByCategory($id);
+
+        if ($nbObjets > 0) {
+            Flight::json([
+                'success' => false,
+                'used' => true,
+                'nb_objets' => $nbObjets,
+                'message' => "Cette catégorie est utilisée par $nbObjets objet(s). Veuillez choisir une catégorie de remplacement."
+            ]);
+            return;
+        }
+
+        $repo->deleteById($id);
+        Flight::json(['success' => true]);
+    }
+
+public static function apiMigrateAndDeleteCategory($id)
+    {
+        $data = Flight::request()->data->getData();
+        $targetId = (int)($data['target_category_id'] ?? 0);
+
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+
+        $cat = $repo->findById($id);
+        if (!$cat) {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+            return;
+        }
+
+        if ($targetId <= 0 || $targetId == $id) {
+            Flight::json(['success' => false, 'message' => 'Catégorie de remplacement invalide.']);
+            return;
+        }
+
+        $target = $repo->findById($targetId);
+        if (!$target) {
+            Flight::json(['success' => false, 'message' => 'Catégorie de remplacement introuvable.']);
+            return;
+        }
+
+        $repo->migrateObjets($id, $targetId);
+        $repo->deleteById($id);
+
+        Flight::json(['success' => true, 'message' => 'Objets migrés et catégorie supprimée.']);
+    }
+
 }
