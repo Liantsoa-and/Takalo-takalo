@@ -191,10 +191,11 @@ $adminId = isset($adminId) ? $adminId : 1;
                                 <i class="bi bi-arrow-left-right"></i> Échanges
                             </a>
                         </li>
+                        
                     </ul>
 
                     <h6 class="text-uppercase mb-3 mt-4" style="font-size: 0.75rem; letter-spacing: 1px; opacity: 0.7;">
-                        Paramètres</h6>
+                        Membership</h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link <?= isset($pagename) && strpos($pagename, 'categories') !== false ? 'active' : '' ?>" href="<?= $base ?>/admin/categories">
@@ -202,8 +203,8 @@ $adminId = isset($adminId) ? $adminId : 1;
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= $base ?>/admin/settings">
-                                <i class="bi bi-gear"></i> Configuration
+                            <a class="nav-link <?= isset($pagename) && strpos($pagename, 'membres') !== false ? 'active' : '' ?>" href="<?= $base ?>/admin/membres">
+                                <i class="bi bi-people-fill"></i> Membres
                             </a>
                         </li>
                     </ul>

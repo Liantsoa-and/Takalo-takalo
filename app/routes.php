@@ -125,6 +125,11 @@ Flight::route('POST /admin/category/@id/update', ['AdminController', 'apiUpdateC
 Flight::route('GET /admin/category/@id/delete', ['AdminController', 'apiDeleteCategory']);
 Flight::route('POST /admin/category/@id/migrate-delete', ['AdminController', 'apiMigrateAndDeleteCategory']);
 
+// Admin Membres (membership)
+Flight::route('GET /admin/membres', ['AdminController', 'showMembres']);
+Flight::route('POST /admin/membre/create', ['AdminController', 'apiCreateMembre']);
+Flight::route('GET /admin/membre/@id/delete', ['AdminController', 'apiDeleteMembre']);
+
 Flight::route('GET /logout', ['AuthController', 'logout']);
 
 

@@ -325,4 +325,59 @@ public static function apiMigrateAndDeleteCategory($id)
         Flight::json(['success' => true, 'message' => 'Objets migrés et catégorie supprimée.']);
     }
 
+
+    // ============ MEMBERS (Membres du projet) ============
+
+    public static function showMembres()
+    {
+        $pdo = Flight::db();
+        require_once __DIR__ . '/../repositories/MemberRepository.php';
+        $repo = new MemberRepository($pdo);
+        $membres = $repo->findAll();
+        $pagename = "admin/membres.php";
+        Flight::render('admin/modele', ['membres' => $membres, 'pagename' => $pagename]);
+    }
+
+    public static function apiCreateMembre()
+    {
+        $data = $_POST ?: Flight::request()->data->getData();
+
+        // handle uploaded photo (store filename in DB, file in public/uploads/membres)
+        $photoFilename = null;
+        if (!empty($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $tmp = $_FILES['photo']['tmp_name'];
+            $orig = $_FILES['photo']['name'];
+            $ext = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
+            $allowed = ['jpg','jpeg','png','gif','webp'];
+            if (in_array($ext, $allowed)) {
+                $name = time() . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
+                $destDir = realpath(__DIR__ . '/../../public/uploads/membres');
+                if (!$destDir) {
+                    mkdir(__DIR__ . '/../../public/uploads/membres', 0755, true);
+                    $destDir = realpath(__DIR__ . '/../../public/uploads/membres');
+                }
+                if ($destDir && move_uploaded_file($tmp, $destDir . DIRECTORY_SEPARATOR . $name)) {
+                    $photoFilename = $name;
+                }
+            }
+        }
+
+        if ($photoFilename) $data['photo'] = $photoFilename;
+
+        $pdo = Flight::db();
+        require_once __DIR__ . '/../repositories/MemberRepository.php';
+        $repo = new MemberRepository($pdo);
+        $id = $repo->create($data);
+        Flight::json(['success' => true, 'id' => $id, 'photo' => $photoFilename]);
+    }
+
+    public static function apiDeleteMembre($id)
+    {
+        $pdo = Flight::db();
+        require_once __DIR__ . '/../repositories/MemberRepository.php';
+        $repo = new MemberRepository($pdo);
+        $ok = $repo->delete($id);
+        Flight::json(['success' => (bool)$ok]);
+    }
+
 }
