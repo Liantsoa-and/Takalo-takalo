@@ -193,7 +193,7 @@ $adminId = isset($adminId) ? $adminId : 1;
                         Paramètres</h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= $base ?>/admin/categories">
+                            <a class="nav-link <?= isset($pagename) && strpos($pagename, 'categories') !== false ? 'active' : '' ?>" href="<?= $base ?>/admin/categories">
                                 <i class="bi bi-tags"></i> Catégories
                             </a>
                         </li>
@@ -252,6 +252,9 @@ $adminId = isset($adminId) ? $adminId : 1;
     <!-- Page-specific scripts -->
     <?php if (isset($pagename) && (strpos($pagename, 'users.php') !== false || strpos($pagename, 'admin/users.php') !== false)): ?>
         <script src="<?= $base ?>/assets/js/users.js"></script>
+    <?php endif; ?>
+    <?php if (isset($pagename) && strpos($pagename, 'categories.php') !== false): ?>
+        <script src="<?= $base ?>/assets/js/categories.js"></script>
     <?php endif; ?>
 </body>
 
