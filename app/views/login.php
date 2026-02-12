@@ -1,58 +1,121 @@
-<!-- Login Form -->
-<div class="row g-4 mb-5">
-    <div class="col-lg-6 mx-auto">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-box-arrow-in-right me-2 text-primary"></i>
-                    Login
-                </h5>
-            </div>
-            <div class="card-body">
-                <form x-data="loginForm" method="post" action="<?= BASE_PATH ?>/api/login">
-                    <!-- Username -->
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input type="text" name="username" class="form-control"
-                                x-model="form.username" @input="validateField('username')"
-                                :class="getFieldClass('username')" placeholder="your username"
-                                required>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Takalo-takalo</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/bootstrap/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/bootstrap-icons/bootstrap-icons.css">
+    <!-- Login Styles -->
+    <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/style/login.css">
+</head>
+<body class="login-page">
+    <div class="container">
+        <div class="login-container">
+            <div class="login-card card">
+                <div class="login-header">
+                    <div class="logo-icon">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </div>
+                    <h2>Takalo-takalo</h2>
+                    <p>Connectez-vous pour échanger vos objets</p>
+                </div>
+                
+                <div class="login-body">
+                    <?php if (isset($_SESSION['error'])): ?>
+                        <div class="alert alert-danger login-alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <?= htmlspecialchars($_SESSION['error']) ?>
+                            <?php unset($_SESSION['error']); ?>
                         </div>
-                        <div class="invalid-feedback d-block" x-show="errors.username"
-                            x-text="errors.username"></div>
-                    </div>
-
-                    <!-- Password -->
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="password" class="form-control"
-                                x-model="form.password" @input="validateField('password')"
-                                :class="getFieldClass('password')" placeholder="your password"
-                                required>
+                    <?php endif; ?>
+                    
+                    <?php if (isset($_SESSION['success'])): ?>
+                        <div class="alert alert-success login-alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <?= htmlspecialchars($_SESSION['success']) ?>
+                            <?php unset($_SESSION['success']); ?>
                         </div>
-                        <div class="invalid-feedback d-block" x-show="errors.password"
-                            x-text="errors.password"></div>
-                    </div>
+                    <?php endif; ?>
+                    
+                    <form method="POST" action="<?= BASE_PATH ?>/login" id="loginForm">
+                        <!-- Username -->
+                        <div class="mb-4">
+                            <label class="form-label login-label">
+                                <i class="bi bi-person-fill me-1"></i> Nom d'utilisateur
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text login-input-group-text">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <input type="text" 
+                                       name="username" 
+                                       class="form-control login-form-control" 
+                                       placeholder="Entrez votre nom d'utilisateur"
+                                       required
+                                       autocomplete="username">
+                            </div>
+                        </div>
 
-                    <!-- Submit Button -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg"
-                            :disabled="isSubmitting || !isFormValid">
-                            <span x-show="!isSubmitting">
-                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
-                            </span>
-                            <span x-show="isSubmitting">
-                                <div class="spinner-border spinner-border-sm me-2"></div>
-                                Processing...
-                            </span>
-                        </button>
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label class="form-label login-label">
+                                <i class="bi bi-lock-fill me-1"></i> Mot de passe
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text login-input-group-text">
+                                    <i class="bi bi-lock"></i>
+                                </span>
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-control login-form-control" 
+                                       placeholder="Entrez votre mot de passe"
+                                       required
+                                       autocomplete="current-password">
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-login" id="btnLogin">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                <span id="btnText">Se connecter</span>
+                                <span id="btnSpinner" class="d-none">
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Connexion...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <small>
+                            <i class="bi bi-shield-check me-1"></i>
+                            Connexion sécurisée
+                        </small>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Bootstrap JS -->
+    <script src="<?= BASE_PATH ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Animation du bouton de submit
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            const btn = document.getElementById('btnLogin');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            
+            btn.disabled = true;
+            btnText.classList.add('d-none');
+            btnSpinner.classList.remove('d-none');
+        });
+    </script>
+</body>
+</html>

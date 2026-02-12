@@ -24,6 +24,12 @@ class UserRepository {
     return $st->fetch(PDO::FETCH_ASSOC) ?: null;
   }
 
+  public function findByUsername($username) {
+    $st = $this->pdo->prepare("SELECT * FROM tt_users WHERE username=? LIMIT 1");
+    $st->execute([(string)$username]);
+    return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+  }
+
   public function findAll() {
     $st = $this->pdo->query("SELECT * FROM tt_users");
     return $st->fetchAll(PDO::FETCH_ASSOC);
