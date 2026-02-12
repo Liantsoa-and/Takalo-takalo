@@ -2,12 +2,34 @@
 class AuthController
 {
 
-  public static function showLogin()
+  private static function ensureSession()
   {
-    // Démarrer la session si ce n'est pas déjà fait
     if (session_status() !== PHP_SESSION_ACTIVE) {
       session_start();
     }
+  }
+
+  // Verifie que l'utilisateur est connecte 
+  public static function requireLogin(?string $role = null)
+  {
+    self::ensureSession();
+
+    if (!isset($_SESSION['user_id'])) {
+      $_SESSION['error'] = 'Veuillez vous connecter pour accéder à cette page.';
+      Flight::redirect('/login');
+      exit;
+    }
+
+    if ($role !== null && ($_SESSION['user_role'] ?? '') !== $role) {
+      $_SESSION['error'] = 'Vous n\'avez pas l\'autorisation d\'accéder à cette page.';
+      Flight::redirect('/objets');
+      exit;
+    }
+  }
+
+  public static function showLogin()
+  {
+    self::ensureSession();
     
     // Si l'utilisateur est déjà connecté, le rediriger
     if (isset($_SESSION['user_id'])) {
@@ -25,10 +47,7 @@ class AuthController
 
   public static function postLogin()
   {
-    // Démarrer la session
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-      session_start();
-    }
+    self::ensureSession();
 
     $pdo = Flight::db();
     $repo = new UserRepository($pdo);
@@ -82,9 +101,7 @@ class AuthController
 
   public static function showRegister()
   {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-      session_start();
-    }
+    self::ensureSession();
 
     if (isset($_SESSION['user_id'])) {
       Flight::redirect('/objets');
@@ -96,9 +113,7 @@ class AuthController
 
   public static function postRegister()
   {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-      session_start();
-    }
+    self::ensureSession();
 
     $pdo = Flight::db();
     $repo = new UserRepository($pdo);
@@ -155,9 +170,7 @@ class AuthController
 
   public static function logout()
   {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-      session_start();
-    }
+    self::ensureSession();
     
     // Détruire la session
     session_unset();
