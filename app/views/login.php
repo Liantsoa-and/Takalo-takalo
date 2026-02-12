@@ -55,6 +55,7 @@
                                        name="username" 
                                        class="form-control login-input" 
                                        placeholder="Entrez votre nom d'utilisateur"
+                                       value="admin1"
                                        required
                                        autocomplete="username">
                             </div>
@@ -73,6 +74,7 @@
                                        name="password" 
                                        class="form-control login-input" 
                                        placeholder="Entrez votre mot de passe"
+                                       value="adminpass1"
                                        required
                                        autocomplete="current-password">
                             </div>
