@@ -58,7 +58,7 @@ class PhotoService
             // Déplacer le fichier
             if (move_uploaded_file($tmp_names[$i], $filepath)) {
                 // Sauvegarder en base de données
-                $url = '/uploads/photos/' . $filename;
+                $url = $filename;
                 $this->savePhotoUrl($objetId, $url);
                 $uploadedPhotos[] = $url;
             }
@@ -117,7 +117,7 @@ class PhotoService
         }
 
         // Supprimer le fichier
-        $filepath = __DIR__ . '/../../public' . $photo['url'];
+        $filepath = __DIR__ . '/../../public/uploads/photos/' . $photo['url'];
         if (file_exists($filepath)) {
             unlink($filepath);
         }

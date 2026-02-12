@@ -53,17 +53,25 @@ CREATE TABLE
         FOREIGN KEY (objet2_id) REFERENCES tt_objets (id),
         FOREIGN KEY (status_id) REFERENCES tt_status (id)
     );
-CREATE OR REPLACE VIEW v_users_roles AS
-SELECT id,
-         username,
-         role,
-         count(*) nb
-FROM tt_users GROUP BY role;
 
-ALTER TABLE tt_users ADD COLUMN pdp VARCHAR(255) DEFAULT 'default.png' ;
+CREATE
+OR REPLACE VIEW v_users_roles AS
+SELECT
+    id,
+    username,
+    role,
+    count(*) nb
+FROM
+    tt_users
+GROUP BY
+    role;
 
-CREATE OR REPLACE VIEW v_objets_cat AS 
-SELECT 
+ALTER TABLE tt_users
+ADD COLUMN pdp VARCHAR(255) DEFAULT 'default.png';
+
+CREATE
+OR REPLACE VIEW v_objets_cat AS
+SELECT
     o.id AS obj_id,
     o.libelle AS obj_libelle,
     o.description AS obj_description,
@@ -71,12 +79,14 @@ SELECT
     c.libelle AS cat_libelle,
     o.user_id AS user_id,
     c.id AS cat_id
-    FROM tt_objets o 
-    JOIN tt_categories c ON c.id=o.category_id; 
-    
+FROM
+    tt_objets o
+    JOIN tt_categories c ON c.id = o.category_id;
+
 -- Vue pour la liste publique des objets avec toutes les informations nécessaires
-CREATE OR REPLACE VIEW v_objets_public AS
-SELECT 
+CREATE
+OR REPLACE VIEW v_objets_public AS
+SELECT
     o.id,
     o.libelle,
     o.description,
@@ -85,11 +95,28 @@ SELECT
     o.user_id,
     c.libelle as category_name,
     u.username as owner_name,
-    (SELECT url FROM tt_photos_objet WHERE objet_id = o.id LIMIT 1) as main_photo,
-    (SELECT COUNT(*) FROM tt_photos_objet WHERE objet_id = o.id) as photos_count
-FROM tt_objets o
-INNER JOIN tt_users u ON o.user_id = u.id
-INNER JOIN tt_categories c ON o.category_id = c.id;
+    (
+        SELECT
+            url
+        FROM
+            tt_photos_objet
+        WHERE
+            objet_id = o.id
+        LIMIT
+            1
+    ) as main_photo,
+    (
+        SELECT
+            COUNT(*)
+        FROM
+            tt_photos_objet
+        WHERE
+            objet_id = o.id
+    ) as photos_count
+FROM
+    tt_objets o
+    INNER JOIN tt_users u ON o.user_id = u.id
+    INNER JOIN tt_categories c ON o.category_id = c.id;
 
 -- ...existing code...
 -- Insertion des utilisateurs (2 admins et 3 utilisateurs)
@@ -279,28 +306,28 @@ VALUES
 INSERT INTO
     tt_photos_objet (objet_id, url)
 VALUES
-    (1, 'uploads/photos/photo_1_1.jpg'),
-    (1, 'uploads/photos/photo_1_2.jpg'),
-    (2, 'uploads/photos/photo_2_1.jpg'),
-    (3, 'uploads/photos/photo_3_1.jpg'),
-    (4, 'uploads/photos/photo_4_1.jpg'),
-    (5, 'uploads/photos/photo_5_1.jpg'),
-    (6, 'uploads/photos/photo_6_1.jpg'),
-    (7, 'uploads/photos/photo_7_1.jpg'),
-    (8, 'uploads/photos/photo_8_1.jpg'),
-    (9, 'uploads/photos/photo_9_1.jpg'),
-    (10, 'uploads/photos/photo_10_1.jpg'),
-    (11, 'uploads/photos/photo_11_1.jpg'),
-    (12, 'uploads/photos/photo_12_1.jpg'),
-    (13, 'uploads/photos/photo_13_1.jpg'),
-    (14, 'uploads/photos/photo_14_1.jpg'),
-    (15, 'uploads/photos/photo_15_1.jpg'),
-    (16, 'uploads/photos/photo_16_1.jpg'),
-    (17, 'uploads/photos/photo_17_1.jpg'),
-    (18, 'uploads/photos/photo_18_1.jpg'),
-    (19, 'uploads/photos/photo_19_1.jpg'),
-    (20, 'uploads/photos/photo_20_1.jpg'),
-    (21, 'uploads/photos/photo_21_1.jpg');
+    (1, 'photo_1_1.jpg'),
+    (1, 'photo_1_2.jpg'),
+    (2, 'photo_2_1.jpg'),
+    (3, 'photo_3_1.jpg'),
+    (4, 'photo_4_1.jpg'),
+    (5, 'photo_5_1.jpg'),
+    (6, 'photo_6_1.jpg'),
+    (7, 'photo_7_1.jpg'),
+    (8, 'photo_8_1.jpg'),
+    (9, 'photo_9_1.jpg'),
+    (10, 'photo_10_1.jpg'),
+    (11, 'photo_11_1.jpg'),
+    (12, 'photo_12_1.jpg'),
+    (13, 'photo_13_1.jpg'),
+    (14, 'photo_14_1.jpg'),
+    (15, 'photo_15_1.jpg'),
+    (16, 'photo_16_1.jpg'),
+    (17, 'photo_17_1.jpg'),
+    (18, 'photo_18_1.jpg'),
+    (19, 'photo_19_1.jpg'),
+    (20, 'photo_20_1.jpg'),
+    (21, 'photo_21_1.jpg');
 
 -- Insertion des statuts (pour les échanges futurs)
 INSERT INTO

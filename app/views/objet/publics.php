@@ -116,8 +116,9 @@ $scope = 'public'; ?>
                             <!-- Image avec badges -->
                             <div class="position-relative">
                                 <?php if (!empty($objet['main_photo'])): ?>
-                                    <img src="<?= htmlspecialchars($objet['main_photo']) ?>" class="card-img-top object-img"
-                                        alt="<?= htmlspecialchars($objet['libelle']) ?>" loading="lazy">
+                                    <img src="/uploads/photos/<?= htmlspecialchars($objet['main_photo']) ?>"
+                                        class="card-img-top object-img" alt="<?= htmlspecialchars($objet['libelle']) ?>"
+                                        loading="lazy">
                                 <?php else: ?>
                                     <div
                                         class="card-img-top object-img bg-gradient d-flex align-items-center justify-content-center">
@@ -181,7 +182,7 @@ $scope = 'public'; ?>
                     <div class="object-list-item">
                         <!-- Thumbnail -->
                         <?php if (!empty($objet['main_photo'])): ?>
-                            <img src="<?= htmlspecialchars($objet['main_photo']) ?>" class="object-thumbnail"
+                            <img src="/uploads/photos/<?= htmlspecialchars($objet['main_photo']) ?>" class="object-thumbnail"
                                 alt="<?= htmlspecialchars($objet['libelle']) ?>" loading="lazy">
                         <?php else: ?>
                             <div class="object-thumbnail bg-gradient d-flex align-items-center justify-content-center">
