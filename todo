@@ -14,7 +14,10 @@ Fonctionnalite 1 :
             .route get admin/login
             .route post admin/login (essaie de connection)
             -controllers:
-            Admincontrollers
+            Authcontrollers:*verification username et mot de passe
+                            *stocker les donnes dans une session
+            -repository:
+            UserRepository:*findbyusername()
             front:
             .page login pour admin et user
 
