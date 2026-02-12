@@ -31,6 +31,14 @@ Flight::route('GET /logout', function () {
     AuthController::logout();
 });
 
+// Register routes
+Flight::route('GET /register', function () {
+    AuthController::showRegister();
+});
+Flight::route('POST /register', function () {
+    AuthController::postRegister();
+});
+
 // Objets routes
 Flight::route('GET /objet/formulaire', function () {
     ObjetController::showForm();
@@ -125,19 +133,11 @@ Flight::route('POST /admin/category/@id/update', ['AdminController', 'apiUpdateC
 Flight::route('GET /admin/category/@id/delete', ['AdminController', 'apiDeleteCategory']);
 Flight::route('POST /admin/category/@id/migrate-delete', ['AdminController', 'apiMigrateAndDeleteCategory']);
 
-Flight::route('GET /logout', ['AuthController', 'logout']);
-
 
 // Profil 
 Flight::route('GET /profil/@id/@typePersonne',function($id, $typePersonne){
     ProfilController::show($id,$typePersonne);
 });
-
-
-
-
-
-// Flight::route('POST /register', ['AuthController', 'postRegister']);
 
 
 
