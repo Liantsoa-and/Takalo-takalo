@@ -59,8 +59,8 @@
 
 ### **Dans modèle :**
 
-- [x] Ajouter une vérification des sessions s'il y en a
-- [x] Sinon, le remettre dans login admin
+- [OK] Ajouter une vérification des sessions s'il y en a
+- [OK] Sinon, le remettre dans login admin
 
 ### **1 - Back office (admin) => [J]**
 
@@ -121,7 +121,14 @@ Fonctionnalités (partie 3 sur 3)
       Lorsqu’on clique sur le lien on affiche les produits qui ont un prix estimatif de 
       + ou – 10%/20%. 
       Ex : si le prix de notre produit est de 10 000Ar, on va afficher les produits qui 
-      ont un prix estimatif entre 9 000Ar et 11 000Ar (cas 10%) 
+      ont un prix estimatif entre 9 000Ar et 11 000Ar (cas 10%)
+    Backend:
+    - Route : GET /objet/{id}/filtre%
+    - ObjetController::searh()
+    - Vue 'objet/echangeFiltre.php'
+    Front:
+    -bouton lien vers liste objets +/-10% et +/-20%
+    -liste des objets concernes 
     
     ii. Dans la liste des produits de + ou – 10% / 20%, pour chaque produit 
         rajouter un lien  
@@ -133,3 +140,6 @@ Fonctionnalités (partie 3 sur 3)
       produit. 
     Ex : votre produit coute 10 000Ar, et dans la liste, on a un produit à 10 
     500Ar, vous affichez +5% 
+
+    -A faire : affichage pourcentage de difference 
+    
