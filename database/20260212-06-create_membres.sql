@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS `membres` (
 -- Seed initial
 INSERT INTO `membres` (`nom`, `prenom`, `etu`, `photo`, `bio`) VALUES
 ('RAKOTOARIVONY', 'Harena Natolotra Sarobidy', 'ETU-3940', 'H.jpg', 'Membre du projet.'),
-('FENOHERYLIANTSOA', 'Ny Aina Andreane', 'ETU-4199', 'L.jpg', 'Membre du projet.'),
+('FENOHERILIANTSOA', 'Ny Aina Andreane', 'ETU-4199', 'L.jpg', 'Membre du projet.'),
 ('FANEVA', 'Jedidia', 'ETU-4042', 'J.jpg', 'Membre du projet.');

@@ -6,6 +6,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 $profileHref = $base . '/profil';
 if (!empty($_SESSION['user_id'])) {
+    
     $uid = (int) $_SESSION['user_id'];
     try {
         $pdo = Flight::db();
