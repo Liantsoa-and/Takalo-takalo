@@ -110,3 +110,26 @@
 **Notes :** Adapter les chemins d'images selon stockage (uploads/ ou assets/images). Pagination recommandée si nécessaire.
 
 **Bonus :** Fragmenter les cards des objets pour améliorer les recherches dans \_card.php
+
+===========================================================================
+
+Fonctionnalités (partie 3 sur 3) 
+# ** 1. Frontoffice => [H] **
+  a. Prix estimatif 
+    i. Dans la page qui affiche la liste des objets de l’utilisateur, rajouter 2  
+        liens  
+      Lorsqu’on clique sur le lien on affiche les produits qui ont un prix estimatif de 
+      + ou – 10%/20%. 
+      Ex : si le prix de notre produit est de 10 000Ar, on va afficher les produits qui 
+      ont un prix estimatif entre 9 000Ar et 11 000Ar (cas 10%) 
+    
+    ii. Dans la liste des produits de + ou – 10% / 20%, pour chaque produit 
+        rajouter un lien  
+      
+      Lorsqu’on clique sur le lien, on crée une proposition d’échange avec 
+      votre produit. 
+
+      Ajouter aussi la différence en % dans la liste, par rapport à votre 
+      produit. 
+    Ex : votre produit coute 10 000Ar, et dans la liste, on a un produit à 10 
+    500Ar, vous affichez +5% 
