@@ -24,11 +24,11 @@ $base = Flight::get('base_path') ?? '';
             <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h1 class="card-title"><?= htmlspecialchars($objet['libelle']) ?></h1>
+                        <h1 class="card-title text-danger"><?= htmlspecialchars($objet['libelle']) ?></h1>
 
                         <div class="mb-3">
                             <h5>Description</h5>
-                            <p><?= nl2br(htmlspecialchars($objet['description'])) ?></p>
+                            <p class="text-white"><?= nl2br(htmlspecialchars($objet['description'])) ?></p>
                         </div>
 
                         <div class="row mb-3">
