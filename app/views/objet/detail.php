@@ -124,9 +124,9 @@ $base = Flight::get('base_path') ?? '';
             </div>
 
             <div class="col-md-6">
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header">
-                        <h5>Photos</h5>
+                        <h5 class="mb-0">Photos</h5>
                     </div>
                     <div class="card-body">
                         <?php if (!empty($objet['photos'])): ?>
@@ -149,9 +149,9 @@ $base = Flight::get('base_path') ?? '';
                                             aria-hidden="true"></span><span class="visually-hidden">Suivant</span></button>
                                 <?php endif; ?>
                             </div>
-                            <div class="row gap-2">
+                            <div class="row g-2">
                                 <?php foreach ($objet['photos'] as $index => $photo): ?>
-                                    <div class="col-md-3" style="cursor:pointer;"
+                                    <div class="col-4" style="cursor:pointer;"
                                         onclick="document.getElementById('carouselPhotos').carousel(<?= $index ?>)">
                                         <img src="<?= $base ?>/uploads/photos/<?= htmlspecialchars($photo['url']) ?>"
                                             class="img-fluid rounded" alt="Photo">
@@ -163,11 +163,31 @@ $base = Flight::get('base_path') ?? '';
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <div class="card mt-3 border-primary border-2">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-gem"></i> Objets au prix similaire</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">Découvrez des objets avec un prix estimatif proche :</p>
+                        <input type="hidden" id="objet_id" value="<?= $objet['id'] ?>">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-lg fw-bold" onclick="findSimilarObjects(10)">
+                                <i class="bi bi-search"></i> ±10% du prix
+                            </button>
+                            <button class="btn btn-primary btn-lg fw-bold" onclick="findSimilarObjects(20)">
+                                <i class="bi bi-search"></i> ±20% du prix
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     <?php endif; ?>
 
     <script>
-        function confirmDelete(id) { if (confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')) window.location.href = '<?= $base ?>/objet/' + id + '/delete'; }
+        function confirmDelete(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')) window.location.href = '<?= $base ?>/objet/' + id + '/delete';
+        }
     </script>
 </main>
