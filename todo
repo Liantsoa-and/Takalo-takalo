@@ -18,28 +18,28 @@
 
 - **Back:**
   - **Route:**
-    - [x] Route GET admin/login
-    - [x] Route POST admin/login (essai de connexion)
+    - [OK] Route GET admin/login
+    - [OK] Route POST admin/login (essai de connexion)
   - **Controllers:**
-    - [x] AuthController: \*vérification username et mot de passe
-    - [x] \*stocker les données dans une session
+    - [OK] AuthController: \*vérification username et mot de passe
+    - [OK] \*stocker les données dans une session
   - **Repository:**
-    - [x] UserRepository: \*findByUsername()
+    - [OK] UserRepository: \*findByUsername()
 - **Front:**
-  - [x] Page login pour admin et user
+  - [OK] Page login pour admin et user
 
 #### **b - Gestion des catégories**
 
-- [x] Tableau listant toutes les catégories avec le nombre d'objets liés
-- [x] Ajout/Modification via modal avec validation (nom obligatoire)
-- [x] Suppression : si la catégorie est vide, suppression directe. Si elle contient des objets, un modal demande de choisir une catégorie de remplacement pour migrer les objets avant suppression
-- [x] Accès uniquement via /admin/categories (pages admin)
+- [OK] Tableau listant toutes les catégories avec le nombre d'objets liés
+- [OK] Ajout/Modification via modal avec validation (nom obligatoire)
+- [OK] Suppression : si la catégorie est vide, suppression directe. Si elle contient des objets, un modal demande de choisir une catégorie de remplacement pour migrer les objets avant suppression
+- [OK] Accès uniquement via /admin/categories (pages admin)
 
 ### **2 - Front office (utilisateur) => [L]**
 
 #### **a - Créer une page d'inscription et de login [H]**
 
-- [x] Créer une page d'inscription et de login
+- [OK] Créer une page d'inscription et de login
 
 #### **b - Page pour gérer ses objets**
 
