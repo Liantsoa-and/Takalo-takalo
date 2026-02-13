@@ -45,7 +45,7 @@ $base = Flight::get('base_path') ?? '';
                         ?>
                         <img src="<?= $photoUrl ?>" class="card-img-top" style="height:160px;object-fit:cover;" alt="<?= htmlspecialchars($objet['libelle']) ?>">
                         <div class="card-body d-flex flex-column">
-                            <h6 class="card-title mb-1" style="font-size:0.95rem"><?= htmlspecialchars($objet['libelle']) ?></h6>
+                            <h6 class="card-title mb-1 text-white" style="font-size:0.95rem"><?= htmlspecialchars($objet['libelle']) ?></h6>
                             <p class="text-muted small mb-2" style="flex:1"><?= htmlspecialchars(substr($objet['description'] ?? '', 0, 100)) ?><?= (strlen($objet['description'] ?? '')>100)?'...':'' ?></p>
                         </div>
                     </div>
