@@ -92,6 +92,11 @@ $base = Flight::get('base_path') ?? '';
                 </div>
                 <i class="bi bi-tags-fill" style="font-size: 2.5rem; opacity: 0.7;"></i>
             </div>
+            <div class="mt-2">
+                <a href="<?= $base ?>/admin/categories" class="text-white text-decoration-none small">
+                    Voir tout <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
         </div>
     </div>
 </div>

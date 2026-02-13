@@ -14,11 +14,20 @@ Fonctionnalite 1 :
             .route get admin/login
             .route post admin/login (essaie de connection)
             -controllers:
-            Admincontrollers
+            Authcontrollers:*verification username et mot de passe
+                            *stocker les donnes dans une session
+            -repository:
+            UserRepository:*findbyusername()
             front:
             .page login pour admin et user
 
         b - Gestion des categories
+        Tableau listant toutes les catégories avec le nombre d'objets liés
+        Ajout/Modification via modal avec validation (nom obligatoire)
+        Suppression : si la catégorie est vide, suppression directe. Si elle contient des objets, un modal demande de choisir une catégorie de remplacement pour migrer les objets avant suppression
+        Accès uniquement via /admin/categories (pages admin)
+
+
     2 - Front  office (utilisateur) => [L]
         a - . Créer une page d’inscription et de login [H]
         b. Page pour gérer ses objets 

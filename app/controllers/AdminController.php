@@ -197,4 +197,187 @@ public static function apiDeleteObjet($id)
         Flight::json(['success' => true]);
     }
 
+// ============ CATÉGORIES ADMIN ============
+
+public static function showCategories()
+    {
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+        $categories = $repo->findAll();
+
+        // Compter les objets par catégorie
+        foreach ($categories as &$cat) {
+            $cat['nb_objets'] = $repo->countObjetsByCategory($cat['id']);
+        }
+        unset($cat);
+
+        $pagename = "admin/categories.php";
+        Flight::render('admin/modele', ['categories' => $categories, 'pagename' => $pagename]);
+    }
+
+public static function apiCreateCategory()
+    {
+        $data = Flight::request()->data->getData();
+        $libelle = trim($data['libelle'] ?? '');
+
+        if ($libelle === '') {
+            Flight::json(['success' => false, 'message' => 'Le nom de la catégorie est obligatoire.']);
+            return;
+        }
+
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+        $id = $repo->create(['libelle' => $libelle]);
+        Flight::json(['success' => true, 'id' => $id, 'libelle' => $libelle]);
+    }
+
+public static function apiGetCategory($id)
+    {
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+        $cat = $repo->findById($id);
+        if ($cat) {
+            $cat['nb_objets'] = $repo->countObjetsByCategory($cat['id']);
+            Flight::json(['success' => true, 'category' => $cat]);
+        } else {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+        }
+    }
+
+public static function apiUpdateCategory($id)
+    {
+        $data = Flight::request()->data->getData();
+        $libelle = trim($data['libelle'] ?? '');
+
+        if ($libelle === '') {
+            Flight::json(['success' => false, 'message' => 'Le nom de la catégorie est obligatoire.']);
+            return;
+        }
+
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+
+        $cat = $repo->findById($id);
+        if (!$cat) {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+            return;
+        }
+
+        $repo->update($id, ['libelle' => $libelle]);
+        Flight::json(['success' => true]);
+    }
+
+public static function apiDeleteCategory($id)
+    {
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+
+        $cat = $repo->findById($id);
+        if (!$cat) {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+            return;
+        }
+
+        $nbObjets = $repo->countObjetsByCategory($id);
+
+        if ($nbObjets > 0) {
+            Flight::json([
+                'success' => false,
+                'used' => true,
+                'nb_objets' => $nbObjets,
+                'message' => "Cette catégorie est utilisée par $nbObjets objet(s). Veuillez choisir une catégorie de remplacement."
+            ]);
+            return;
+        }
+
+        $repo->deleteById($id);
+        Flight::json(['success' => true]);
+    }
+
+public static function apiMigrateAndDeleteCategory($id)
+    {
+        $data = Flight::request()->data->getData();
+        $targetId = (int)($data['target_category_id'] ?? 0);
+
+        $pdo = Flight::db();
+        $repo = new CategoryRepository($pdo);
+
+        $cat = $repo->findById($id);
+        if (!$cat) {
+            Flight::json(['success' => false, 'message' => 'Catégorie introuvable.']);
+            return;
+        }
+
+        if ($targetId <= 0 || $targetId == $id) {
+            Flight::json(['success' => false, 'message' => 'Catégorie de remplacement invalide.']);
+            return;
+        }
+
+        $target = $repo->findById($targetId);
+        if (!$target) {
+            Flight::json(['success' => false, 'message' => 'Catégorie de remplacement introuvable.']);
+            return;
+        }
+
+        $repo->migrateObjets($id, $targetId);
+        $repo->deleteById($id);
+
+        Flight::json(['success' => true, 'message' => 'Objets migrés et catégorie supprimée.']);
+    }
+
+
+    // ============ MEMBERS (Membres du projet) ============
+
+    public static function showMembres()
+    {
+        $pdo = Flight::db();
+        require_once __DIR__ . '/../repositories/MemberRepository.php';
+        $repo = new MemberRepository($pdo);
+        $membres = $repo->findAll();
+        $pagename = "admin/membres.php";
+        Flight::render('admin/modele', ['membres' => $membres, 'pagename' => $pagename]);
+    }
+
+    public static function apiCreateMembre()
+    {
+        $data = $_POST ?: Flight::request()->data->getData();
+
+        // handle uploaded photo (store filename in DB, file in public/uploads/membres)
+        $photoFilename = null;
+        if (!empty($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $tmp = $_FILES['photo']['tmp_name'];
+            $orig = $_FILES['photo']['name'];
+            $ext = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
+            $allowed = ['jpg','jpeg','png','gif','webp'];
+            if (in_array($ext, $allowed)) {
+                $name = time() . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
+                $destDir = realpath(__DIR__ . '/../../public/uploads/membres');
+                if (!$destDir) {
+                    mkdir(__DIR__ . '/../../public/uploads/membres', 0755, true);
+                    $destDir = realpath(__DIR__ . '/../../public/uploads/membres');
+                }
+                if ($destDir && move_uploaded_file($tmp, $destDir . DIRECTORY_SEPARATOR . $name)) {
+                    $photoFilename = $name;
+                }
+            }
+        }
+
+        if ($photoFilename) $data['photo'] = $photoFilename;
+
+        $pdo = Flight::db();
+        require_once __DIR__ . '/../repositories/MemberRepository.php';
+        $repo = new MemberRepository($pdo);
+        $id = $repo->create($data);
+        Flight::json(['success' => true, 'id' => $id, 'photo' => $photoFilename]);
+    }
+
+    public static function apiDeleteMembre($id)
+    {
+        $pdo = Flight::db();
+        require_once __DIR__ . '/../repositories/MemberRepository.php';
+        $repo = new MemberRepository($pdo);
+        $ok = $repo->delete($id);
+        Flight::json(['success' => (bool)$ok]);
+    }
+
 }

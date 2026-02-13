@@ -17,23 +17,23 @@ class EchangeRepository
                    s.libelle AS status,
                    e.date_echange
             FROM tt_echanges e
-            LEFT JOIN tt_objets o1 ON e.objet1_id = o1.id
-            LEFT JOIN tt_users u1 ON o1.user_id = u1.id
-            LEFT JOIN tt_objets o2 ON e.objet2_id = o2.id
-            LEFT JOIN tt_users u2 ON o2.user_id = u2.id
-            LEFT JOIN tt_status s ON e.status_id = s.id
+            INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
+            INNER JOIN tt_users u1 ON e.user1_id = u1.id
+            INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
+            INNER JOIN tt_users u2 ON e.user2_id = u2.id
+            INNER JOIN tt_status s ON e.status_id = s.id
             ORDER BY e.id DESC";
     $st = $this->pdo->query($sql);
     return $st->fetchAll(PDO::FETCH_ASSOC);
   }
 
   // Créer une nouvelle proposition d'échange
-  public function createEchange($objet1_id, $objet2_id)
+  public function createEchange($objet1_id, $objet2_id, $user1_id, $user2_id)
   {
     // Statut par défaut : "en attente" (id = 1)
-    $sql = "INSERT INTO tt_echanges (objet1_id, objet2_id, status_id) VALUES (?, ?, 1)";
+    $sql = "INSERT INTO tt_echanges (objet1_id, objet2_id, user1_id, user2_id, status_id) VALUES (?, ?, ?, ?, 1)";
     $st = $this->pdo->prepare($sql);
-    $st->execute([(int) $objet1_id, (int) $objet2_id]);
+    $st->execute([(int) $objet1_id, (int) $objet2_id, (int) $user1_id, (int) $user2_id]);
     return $this->pdo->lastInsertId();
   }
 
@@ -49,24 +49,29 @@ class EchangeRepository
     return $result['count'] > 0;
   }
 
-  // Récupérer les échanges proposés pour un objet spécifique
+  // Récupérer les échanges ACCEPTÉS pour un objet (historique de propriété)
   public function getEchangesByObjetId($objet_id)
   {
     $sql = "SELECT e.id,
-                   o1.id as objet1_id, o1.libelle AS objet1,
-                   u1.username AS user1,
-                   o2.id as objet2_id, o2.libelle AS objet2,
-                   u2.username AS user2,
+                   e.status_id,
+                   e.user1_id, e.user2_id,
+                   o1.id as objet1_id, o1.libelle AS objet1_libelle,
+                   u1.username AS user1_name, u1.pdp AS user1_pdp,
+                   (SELECT p1.url FROM tt_photos_objet p1 WHERE p1.objet_id = o1.id LIMIT 1) AS objet1_photo,
+                   o2.id as objet2_id, o2.libelle AS objet2_libelle,
+                   u2.username AS user2_name, u2.pdp AS user2_pdp,
+                   (SELECT p2.url FROM tt_photos_objet p2 WHERE p2.objet_id = o2.id LIMIT 1) AS objet2_photo,
                    s.libelle AS status,
                    e.date_echange
             FROM tt_echanges e
-            LEFT JOIN tt_objets o1 ON e.objet1_id = o1.id
-            LEFT JOIN tt_users u1 ON o1.user_id = u1.id
-            LEFT JOIN tt_objets o2 ON e.objet2_id = o2.id
-            LEFT JOIN tt_users u2 ON o2.user_id = u2.id
-            LEFT JOIN tt_status s ON e.status_id = s.id
-            WHERE e.objet1_id = ? OR e.objet2_id = ?
-            ORDER BY e.date_echange DESC";
+            INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
+            INNER JOIN tt_users u1 ON e.user1_id = u1.id
+            INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
+            INNER JOIN tt_users u2 ON e.user2_id = u2.id
+            INNER JOIN tt_status s ON e.status_id = s.id
+            WHERE (e.objet1_id = ? OR e.objet2_id = ?)
+              AND e.status_id = 2
+            ORDER BY e.date_echange ASC";
     $st = $this->pdo->prepare($sql);
     $st->execute([(int) $objet_id, (int) $objet_id]);
     return $st->fetchAll(PDO::FETCH_ASSOC);
@@ -80,7 +85,7 @@ class EchangeRepository
                    o1.id as objet_propose_id, 
                    o1.libelle AS objet_propose,
                    o1.prix_estimatif as prix_propose,
-                   u1.id as proposant_id,
+                   e.user1_id as proposant_id,
                    u1.username AS proposant,
                    o2.id as mon_objet_id, 
                    o2.libelle AS mon_objet,
@@ -91,10 +96,10 @@ class EchangeRepository
                    (SELECT url FROM tt_photos_objet WHERE objet_id = o2.id LIMIT 1) as ma_photo
             FROM tt_echanges e
             INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
-            INNER JOIN tt_users u1 ON o1.user_id = u1.id
+            INNER JOIN tt_users u1 ON e.user1_id = u1.id
             INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
             INNER JOIN tt_status s ON e.status_id = s.id
-            WHERE o2.user_id = ?
+            WHERE e.user2_id = ?
             ORDER BY e.date_echange DESC";
     $st = $this->pdo->prepare($sql);
     $st->execute([(int) $userId]);
@@ -112,7 +117,7 @@ class EchangeRepository
                    o2.id as objet_cible_id, 
                    o2.libelle AS objet_cible,
                    o2.prix_estimatif as prix_cible,
-                   u2.id as destinataire_id,
+                   e.user2_id as destinataire_id,
                    u2.username AS destinataire,
                    s.libelle AS status,
                    e.date_echange,
@@ -121,9 +126,9 @@ class EchangeRepository
             FROM tt_echanges e
             INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
             INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
-            INNER JOIN tt_users u2 ON o2.user_id = u2.id
+            INNER JOIN tt_users u2 ON e.user2_id = u2.id
             INNER JOIN tt_status s ON e.status_id = s.id
-            WHERE o1.user_id = ?
+            WHERE e.user1_id = ?
             ORDER BY e.date_echange DESC";
     $st = $this->pdo->prepare($sql);
     $st->execute([(int) $userId]);
@@ -212,11 +217,11 @@ class EchangeRepository
                    s.libelle AS status,
                    e.date_echange
             FROM tt_echanges e
-            LEFT JOIN tt_objets o1 ON e.objet1_id = o1.id
-            LEFT JOIN tt_users u1 ON o1.user_id = u1.id
-            LEFT JOIN tt_objets o2 ON e.objet2_id = o2.id
-            LEFT JOIN tt_users u2 ON o2.user_id = u2.id
-            LEFT JOIN tt_status s ON e.status_id = s.id
+            INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
+            INNER JOIN tt_users u1 ON e.user1_id = u1.id
+            INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
+            INNER JOIN tt_users u2 ON e.user2_id = u2.id
+            INNER JOIN tt_status s ON e.status_id = s.id
             ORDER BY e.id DESC
             LIMIT " . (int)$limit;
     $st = $this->pdo->query($sql);
@@ -226,12 +231,8 @@ class EchangeRepository
   // Récupérer un échange par ID
   public function findById($id)
   {
-    $sql = "SELECT e.*, 
-                   o1.user_id as user1_id,
-                   o2.user_id as user2_id
+    $sql = "SELECT e.*
             FROM tt_echanges e
-            INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
-            INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
             WHERE e.id = ?";
     $st = $this->pdo->prepare($sql);
     $st->execute([(int) $id]);
@@ -242,65 +243,70 @@ class EchangeRepository
   public function getOwnershipHistory($objetId)
   {
     // Récupérer l'état courant (propriétaire actuel)
-    $st = $this->pdo->prepare("SELECT user_id FROM tt_objets WHERE id = ? LIMIT 1");
+    $st = $this->pdo->prepare("SELECT o.user_id, u.username, u.pdp 
+                               FROM tt_objets o 
+                               INNER JOIN tt_users u ON o.user_id = u.id 
+                               WHERE o.id = ? LIMIT 1");
     $st->execute([(int)$objetId]);
     $current = $st->fetch(PDO::FETCH_ASSOC);
-    $currentOwner = $current ? (int)$current['user_id'] : null;
+    
+    if (!$current) {
+      return [];
+    }
+    
+    $currentOwnerId = (int)$current['user_id'];
 
-    // Récupérer les échanges confirmés impliquant cet objet, par date décroissante
-    $sql = "SELECT e.id, e.date_echange, e.objet1_id, e.objet2_id,
-                   o1.user_id AS o1_user_id, u1.username AS o1_username, u1.pdp AS o1_pdp,
-                   o2.user_id AS o2_user_id, u2.username AS o2_username, u2.pdp AS o2_pdp,
-                   s.libelle AS status
-            FROM tt_echanges e
-            LEFT JOIN tt_objets o1 ON e.objet1_id = o1.id
-            LEFT JOIN tt_users u1 ON o1.user_id = u1.id
-            LEFT JOIN tt_objets o2 ON e.objet2_id = o2.id
-            LEFT JOIN tt_users u2 ON o2.user_id = u2.id
-            LEFT JOIN tt_status s ON e.status_id = s.id
-            WHERE (e.objet1_id = ? OR e.objet2_id = ?) AND e.status_id = 2
-            ORDER BY e.date_echange DESC";
+    // Utiliser la vue v_echange_comp pour récupérer les échanges confirmés
+    $sql = "SELECT * FROM v_echange_comp 
+            WHERE (objet1_id = ? OR objet2_id = ?) AND status_id = 2
+            ORDER BY date_echange DESC";
 
     $st = $this->pdo->prepare($sql);
     $st->execute([(int)$objetId, (int)$objetId]);
     $rows = $st->fetchAll(PDO::FETCH_ASSOC);
 
     $timeline = [];
-    if ($currentOwner !== null) {
-      // récupérer infos utilisateur courant
-      $ust = $this->pdo->prepare("SELECT id, username, pdp FROM tt_users WHERE id = ? LIMIT 1");
-      $ust->execute([$currentOwner]);
-      $u = $ust->fetch(PDO::FETCH_ASSOC) ?: ['id'=>$currentOwner,'username'=>'Utilisateur','pdp'=>'default.png'];
-      $timeline[] = ['user_id'=>$u['id'],'username'=>$u['username'],'pdp'=>$u['pdp'],'date'=>null,'note'=>'Actuel'];
-    }
+    
+    // Ajouter le propriétaire actuel
+    $timeline[] = [
+      'user_id' => $current['user_id'],
+      'username' => $current['username'],
+      'pdp' => $current['pdp'] ?? 'default.png',
+      'date' => null,
+      'note' => 'Propriétaire actuel'
+    ];
 
-    // parcourir les échanges du plus récent au plus ancien et reconstituer les propriétaires précédents
+    $trackingOwner = $currentOwnerId;
+
+    // Parcourir les échanges du plus récent au plus ancien
     foreach ($rows as $r) {
-      // déterminer l'autre utilisateur impliqué dans l'échange
       if ((int)$r['objet1_id'] === (int)$objetId) {
-        $userAfter = (int)$r['o2_user_id']; // après échange, objet1 appartient à o2
-        $userBefore = (int)$r['o1_user_id'];
+        // L'objet était objet1 : après échange il appartient à user2
+        $ownerAfter = (int)$r['user2_id'];
+        $ownerBefore = (int)$r['user1_id'];
+        $prevUsername = $r['user1_name'];
+        $prevPdp = $r['user1_pdp'] ?? 'default.png';
       } else {
-        // objet2
-        $userAfter = (int)$r['o1_user_id']; // après échange, objet2 appartient à o1
-        $userBefore = (int)$r['o2_user_id'];
+        // L'objet était objet2 : après échange il appartient à user1
+        $ownerAfter = (int)$r['user1_id'];
+        $ownerBefore = (int)$r['user2_id'];
+        $prevUsername = $r['user2_name'];
+        $prevPdp = $r['user2_pdp'] ?? 'default.png';
       }
 
-      // si le propriétaire courant correspond à l'état après l'échange, le propriétaire précédent est userBefore
-      $prevOwner = ($currentOwner === $userAfter) ? $userBefore : $userAfter;
+      // Ajouter le propriétaire précédent à la timeline
+      $timeline[] = [
+        'user_id' => $ownerBefore,
+        'username' => $prevUsername,
+        'pdp' => $prevPdp,
+        'date' => $r['date_echange'],
+        'note' => 'Transféré'
+      ];
 
-      // récupérer infos du prevOwner
-      $ust = $this->pdo->prepare("SELECT id, username, pdp FROM tt_users WHERE id = ? LIMIT 1");
-      $ust->execute([$prevOwner]);
-      $pu = $ust->fetch(PDO::FETCH_ASSOC) ?: ['id'=>$prevOwner,'username'=>'Utilisateur','pdp'=>'default.png'];
-
-      $timeline[] = ['user_id'=>$pu['id'],'username'=>$pu['username'],'pdp'=>$pu['pdp'],'date'=>$r['date_echange'],'note'=>'Transféré'];
-
-      // mettre à jour currentOwner pour l'étape suivante (remonter dans le temps)
-      $currentOwner = $prevOwner;
+      $trackingOwner = $ownerBefore;
     }
 
-    // inverser pour ordre chronologique (ancien -> actuel)
+    // Inverser pour ordre chronologique (ancien -> actuel)
     return array_reverse($timeline);
   }
 

@@ -24,6 +24,12 @@ class UserRepository {
     return $st->fetch(PDO::FETCH_ASSOC) ?: null;
   }
 
+  public function findByUsername($username) {
+    $st = $this->pdo->prepare("SELECT * FROM tt_users WHERE username=? LIMIT 1");
+    $st->execute([(string)$username]);
+    return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+  }
+
   public function findAll() {
     $st = $this->pdo->query("SELECT * FROM tt_users");
     return $st->fetchAll(PDO::FETCH_ASSOC);
@@ -58,6 +64,7 @@ class UserRepository {
     if (isset($data['password']) && $data['password'] !== '') { $fields[] = 'password = ?'; $params[] = password_hash($data['password'], PASSWORD_DEFAULT); }
     if (isset($data['role'])) { $fields[] = 'role = ?'; $params[] = $data['role']; }
     if (isset($data['pdp'])) { $fields[] = 'pdp = ?'; $params[] = $data['pdp']; }
+  if (isset($data['bio'])) { $fields[] = 'bio = ?'; $params[] = $data['bio']; }
     if (empty($fields)) { return false; }
     $params[] = (int)$id;
     $sql = "UPDATE tt_users SET " . implode(', ', $fields) . " WHERE id = ?";

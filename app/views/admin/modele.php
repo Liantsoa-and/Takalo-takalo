@@ -1,5 +1,9 @@
 <?php
-$adminName = isset($adminName) ? $adminName : 'Admin Demo';
+
+if(!isset($_SESSION['user_id'])) { Flight::redirect('/login');
+ exit;
+}
+$adminName = isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin Demo';
 $adminInitials = strtoupper(substr($adminName, 0, 1));
 $base = Flight::get('base_path') ?? '';
 $adminId = isset($adminId) ? $adminId : 1;
@@ -187,19 +191,20 @@ $adminId = isset($adminId) ? $adminId : 1;
                                 <i class="bi bi-arrow-left-right"></i> Échanges
                             </a>
                         </li>
+                        
                     </ul>
 
                     <h6 class="text-uppercase mb-3 mt-4" style="font-size: 0.75rem; letter-spacing: 1px; opacity: 0.7;">
-                        Paramètres</h6>
+                        Membership</h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= $base ?>/admin/categories">
+                            <a class="nav-link <?= isset($pagename) && strpos($pagename, 'categories') !== false ? 'active' : '' ?>" href="<?= $base ?>/admin/categories">
                                 <i class="bi bi-tags"></i> Catégories
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= $base ?>/admin/settings">
-                                <i class="bi bi-gear"></i> Configuration
+                            <a class="nav-link <?= isset($pagename) && strpos($pagename, 'membres') !== false ? 'active' : '' ?>" href="<?= $base ?>/admin/membres">
+                                <i class="bi bi-people-fill"></i> Membres
                             </a>
                         </li>
                     </ul>
@@ -252,6 +257,9 @@ $adminId = isset($adminId) ? $adminId : 1;
     <!-- Page-specific scripts -->
     <?php if (isset($pagename) && (strpos($pagename, 'users.php') !== false || strpos($pagename, 'admin/users.php') !== false)): ?>
         <script src="<?= $base ?>/assets/js/users.js"></script>
+    <?php endif; ?>
+    <?php if (isset($pagename) && strpos($pagename, 'categories.php') !== false): ?>
+        <script src="<?= $base ?>/assets/js/categories.js"></script>
     <?php endif; ?>
 </body>
 

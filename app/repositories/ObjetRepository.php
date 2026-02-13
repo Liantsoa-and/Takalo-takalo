@@ -9,7 +9,8 @@ class ObjetRepository
 
   public function findByUserId($userId)
   {
-    $st = $this->pdo->prepare("SELECT * FROM tt_objets WHERE user_id=?");
+    $sql = "SELECT * FROM v_objets_public WHERE user_id = ? ORDER BY id DESC";
+    $st = $this->pdo->prepare($sql);
     $st->execute([(int) $userId]);
     return $st->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -106,7 +107,7 @@ class ObjetRepository
 
   public function searchByUser($userId, $q = '', $categoryId = null)
   {
-    $sql = "SELECT * FROM tt_objets WHERE user_id = ?";
+    $sql = "SELECT * FROM v_objets_public WHERE user_id = ?";
     $params = [(int) $userId];
     if ($q !== '') {
       $sql .= " AND (libelle LIKE ? OR description LIKE ?)";

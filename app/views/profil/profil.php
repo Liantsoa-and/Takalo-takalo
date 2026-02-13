@@ -14,8 +14,14 @@ $base = Flight::get('base_path') ?? '';
                 <h4 class="mb-0"><?= htmlspecialchars($u['username'] ?? 'Utilisateur') ?></h4>
                 <small class="text-muted"><?= htmlspecialchars($u['role'] ?? '') ?></small>
             </div>
+        <?php if (!empty($_SESSION['user_id']) && (int)$_SESSION['user_id'] === (int)($u['id'] ?? 0)): ?>
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalEditProfile">Modifier le profil</button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalChangePdp">Changer la photo</button>
+            </div>
+        <?php endif; ?>
         </div>
-    </div>
+        </div>
 
     <div class="mt-4">
         <div class="card shadow-sm">
@@ -49,3 +55,61 @@ $base = Flight::get('base_path') ?? '';
     </div>
     <?php endif; ?>
 </div>
+
+<!-- Modal: Edit profile -->
+<?php if (!empty($_SESSION['user_id']) && (int)$_SESSION['user_id'] === (int)($u['id'] ?? 0)): ?>
+<div class="modal fade" id="modalEditProfile" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="POST" action="<?= $base ?>/profil/<?= $u['id'] ?>/update">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier le profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label">Nom d'utilisateur</label>
+                        <input name="username" type="text" class="form-control" value="<?= htmlspecialchars($u['username'] ?? '') ?>" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Mot de passe (laisser vide pour conserver)</label>
+                        <input name="password" type="password" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Bio</label>
+                        <textarea name="bio" class="form-control" rows="3"><?= htmlspecialchars($u['bio'] ?? '') ?></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Change profile picture -->
+<div class="modal fade" id="modalChangePdp" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="POST" action="<?= $base ?>/profil/<?= $u['id'] ?>/photo" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Changer la photo de profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label">Nouvelle photo</label>
+                        <input name="pdp" type="file" class="form-control" accept="image/*" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Téléverser</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
