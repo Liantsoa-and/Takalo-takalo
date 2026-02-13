@@ -172,7 +172,7 @@ class ObjetController
 
     public static function listeObjetPublics()
     {
-        $currentUserId = null; // À récupérer depuis la session plus tard
+        $currentUserId = 3; // À récupérer depuis la session plus tard
         $categoryId = $_GET['category_id'] ?? null;
         $page = $_GET['page'] ?? 1;
         $limit = 10;
