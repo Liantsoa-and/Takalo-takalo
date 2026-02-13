@@ -56,10 +56,14 @@ class EchangeRepository
                    e.status_id,
                    e.user1_id, e.user2_id,
                    o1.id as objet1_id, o1.libelle AS objet1_libelle,
+                   o1.libelle AS objet1,
                    u1.username AS user1_name, u1.pdp AS user1_pdp,
+                   u1.username AS user1,
                    (SELECT p1.url FROM tt_photos_objet p1 WHERE p1.objet_id = o1.id LIMIT 1) AS objet1_photo,
                    o2.id as objet2_id, o2.libelle AS objet2_libelle,
+                   o2.libelle AS objet2,
                    u2.username AS user2_name, u2.pdp AS user2_pdp,
+                   u2.username AS user2,
                    (SELECT p2.url FROM tt_photos_objet p2 WHERE p2.objet_id = o2.id LIMIT 1) AS objet2_photo,
                    s.libelle AS status,
                    e.date_echange
@@ -84,11 +88,14 @@ class EchangeRepository
                    e.status_id,
                    o1.id as objet_propose_id, 
                    o1.libelle AS objet_propose,
+           o1.libelle AS objet1,
                    o1.prix_estimatif as prix_propose,
                    e.user1_id as proposant_id,
                    u1.username AS proposant,
+           u1.username AS user1,
                    o2.id as mon_objet_id, 
                    o2.libelle AS mon_objet,
+           o2.libelle AS objet2,
                    o2.prix_estimatif as mon_prix,
                    s.libelle AS status,
                    e.date_echange,
@@ -98,6 +105,7 @@ class EchangeRepository
             INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
             INNER JOIN tt_users u1 ON e.user1_id = u1.id
             INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
+         INNER JOIN tt_users u2 ON e.user2_id = u2.id
             INNER JOIN tt_status s ON e.status_id = s.id
             WHERE e.user2_id = ?
             ORDER BY e.date_echange DESC";
@@ -113,18 +121,22 @@ class EchangeRepository
                    e.status_id,
                    o1.id as mon_objet_id, 
                    o1.libelle AS mon_objet,
+           o1.libelle AS objet1,
                    o1.prix_estimatif as mon_prix,
                    o2.id as objet_cible_id, 
                    o2.libelle AS objet_cible,
+           o2.libelle AS objet2,
                    o2.prix_estimatif as prix_cible,
                    e.user2_id as destinataire_id,
                    u2.username AS destinataire,
+           u2.username AS user2,
                    s.libelle AS status,
                    e.date_echange,
                    (SELECT url FROM tt_photos_objet WHERE objet_id = o1.id LIMIT 1) as ma_photo,
                    (SELECT url FROM tt_photos_objet WHERE objet_id = o2.id LIMIT 1) as photo_cible
             FROM tt_echanges e
             INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
+         INNER JOIN tt_users u1 ON e.user1_id = u1.id
             INNER JOIN tt_objets o2 ON e.objet2_id = o2.id
             INNER JOIN tt_users u2 ON e.user2_id = u2.id
             INNER JOIN tt_status s ON e.status_id = s.id

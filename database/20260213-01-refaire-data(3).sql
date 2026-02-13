@@ -147,23 +147,34 @@ SELECT
     o1.description AS objet1_description,
     o1.prix_estimatif AS objet1_prix,
     (SELECT url FROM tt_photos_objet WHERE objet_id = o1.id LIMIT 1) AS objet1_photo,
+
+    -- Aliases backward-compatible pour les templates existants
+    o1.libelle AS objet1,
     
     -- Infos user1 (propriétaire de objet1 au moment de l'échange)
     u1.username AS user1_name,
     u1.pdp AS user1_pdp,
+
+    u1.username AS user1,
     
     -- Infos objet 2
     o2.libelle AS objet2_libelle,
     o2.description AS objet2_description,
     o2.prix_estimatif AS objet2_prix,
     (SELECT url FROM tt_photos_objet WHERE objet_id = o2.id LIMIT 1) AS objet2_photo,
+
+    -- Alias backward-compatible
+    o2.libelle AS objet2,
     
     -- Infos user2 (propriétaire de objet2 au moment de l'échange)
     u2.username AS user2_name,
     u2.pdp AS user2_pdp,
+
+    u2.username AS user2,
     
     -- Statut
     s.libelle AS status_libelle
+    , s.libelle AS status
     
 FROM tt_echanges e
 INNER JOIN tt_objets o1 ON e.objet1_id = o1.id
@@ -179,11 +190,11 @@ INNER JOIN tt_status s ON e.status_id = s.id;
 -- =====================================================
 
 INSERT INTO tt_users (id, username, password, role, pdp, bio) VALUES
-(1, 'admin1', '$2y$10$abcdefghijklmnopqrstuv', 'admin', 'admin1.png', 'Administrateur principal du système.'),
-(2, 'admin2', '$2y$10$abcdefghijklmnopqrstuv', 'admin', 'admin2.png', 'Administrateur secondaire.'),
-(3, 'user1', '$2y$10$abcdefghijklmnopqrstuv', 'user', 'user1.png', 'Passionné de technologie et de livres.'),
-(4, 'user2', '$2y$10$abcdefghijklmnopqrstuv', 'user', 'user2.png', 'Amateur de sports et de musique.'),
-(5, 'user3', '$2y$10$abcdefghijklmnopqrstuv', 'user', 'user3.png', 'Collectionneur d\'art et de bijoux.');
+(1, 'admin1', 'adminpass1', 'admin', 'admin1.png', 'Administrateur principal du système.'),
+(2, 'admin2', 'adminpass2', 'admin', 'admin2.png', 'Administrateur secondaire.'),
+(3, 'user1', 'userpass1', 'user', 'user1.png', 'Passionné de technologie et de livres.'),
+(4, 'user2', 'userpass2', 'user', 'user2.png', 'Amateur de sports et de musique.'),
+(5, 'user3', 'userpass3', 'user', 'user3.png', 'Collectionneur d\'art et de bijoux.');
 
 -- =====================================================
 -- DONNÉES: CATÉGORIES
@@ -372,7 +383,7 @@ UPDATE tt_objets SET user_id = 4 WHERE id = 17;
 
 INSERT INTO membres (nom, prenom, etu, photo, bio) VALUES
 ('RAKOTOARIVONY', 'Harena Natolotra Sarobidy', 'ETU-3940', 'H.jpg', 'Membre du projet - Back-office et gestion des catégories.'),
-('FENOHERILIANTSOA', 'Ny Aina Andreane', 'ETU-4199', 'L.jpg', 'Membre du projet - Front-office et interface utilisateur.'),
+('FENOHERILIANTSOA', 'Ny Aina Andréane', 'ETU-4199', 'L.jpg', 'Membre du projet - Front-office et interface utilisateur.'),
 ('FANEVA', 'Jedidia', 'ETU-4042', 'J.jpg', 'Membre du projet - Statistiques, recherche et historique.');
 
 -- =====================================================
