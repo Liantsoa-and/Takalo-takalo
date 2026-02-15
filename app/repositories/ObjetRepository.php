@@ -205,6 +205,37 @@ class ObjetRepository
     return $st->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Trouver les objets d'autres utilisateurs dont le prix est dans une fourchette ±pourcentage
+   * par rapport à un objet donné.
+   */
+  public function findSimilarByPrice($objetId, $percentage, $currentUserId = null)
+  {
+    // D'abord récupérer le prix de l'objet de référence
+    $st = $this->pdo->prepare("SELECT prix_estimatif FROM tt_objets WHERE id = ?");
+    $st->execute([(int) $objetId]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) return [];
+
+    $prix = (float) $row['prix_estimatif'];
+    $pctDecimal = $percentage / 100;
+    $prixMin = $prix * (1 - $pctDecimal);
+    $prixMax = $prix * (1 + $pctDecimal);
+
+    $sql = "SELECT * FROM v_objets_public WHERE id != ? AND prix_estimatif BETWEEN ? AND ?";
+    $params = [(int) $objetId, $prixMin, $prixMax];
+
+    if ($currentUserId !== null) {
+      $sql .= " AND user_id != ?";
+      $params[] = (int) $currentUserId;
+    }
+
+    $sql .= " ORDER BY prix_estimatif ASC";
+    $st = $this->pdo->prepare($sql);
+    $st->execute($params);
+    return $st->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function searchPublic($currentUserId = null, $q = '', $categoryId = null)
   {
     $sql = "SELECT * FROM v_objets_public WHERE 1=1";

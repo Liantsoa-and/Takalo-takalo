@@ -76,6 +76,12 @@ Flight::route('GET /objet/@id/history', function ($id) {
     ObjetController::history($id);
 });
 
+// Filtre par prix similaire (±10% ou ±20%)
+Flight::route('GET /objet/@id/filtre/@percentage', function ($id, $percentage) {
+    AuthController::requireLogin();
+    ObjetController::filtreParPrix($id, $percentage);
+});
+
 Flight::route('GET /objets', function () {
     AuthController::requireLogin();
     ObjetController::list();

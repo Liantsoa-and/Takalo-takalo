@@ -170,14 +170,13 @@ $base = Flight::get('base_path') ?? '';
                     </div>
                     <div class="card-body">
                         <p class="text-muted small mb-3">Découvrez des objets avec un prix estimatif proche :</p>
-                        <input type="hidden" id="objet_id" value="<?= $objet['id'] ?>">
                         <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-lg fw-bold" onclick="findSimilarObjects(10)">
+                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>/filtre/10" class="btn btn-primary btn-lg fw-bold">
                                 <i class="bi bi-search"></i> ±10% du prix
-                            </button>
-                            <button class="btn btn-primary btn-lg fw-bold" onclick="findSimilarObjects(20)">
+                            </a>
+                            <a href="<?= $base ?>/objet/<?= $objet['id'] ?>/filtre/20" class="btn btn-primary btn-lg fw-bold">
                                 <i class="bi bi-search"></i> ±20% du prix
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>

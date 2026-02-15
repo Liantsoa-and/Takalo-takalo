@@ -288,6 +288,60 @@ class ObjetController
         ]);
     }
 
+    /**
+     * Afficher les objets au prix similaire (±percentage%)
+     * Route: GET /objet/{id}/filtre/{percentage}
+     */
+    public static function filtreParPrix($id, $percentage)
+    {
+        $pdo = Flight::db();
+        $repo = new ObjetRepository($pdo);
+        $photoService = new PhotoService($pdo);
+        $currentUserId = self::currentUserId();
+
+        // Récupérer l'objet de référence
+        $objet = $repo->findById($id);
+        if (!$objet) {
+            Flight::notFound();
+            return;
+        }
+
+        // Valider le pourcentage (10 ou 20 acceptés)
+        $percentage = (int) $percentage;
+        if (!in_array($percentage, [10, 20])) {
+            $percentage = 10;
+        }
+
+        // Récupérer les objets similaires
+        $objetsSimilaires = $repo->findSimilarByPrice($id, $percentage, $currentUserId);
+
+        // Ajouter la photo principale et calculer la différence de prix en %
+        $prixRef = (float) $objet['prix_estimatif'];
+        foreach ($objetsSimilaires as &$o) {
+            $o['main_photo'] = $photoService->getFirstPhoto($o['id']);
+            // Calcul de la différence en pourcentage
+            if ($prixRef > 0) {
+                $diff = (($o['prix_estimatif'] - $prixRef) / $prixRef) * 100;
+                $o['diff_percent'] = round($diff, 1);
+            } else {
+                $o['diff_percent'] = 0;
+            }
+        }
+
+        // Récupérer les objets du user connecté pour proposer un échange
+        $mesObjets = $repo->findByUserId($currentUserId);
+
+        $pagename = 'objet/echangeFiltre.php';
+        Flight::render('modele', [
+            'objet' => $objet,
+            'objetsSimilaires' => $objetsSimilaires,
+            'percentage' => $percentage,
+            'mesObjets' => $mesObjets,
+            'currentUserId' => $currentUserId,
+            'pagename' => $pagename
+        ]);
+    }
+
     // Proposer un échange
     public static function proposeEchange()
     {
